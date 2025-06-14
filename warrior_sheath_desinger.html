@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Warrior Sheath Designer v1.2</TITLE>
+	<TITLE>Hymore's Warrior Sheath Designer v1.3</TITLE>
 	<STYLE>
 		div.sheath_text {
 			font-size: 30px;
@@ -21,6 +21,8 @@
 			    Removed incorrect Dagger Sheath/Scabbard location text.
 				Updated plural versions of many gems.
 				Color categories are now alphabetical, ending with Misc Colors.
+		v1.3  - Fixed even more typos.
+		        Added wrap category to materials (no skins with wrap noun exist yet).
 		*/
 		
 		/*
@@ -174,7 +176,7 @@
 		const gems_orabloom = ["---ORA-BLOOMS---", "green ora-blooms"];
 		const gems_opal = ["---OPALS---", "aster opals", "black opals", "blue-white frost opals", "blue green lagoon opals", "blue sky opals", "boulder opals", "brilliant purple opals", "clusters of fire opal", "cloud opal", "dragonfire opals", "iridescent wood opals", "jelly opals", "moonglae opals", "purple black thunderhead opals", "silvery nimbus opals", "white opals"];
 		const gems_pearl = ["---PEARLS---", "absinthe green pearls", "brilliant fire pearls", "frosty pale violet pearls", "iridescent pearls", "metallic black pearls", "midnight blue pearls", "pastel-hued winterbite pearls", "large black pearls", "large grey pearls", "large pink pearls", "large white pearls", "medium black pearls", "medium grey pearls", "medium pink pearls", "medium white pearls", "tiny black pearls", "tiny grey pearls", "tiny pink pearls", "tiny white pearls"];
-		const gems_peridot = ["---PERIDOTS---", "blue peridots", "green peridots", "pink peridot"];
+		const gems_peridot = ["---PERIDOTS---", "blue peridots", "green peridots", "pink peridots"];
 		const gems_petalite = ["---PETALITES---", "pink petalites"];
 		const gems_prehnite = ["---PREHNITES---", "luminous prehnites"];
 		const gems_pumice = ["---PUMICES---", "hunks of hole-ridden pumice"];
@@ -183,10 +185,10 @@
 		const gems_razernbloom = ["---RAZERN-BLOOMS---", "bluish black razern-blooms"];
 		const gems_rhimarbloom = ["---RHIMAR-BLOOMS---", "golden rhimar-blooms"];
 		const gems_riftshard = ["---RIFTSHARDS---", "blue star-shaped riftshards"];
-		const gems_riftstone = ["---RIFTSTONES---", "black riftstones", "faceted midnight blue riftstone", "pale violet riftstone"];
+		const gems_riftstone = ["---RIFTSTONES---", "black riftstones", "faceted midnight blue riftstones", "pale violet riftstones"];
 		const gems_rivertear = ["---RIVERTEARS---", "Alhan'aht rivertear"];
 		const gems_rock = ["---ROCKS---", "shale rocks"];
-		const gems_roestone = ["---ROESTONES---", "orange roestones", "pink roestones", "red roestone", "yellow roestones"];
+		const gems_roestone = ["---ROESTONES---", "orange roestones", "pink roestones", "red roestones", "yellow roestones"];
 		const gems_rosespar = ["---ROSESPARS---", "rosespar"];
 		const gems_ruby = ["---RUBIES---", "dragon's-tear rubies", "dwarf-cut rubies", "faceted blood red sandrubies", "haloed Reim rubies", "impure blood red rubies", "pale pink mistvein rubies", "star rubies", "uncut rubies", "sylvarraend rubies", "vinous gigasblood rubies"];	
 		const gems_saewehna = ["---SAEWEHNAS---", "bright orange butterfly saewehnas", "iridescent azure butterfly saewehnas", "jewel-toned dragonfly saewehnas", "pale gold firefly saewehnas", "russet and cream moth saewehnas", "silver firefly saewehnas", "silvery mint green moth saewehnas", "vibrant hummingbird saewehnas"];
@@ -204,7 +206,7 @@
 		const gems_snowstone = ["---SNOWSTONES---", "stark white snowstones"];
 		const gems_soulstone = ["---SOULSTONES---", "fiery viridian soulstones"];
 		const gems_spectrolite = ["---SPECTROLITES---", "streaked blue spectrolites"];
-		const gems_sphene = ["---SPHENES---", "black sphene", "brown sphene", "white sphene", "yellow sphene"];
+		const gems_sphene = ["---SPHENES---", "black sphenes", "brown sphenes", "white sphenes", "yellow sphenes"];
 		const gems_spherine = ["---SPHERINES---", "tiny black and blue spherines", "tiny green and grey spherines", "tiny red and blue spherines", "tiny white and black spherines", "transparent spherines"];
 		const gems_spinel = ["---SPINELS---", "blue spinels", "pink spinels", "red spinels", "violet spinels", "vivid cobalt blue spinels"];
 		const gems_spiral = ["---SPIRALS---", "twisted iron spirals"];
@@ -226,7 +228,7 @@
 		const gems_vultitebloom = ["---VULTITE-BLOOMS---", "argent vultite-blooms"];
 		const gems_waterweb = ["---WATERWEBS---", "nacreous blue waterwebs"];
 		const gems_wispstone = [];
-		const gems_wraithaline = ["---WRAITHALINES---", "crystals of shadowy wraithalines", "crystals of silvery wraithalines"];
+		const gems_wraithaline = ["---WRAITHALINES---", "crystals of shadowy wraithaline", "crystals of silvery wraithaline"];
 		const gems_wyrdshard = ["---WYRDSHARDS---", "multi-colored wyrdshards"];
 		const gems_zircon = ["---ZIRCONS---", "brown zircons", "clear zircons", "green zircons", "snowflake zircons", "yellow zircons"];
 		const gems_zoisite = ["---ZOISITES---", "green and pink zoisites"];
@@ -239,7 +241,8 @@
 		const materials_sheepskin = ["---SHEEPSKINS---", "bighorn sheepskin"];
 		const materials_shroud = ["---SHROUDS---", "mummy's shroud"];
 		const materials_skin = ["---SKINS---", "bear skin", "boar skin", "caedera skin", "cobra skin", "cave nipper skin", "dirge skin", "giant skin", "glowing worm skin", "goblin skin", "hisskra skin", "kobold skin", "leopard skin", "madrinol skin", "mountain lion skin", "plains lion skin", "polar bear skin", "roa'ter skin", "salamander skin", "siren lizard skin", "snake skin", "spectre skin", "tsark skin", "troll skin", "viper skin", "vruul skin", "water moccasin skin", "wight skin"];
-		const materials_all = materials_fur.concat(materials_hide, materials_pelt, materials_scale, materials_scalp, materials_sheepskin, materials_shroud, materials_skin);
+		const materials_wrap = [];
+		const materials_all = materials_fur.concat(materials_hide, materials_pelt, materials_scale, materials_scalp, materials_sheepskin, materials_shroud, materials_skin, materials_wrap);
 		const metals = ["alum", "brass", "bronze", "copper", "glaes", "gold", "imflass", "invar", "iron", "laje", "mithglin", "mithril", "ora", "platinum", "rhimar", "silver", "steel", "vaalin", "vaalorn", "veniom", "vultite"];
 	
 	
@@ -255,7 +258,7 @@
 			
 			//For the sake of saving space, all SELECT elements are populated using for loops	
 			for(var i = 0; i < selecters.length; i++) {
-				select = document.getElementById(selecters[i]);				
+				select = document.getElementById(selecters[i]);
 				for(var j = 0; j < arrays[i].length; j++) {
 					var opt = arrays[i][j];
 					var el = document.createElement("option");
@@ -272,7 +275,7 @@
 			choice to avoid having a label as a default choice.
 			*/
 			for(var i = 0; i < combo_selectors.length; i++) {
-				select = document.getElementById(combo_selectors[i]);				
+				select = document.getElementById(combo_selectors[i]);
 				for(var j = 0; j < combo_arrays[i].length; j++) {
 					var opt = combo_arrays[i][j];
 					var el = document.createElement("option");
@@ -315,7 +318,7 @@
 				new_value = set_value + " trimmed";
 			}			
 			else if(caller_id == "pick_fringing_specific_deco2") {
-				new_value = "fringed with " + set_value;			
+				new_value = "fringed with " + set_value;
 			}		
 			else if(caller_id == "pick_inlaid_specific_deco2") {
 				new_value = "inlaid with " + set_value;
@@ -347,7 +350,7 @@
 					new_value = document.getElementById("pick_color").value
 					colors.style.display = 'block';
 				}
-				else if(set_value == "Fringing...") {						
+				else if(set_value == "Fringing...") {
 					new_value = document.getElementById("pick_fringing_deco").value + " fringed";
 					fringing.style.display = 'block';	
 					
@@ -393,7 +396,7 @@
 				}
 			}
 			else if(caller_id == "pick_deco2") {
-				deco = document.getElementById("pick_deco");	
+				deco = document.getElementById("pick_deco");
 				colors = document.getElementById("deco_div_color");
 				fringing = document.getElementById("deco_div_fringing");
 				gem = document.getElementById("deco_div_inlaid");
@@ -488,7 +491,7 @@
 			else if(caller_id == "pick_fringing_deco2") {
 				extra_value = document.getElementById("pick_fringing2_deco2").value;
 				if(extra_value == 'Nothing') {		
-					new_value = "fringed with " + set_value;				
+					new_value = "fringed with " + set_value;
 				}
 				else if(extra_value == set_value) {
 					document.getElementById("pick_fringing2_deco2").value = prev_value;
@@ -508,7 +511,7 @@
 					if(prev_value == 'Nothing') {
 						document.getElementById("pick_fringing_deco2").value = set_value;
 						document.getElementById("pick_fringing2_deco2").value = 'Nothing';
-						new_value = "fringed with " + set_value;								
+						new_value = "fringed with " + set_value;
 					}
 					else {
 						document.getElementById("pick_fringing_deco2").value = prev_value;
@@ -522,7 +525,7 @@
 			else if(caller_id == "pick_inlaid_deco2") {
 				extra_value = document.getElementById("pick_inlaid2_deco2").value;
 				if(extra_value == 'Nothing') {			
-					new_value = "inlaid with " + set_value;		
+					new_value = "inlaid with " + set_value;
 				}
 				else if(extra_value == set_value) {
 					document.getElementById("pick_inlaid2_deco2").value = prev_value;
@@ -542,21 +545,21 @@
 					if(prev_value == 'Nothing') {
 						document.getElementById("pick_inlaid_deco2").value = set_value;
 						document.getElementById("pick_inlaid2_deco2").value = 'Nothing';
-						new_value = "inlaid with " + set_value;								
+						new_value = "inlaid with " + set_value;
 					}
 					else {
 						document.getElementById("pick_inlaid_deco2").value = prev_value;
 						new_value = "inlaid with " + prev_value + " and " + set_value;
-					}				
+					}
 				}
-				else {				
+				else {
 					new_value = "inlaid with " + extra_value + " and " + set_value;
 				}
 			}
 			else if(caller_id == "pick_binding_deco2") {
 				extra_value = document.getElementById("pick_binding2_deco2").value;
 				if(extra_value == 'Nothing') {			
-					new_value = "bound in" + set_value;	
+					new_value = "bound in " + set_value;	
 				}
 				else if(extra_value == set_value) {
 					document.getElementById("pick_binding2_deco2").value = prev_value;
@@ -569,7 +572,7 @@
 			else if(caller_id == "pick_binding2_deco2") {
 				extra_value = document.getElementById("pick_binding_deco2").value;
 				if(set_value == "Nothing") {
-					new_value = "bound in" + extra_value;				
+					new_value = "bound in " + extra_value;				
 				}
 				else if(extra_value == set_value) {
 					if(prev_value == 'Nothing') {
