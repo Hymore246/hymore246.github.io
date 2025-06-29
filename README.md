@@ -20,3 +20,4 @@ v1.2  - Fixed typos. Added sizes for pearl gems and ki-lin horn fringing.
          
 v1.3  - Fixed even more typos.
         Added wrap category to materials (no skins with wrap noun exist yet).
+v1.4  - Fixed some more typos. Added Ascension area gems.
