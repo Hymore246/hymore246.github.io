@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Warrior Sheath Designer v1.5</TITLE>
+	<TITLE>Hymore's Warrior Sheath Designer v1.6</TITLE>
 	<STYLE>
 		div.sheath_text {
 			font-size: 30px;
@@ -15,20 +15,36 @@
 		the HTML page and opening it in a web browser.
 		
 		VERSION HISTORY:
-		v1.0  - Initial release.
-		v1.1  - Fixed typos. Removed "stones" word from stone gems. Added more gem types.
-		v1.2  - Fixed typos. Added sizes for pearl gems and ki-lin horn fringing.
-			    Removed incorrect Dagger Sheath/Scabbard location text.
-				Updated plural versions of many gems.
-				Color categories are now alphabetical, ending with Misc Colors.
-		v1.3  - Fixed even more typos.
-		        Added wrap category to materials (no skins with wrap noun exist yet).
-		v1.4  - Fixed some more typos. Added Ascension area gems.
-		v1.5  - Fixed typos. 
-				Updated changeValue() to be a wrapper for four sub-functions that handle value changing.
-				Added Lock checkboxes. Keeps option choice when using Clear All and Random Sheath buttons.
-				Added Custom Fringing and Inlaid Gem input boxes for anything that does not naturall spawn.				
+		v1.0  
+		- Initial release.
+
+		v1.1  
+		- Fixed typos. Removed "stones" word from stone gems. Added more gem types.
+
+		v1.2  
+		- Fixed typos. Added sizes for pearl gems and ki-lin horn fringing.
+		- Removed incorrect Dagger Sheath/Scabbard location text. 
+		- Updated plural versions of many gems.        
+		- Color categories are now alphabetical, ending with Misc Colors.
+				 
+		v1.3  
+		- Fixed even more typos.
+		- Added wrap category to materials (no skins with wrap noun exist yet).
+				
+		v1.4  
+		- Fixed some more typos. Added Ascension area gems.		
+		
+		v1.5
+		- Fixed typos.
+		- Updated changeValue() to be a wrapper for four sub-functions that handle value changing.
+		- Added Lock checkboxes. Keeps option choice when using Clear All and Random Sheath buttons.
+		- Added Custom Fringing and Inlaid Gem input boxes for anything that does not naturall spawn.
+
+		v1.6
+		- Added a few new gems.
 		*/
+		
+		
 		
 		/*
 		Lists section.
@@ -63,7 +79,7 @@
 		const fringe_ear = ["---EARS---", "hawk-owl ears", "hobgoblin ears", "hound ears", "kobold ears", "orc ears", "rolton ears", "troll ears"];
 		const fringe_eye = ["---EYES---", "cyclops eyes", "eyes", "rolton eyes", "seeker eyes", "spider eyes", "troll eyes", "wraith eyes"];
 		const fringe_fang = ["---FANGS---", "direbear fangs", "faeroth fangs", "goblin fangs", "rodent fangs", "snake fangs", "troll fangs", "viper fangs"];
-		const fringe_feather = ["---FEATHERS---", "cockatrice feathers", "eagle feathers", "feathers", "griffin feathers", "raptor feathers", "vulture feathers"];
+		const fringe_feather = ["---FEATHERS---", "cockatrice feathers", "eagle feathers", "red firebird feathers", "griffin feathers", "raptor feathers", "vulture feathers"];
 		const fringe_foreclaw = ["---FORECLAWS---", "kresh foreclaws"];
 		const fringe_horn = ["---HORNS---", "gnarp horns", "minotaur horns", "rolton horns", "velnalin horns", "vor'taz horns"];
 		const fringe_incisor = ["---INCISORS---", "tiger incisors"];
@@ -97,7 +113,7 @@
 		const gems_ametrine = ["---AMETRINES---", "lilac-crested molten gold ametrines"];
 		const gems_amethyst = ["---AMETHYSTS---", "brilliant wyrm's-tooth amethysts", "deep purple amethysts", "frosted pale violet amethysts", "indigo-cored stormy violet amethysts", "rutilated frostbite amethysts", "shadow amethysts", "smoky amethysts"];
 		const gems_aquamarine = ["---AQUAMARINES---", "pale green-blue aquamarines"];
-		const gems_aranthiumbloom = ["---ARANTHIUM-BLOOMS---", "dark ivory aranthium-blooms"];
+		const gems_aranthiumbloom = ["---ARANTHIUM-BLOOM---", "dark ivory aranthium-bloom"];
 		const gems_auboraline = ["---AUBOBALINES---", "shifting multihued auboralines"];
 		const gems_auroraline = [];
 		const gems_azurite = ["---AZURITES---", "azurites", "pocked azurites"];
@@ -132,7 +148,7 @@
 		const gems_eostone = ["---EOSTONES---", "deep blue eostones"];
 		const gems_everine = [];
 		const gems_eye = ["---EYES---", "milky quartz eyes", "obsidian eyes"];
-		const gems_faenorbloom = ["---FAENOR-BLOOMS---", "olivine faenor-blooms"];
+		const gems_faenorbloom = ["---FAENOR-BLOOM---", "olivine faenor-bloom"];
 		const gems_fang = ["---FANGS---", "bronze fangs", "copper fangs", "gold fangs", "iron fangs", "mithril fangs", "petrified warg fangs", "platinum fangs", "silver fangs", "steel fangs", "urglaes fangs"];
 		const gems_feldspar = ["---FELDSPAR---", "chalky feldspar"];
 		const gems_feystone = ["---FEYSTONES---", "bright violet feystones", "periwinkle feystones"];
@@ -168,7 +184,7 @@
 		const gems_marcasite = ["---MARCASITES---", "shimmering marcasite"];
 		const gems_melanite = [];
 		const gems_mica = ["---MICAS---", "dark mica", "mica"];
-		const gems_mithrilbloom = ["---MITHRIL-BLOOMS---", "bluish grey mithril-blooms", "pink mithril-blooms", "purple mithril-blooms"];
+		const gems_mithrilbloom = ["---MITHRIL-BLOOM---", "bluish grey mithril-bloom", "pink mithril-bloom", "purple mithril-bloom"];
 		const gems_mekret = ["---MEKRETS---", "glossy pale beige mekrets", "glossy sable mekrets"];
 		const gems_modwir = ["---MODWIR---", "petrified modwir"];
 		const gems_moonstone = ["---MOONSTONES---", "blue moonstones", "grey moonstones", "cats-eye moonstones", "black moonstones", "golden moonstones", "opaline moonstones", "pale blue moonstones", "pale green moonstones", "rainbow-swept royal blue moonstones", "red-clouded black moonstone", "silvery moonstones"];
@@ -181,14 +197,14 @@
 		const gems_orabloom = ["---ORA-BLOOMS---", "green ora-blooms"];
 		const gems_opal = ["---OPALS---", "aster opals", "black opals", "blue-white frost opals", "blue green lagoon opals", "blue sky opals", "boulder opals", "brilliant purple opals", "fire opals", "cloud opals", "dragonfire opals", "iridescent wood opals", "jelly opals", "moonglae opals", "purple black thunderhead opals", "silvery nimbus opals", "white opals"];
 		const gems_pearl = ["---PEARLS---", "absinthe green pearls", "brilliant fire pearls", "frosty pale violet pearls", "iridescent pearls", "metallic black pearls", "midnight blue pearls", "pastel-hued winterbite pearls", "large black pearls", "large grey pearls", "large pink pearls", "large white pearls", "medium black pearls", "medium grey pearls", "medium pink pearls", "medium white pearls", "tiny black pearls", "tiny grey pearls", "tiny pink pearls", "tiny white pearls"];
-		const gems_peridot = ["---PERIDOTS---", "blue peridots", "green peridots", "pink peridots"];
+		const gems_peridot = ["---PERIDOTS---", "blue peridots", "cloudy winter peridots", "green peridots", "pink peridots"];
 		const gems_petalite = ["---PETALITES---", "pink petalites"];
 		const gems_prehnite = ["---PREHNITES---", "luminous prehnites"];
 		const gems_pumice = ["---PUMICE---", "hole-ridden pumice"];
 		const gems_pyrite = ["---PYRITES---", "pyrite"];
-		const gems_quartz = ["---QUARTZ---", "irregular blue quartz", "lambent gold warg's eye quartz", "blue quartz", "carnelian quartz", "cat's eye quartz", "citrine quartz", "gilt-sprouted icy white quartz", "milky quartz", "rose quartz", "smoky quartz", "snow quartz", "quartz crystals", "rainbow quartz", "tangerine quartz", "asterfire quartz", "dragonfire quartz", "dragon's-fang quartz", "leopard quartz", "oblivion quartz"];
-		const gems_razernbloom = ["---RAZERN-BLOOMS---", "bluish black razern-blooms"];
-		const gems_rhimarbloom = ["---RHIMAR-BLOOMS---", "bluish silver rhimar-blooms", "golden rhimar-blooms"];
+		const gems_quartz = ["---QUARTZES---", "irregular blue quartzes", "lambent gold warg's eye quartzes", "blue quartzes", "carnelian quartzes", "cat's eye quartzes", "citrine quartzes", "gilt-sprouted icy white quartzes", "milky quartzes", "rose quartzes", "smoky quartzes", "snow quartzes", "quartzes crystals", "rainbow quartzes", "tangerine quartzes", "asterfire quartzes", "dragonfire quartzes", "dragon's-fang quartzes", "leopard quartzes", "oblivion quartzes"];
+		const gems_razernbloom = ["---RAZERN-BLOOM---", "bluish black razern-bloom"];
+		const gems_rhimarbloom = ["---RHIMAR-BLOOM---", "bluish silver rhimar-bloom", "golden rhimar-bloom"];
 		const gems_riftshard = ["---RIFTSHARDS---", "blue star-shaped riftshards"];
 		const gems_riftstone = ["---RIFTSTONES---", "black riftstones", "faceted midnight blue riftstones", "pale violet riftstones"];
 		const gems_rivertear = ["---RIVERTEARS---", "Alhan'aht rivertears"];
@@ -208,7 +224,6 @@
 		const gems_shale = ["---SHALES---", "shale rocks" ];
 		const gems_shell = ["---SHELLS---", "amethyst clam shells", "angulate wentletrap shells", "beige clam shells", "black helmet shells", "black-spined conch shells", "blue-banded coquina shells", "bright noble pectin shells", "blue periwinkle shells", "candystick tellin shells", "checkered chiton shells", "crown conch shells", "crown-of-Charl shells", "dark brown triton shells", "dovesnail shells", "egg cowrie shells", "emperor's crown shells", "empress's crown shells", "fluted limpet shells", "giant paper nautilus shells", "golden cowrie shells", "golden triton shells", "iridescent mother-of-pearls", "iridescent tempest shells", "king helmet shells", "large chipped clam shells", "large moonsnail shells", "lavender nassa shells", "leopard cowrie shells", "lynx cowrie shells", "marlin spike shells", "multi-colored snail shells", "opaque spiral shells", "pearl nautilus shells", "pink clam shells", "pink-banded coquina shells", "polished batwing chiton shells", "polished black tegula shells", "polished green abalone shells", "polished red abalone shells", "polished silver abalone shells", "purple-cap cowrie shells", "queen helmet shells", "red helmet shells", "ruby-lined nassa shells", "sea urchin shells", "silvery clam shells", "snake-head cowrie shells", "snow cowrie shells", "Solhaven Bay scallop shells", "sparkling silvery conch shells", "speckled conch shells", "spiny siren's-comb shells", "spiral turret shells", "split-back pink conch shells", "striated abalone shells", "sundial shells", "three-lined nassa shells", "tiger cowrie shells", "tiger-striped nautilus shells", "translucent golden spiral shells", "yellow-banded coquina shells", "yellow helmet shells", "white gryphon's wing shells", "white clam shells"];
 		const gems_smoldereye = ["---SMOLDEREYES---", "scarlet smoldereyes", "violet smoldereyes"];
-		const gems_snowdrop = [];
 		const gems_snowstone = ["---SNOWSTONES---", "stark white snowstones"];
 		const gems_soulstone = ["---SOULSTONES---", "fiery viridian soulstones"];
 		const gems_spectrolite = ["---SPECTROLITES---", "streaked blue spectrolites"];
@@ -228,17 +243,17 @@
 		const gems_tooth = ["---TEETH---", "fossilized rolton teeth", "petrified tiger teeth", "polished shark teeth"];
 		const gems_toadstool = ["---TOADSTOOLS---", "petrified toadstools"];
 		const gems_topaz = ["---TOPAZES---", "blue topazes", "clear topazes", "golden topazes", "green errisian topazes", "orange imperial topazes", "Phoen's eye topazes", "pink topazes", "royal blue boreal topazes", "smoky topazes"];
-		const gems_tourmaline = ["---TOURMALINES---", "black tourmalines", "blue tourmalines", "clear tourmalines", "green tourmalines", "pink tourmalines", "rutilated twilight tourmalines", "tar black tourmalines"];
+		const gems_tourmaline = ["---TOURMALINES---", "black tourmalines", "blue tourmalines", "clear tourmalines", "green tourmalines", "pink tourmalines", "rutilated twilight tourmalines", "tar black tourmalines", "tiny nightsky tourmalines"];
 		const gems_turquoise = ["---TURQUOISES---", "spiderweb turquoises"];
 		const gems_viridine = ["---VIRIDINES---", "bright green viridines"];
-		const gems_vultitebloom = ["---VULTITE-BLOOMS---", "argent vultite-blooms"];
+		const gems_vultitebloom = ["---VULTITE-BLOOM---", "argent vultite-bloom"];
 		const gems_waterweb = ["---WATERWEBS---", "nacreous blue waterwebs"];
 		const gems_wispstone = [];
 		const gems_wraithaline = ["---WRAITHALINES---", "shadowy wraithaline", "silvery wraithaline"];
 		const gems_wyrdshard = ["---WYRDSHARDS---", "multi-colored wyrdshards"];
 		const gems_zircon = ["---ZIRCONS---", "brown zircons", "clear zircons", "green zircons", "snowflake zircons", "uncut zircons", "yellow zircons"];
 		const gems_zoisite = ["---ZOISITES---", "green and pink zoisites"];
-		const gems_all = gems_aetherstone.concat(gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fishscale, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_shale, gems_shard, gems_shell, gems_smoldereye, gems_snowdrop, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
+		const gems_all = gems_aetherstone.concat(gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fishscale, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_shale, gems_shard, gems_shell, gems_smoldereye, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
 		const materials_fur = ["---FURS---", "fenghai fur", "waern fur"];
 		const materials_hide = ["---HIDES---", "bear hide", "boar hide", "brindlecat hide", "centaur hide", "centaur ranger hide", "gak hide", "grizzly bear hide", "jungle toad hide","leaper hide", "minotaur hide", "night hound hide", "orc hide", "puma hide", "pyrothag hide", "thrak hide", "trali hide", "triton hide", "troll hide", "urgh hide", "velnalin hide"];
 		const materials_pelt = ["---PELTS---", "forest ape pelt", "gak pelt", "griffin pelt", "lynx pelt", "marmot pelt", "panther pelt", "rat pelt", "rolton pelt", "rotting rolton pelt", "snowcat pelt", "spotted leaper pelt", "spotted leopard pelt", "warg pelt", "water hound pelt", "weasel pelt", "wolverine pelt"];		
@@ -892,7 +907,7 @@
 		}
 		
 		/*
-		Generates a completely random sheath. Good for bored and inspiration.
+		Generates a completely random sheath. Good for boredom and inspiration.
 		First, all options are reset and then random choices are made for each field.
 		Code is made to make sure that each field unhides the menues with the right choices selected.		
 		*/
@@ -1159,5 +1174,7 @@
 			</td>
 		 </tr>
 		</table>
+		<br><br><br><br><br><br>
+		<a href="./index.html">Back to Main Page</a>
 	</BODY>
 </HTML>
