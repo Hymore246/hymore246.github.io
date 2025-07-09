@@ -4,6 +4,11 @@
 		div.sheath_text {
 			font-size: 30px;
 		}
+		div.link_text {
+			position: fixed;
+			bottom: 15px;
+			left: 15px;
+		}
 	</STYLE>
 	<SCRIPT>
 		/*
@@ -42,6 +47,7 @@
 
 		v1.6
 		- Added a few new gems.
+		- Changed return link to be inside a position div.
 		*/
 		
 		
@@ -194,7 +200,7 @@
 		const gems_nugget = ["---NUGGETS---", "gold nuggets", "platinum nuggets", "large gold nuggets", "large platinum nuggets", "oblong platinum nuggets", "silver-white palladium nuggets", "small copper nuggets"];
 		const gems_obsidian = ["---OBSIDIAN---", "jet black obsidian", "mahogany obsidian", "snowflake obsidian", "spiderweb obsidian", "glossy black obsidian", "raven's wing obsidian"];
 		const gems_onyx = ["---ONYXES---", "banded onyx", "black onyx", "blue onyx", "gold-banded onyx", "small round graupel onyx"];
-		const gems_orabloom = ["---ORA-BLOOMS---", "green ora-blooms"];
+		const gems_orabloom = ["---ORA-BLOOMS---", "green ora-bloom"];
 		const gems_opal = ["---OPALS---", "aster opals", "black opals", "blue-white frost opals", "blue green lagoon opals", "blue sky opals", "boulder opals", "brilliant purple opals", "fire opals", "cloud opals", "dragonfire opals", "iridescent wood opals", "jelly opals", "moonglae opals", "purple black thunderhead opals", "silvery nimbus opals", "white opals"];
 		const gems_pearl = ["---PEARLS---", "absinthe green pearls", "brilliant fire pearls", "frosty pale violet pearls", "iridescent pearls", "metallic black pearls", "midnight blue pearls", "pastel-hued winterbite pearls", "large black pearls", "large grey pearls", "large pink pearls", "large white pearls", "medium black pearls", "medium grey pearls", "medium pink pearls", "medium white pearls", "tiny black pearls", "tiny grey pearls", "tiny pink pearls", "tiny white pearls"];
 		const gems_peridot = ["---PERIDOTS---", "blue peridots", "cloudy winter peridots", "green peridots", "pink peridots"];
@@ -1174,7 +1180,8 @@
 			</td>
 		 </tr>
 		</table>
-		<br><br><br><br><br><br>
-		<a href="./index.html">Back to Main Page</a>
+		<div class="link_text">
+			<a href="./index.html">Back to Main Page</a>
+		</div>
 	</BODY>
 </HTML>
