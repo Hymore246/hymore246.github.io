@@ -1,8 +1,13 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Knitting Designer v1.0</TITLE>
+	<TITLE>Hymore's Knitting Designer v1.2</TITLE>
 	<STYLE>
 		div.knitted_text {
 			font-size: 30px;
+		}
+		div.link_text {
+			position: fixed;
+			bottom: 15px;
+			left: 15px;
 		}
 	</STYLE>
 	<SCRIPT>
@@ -18,8 +23,20 @@
 		VERSION HISTORY:
 		v1.0  
 		- Initial release.
-		*/
 		
+		v1.1  
+		- Fixed crocheted option error.
+		- Added more yarn material types.
+		- Reorder several options to be alphabetical.
+		- Reorganized several options.
+		
+		v1.2  
+		- Split Color, Design, and Material choices into submenues.
+		- Added input boxes for color and material.
+		- Added a bunch of new color fields due to custom color possibilities.
+		- Reorder several options to be alphabetical.
+		- Changed return link to be inside a position div.
+		*/		
 		
 		
 		/*
@@ -42,20 +59,20 @@
 		const colors_red = ["---RED COLORS---", "blood red", "brick red", "bright crimson", "bright red", "bright scarlet", "burgundy", "burgundy red", "cardinal red", "carmine", "cherry red", "cinnabar red", "coral red", "cranberry red", "claret", "crimson", "dark crimson", "dark maroon", "dark red", "dark russet", "deep red", "dingy red", "dull red", "faded maroon", "fiery red", "fiery scarlet", "firebrick red", "garnet red", "glossy red", "jacinth", "lava red", "light red", "mahogany", "mottled scarlet", "opalescent red", "plain red", "poppy red", "red", "ruby red", "russet", "rust red", "sanguine red", "scarlet", "shiny red", "terra cotta", "terracotta", "titian red", "vermilion", "vibrant red", "wine", "wine red"];
 		const colors_white = ["---WHITE COLORS---", "alabaster white", "argent", "bleached white", "bone white", "bright white", "chalk white", "chalky white", "cloudy white", "cream white", "ecru", "faded white", "frosty white", "ghostly white", "glossy white", "iridescent white", "ivory", "ivory white", "lily white", "opalescent white", "opaline white", "pale champagne", "pale ivory", "pearly", "pearly white", "pure white", "roan", "sand-hued", "silvery white", "snowy white", "swan white", "vanilla-hued", "white", "winter white"];
 		const colors_yellow = ["---YELLOW COLORS---", "amber", "apricot", "bright yellow", "burnt ochre", "canary yellow", "citrine yellow", "dark amber", "dark yellow", "dingy yellow", "garish yellow", "golden yellow", "goldenrod yellow", "honey yellow", "honey-hued", "lemon yellow", "matte gold", "mottled ochre", "mustard", "muted ochre", "ochre", "opalescent yellow", "pale yellow", "plain yellow", "saffron yellow", "sallow", "sand-hued", "smoky amber", "sunny yellow", "topaz yellow", "vanilla-hued", "warm ochre", "yellow"];
-		const colors_misc = ["---MISC COLORS---", "dark", "dusky", "garnet", "multicolored", "pearly", "rainbow-flecked", "roan", "topaz", "sapphire"];
+		const colors_misc = ["---MISC COLORS---", "dark", "dusky", "garnet", "pearly", "rainbow-flecked", "roan", "sapphire", "topaz"];
 		const colors_all = colors_black.concat(colors_blue, colors_brown, colors_green, colors_grey, colors_metallic, colors_orange, colors_pink, colors_purple, colors_red, colors_white, colors_yellow, colors_misc);		
-		const description_all = ["knitted", "crocheted", "aged knitted", "bloodstained knitted", "coarse knitted", "frayed knitted", "frosted knitted", "fuzzy knitted", "gradient knitted", "knotted knitted", "lightweight knitted", "lustrous knitted", "scorched knitted", "shiny knitted", "soft knitted", "thick knitted", "thin knitted", "waterlogged knitted", "weathered knitted", "winterweight knitted"];
-		const designs_basic = ["---BASIC---", "striped", "cheveron-patterned", "diamond-patterned", "ribbed", "zig zag-patterned", "floral-patterned", "cable-knit", "gartered-stitched"];
-		const designs_animal = ["---ANIMALS---", "alligator", "bat", "bear", "bronco", "buck", "bug", "bumblebee", "bunny", "butterfly", "capybara", "caribou", "cat", "centaur", "chinchilla", "cobra", "cow", "crab", "deer", "damselfly", "dog", "doe", "dolphin", "dragon", "fly", "dragonfly", "eel", "elephant", "elk", "fawn", "fish", "firefly", "fox", "frog", "gazelle", "goat", "griffin", "ghost", "ghostfly", "glimaerfly", "hart", "hawk", "hog", "hedgehog", "hind", "horse", "iguana", "jackal", "kitten", "koala", "kobold", "koi", "kraken", "ladybug", "lemur", "lion", "lizard", "lobster", "loris", "mantis", "minotaur", "monkey", "moose", "morduska", "moth", "mouse", "mustang", "narwhal", "octopus", "orc", "otter", "panda", "pegasus", "penguin", "phoenix", "pig", "pixie", "polar bear", "pony", "puppy", "qahzumar", "rabbit", "raccoon", "reindeer", "roa'ter", "rolton", "sea anemone", "selshis", "serpent", "shark", "skeleton", "skull", "snake", "spider", "sprite", "stag", "stallion", "starfish", "teadragon", "tentacle", "tiger", "toad", "tortoise", "troll", "turtle", "unicorn", "weasel", "wendigo", "whale", "witch", "wolf", "wombat", "wraith", "wyvern", "yierka", "bird", "bluebird", "cardinal", "chicken", "crow", "duck", "dove", "eagle", "egret", "blood eagle", "finch", "flamingo", "flycatcher", "heron", "ibis", "macaw", "merlin", "owl", "parrot", "peacock", "pelican", "pheasant", "raven", "rook", "rooster", "seagull", "songbird", "swan", "turkey", "wren", "fairywren", "hummingbird"];
-		const designs_floral = ["---FLORAL---", "floral", "flower", "blossom", "alyssum", "amaranth", "anemone", "angelica", "aster", "begonia", "bleeding heart", "bluebell", "bougainvillea", "buttercup", "butterfly weed", "campion", "cactus flower", "carnation", "cherry blossom", "chrysanthemum", "clematis", "clivia", "columbine", "cothinar flower", "crocus", "daffodil", "dahlia", "daisy", "dandelion", "datura", "dragonstalk", "edelweiss", "feverfew", "flamestalk", "forget-me-not", "freesia", "frostflower", "gardenia", "geranium", "ginger blossom", "goldenrod", "heather", "heliotrope", "hellebore", "hibiscus", "honeysuckle", "honeywort", "hyacinth", "hydrangea", "iceblossom", "iris", "lavender", "lilac", "lily", "blood lily", "calla lily", "daylily", "tiger lily", "snow lily", "stargazer lily", "water lily", "lotus blossom", "jasmine", "jessamine", "larkspur", "lupine", "magnolia", "monkeyflower", "moonflower", "morning glory", "mournbloom", "nightshade", "orange blossom", "orchid", "pansy", "snow pansy", "passionflower", "peony", "petunia", "phlox", "plumeria", "poinsettia", "poppy", "posy", "rose", "rosebud", "dog rose", "primrose", "fairy primrose", "tea rose", "winter rose", "sirenflower", "snapdragon", "sunflower", "thistle", "trillium", "tulip", "tuberose", "violet", "alpine violet", "wood violet", "wildflower", "wisteria", "zinnia"];
-		const designs_nature = ["---NATURE---", "autumnal", "celestial", "heraldic", "moon phase", "paisley", "frost", "tropical", "star", "starburst", "sunburst", "moon", "moon and star", "crescent moon", "threefold moon", "nightscape", "eclipse", "solar eclipse", "lunar eclipse", "cloud", "storm cloud", "thundercloud", "rainbow", "lightning bolt", "raindrop", "snowflake", "snowman", "flame", "fire", "rising smoke", "paw print", "footprint", "handprint", "claw", "talon", "jack-o-lantern", "bramble", "branch", "cactus", "fern", "forest", "frond", "ivy", "leaf", "maple leaf", "mushroom", "palm frond", "pine needle", "pumpkin", "wreath", "holly", "mistletoe", "reed", "rosette", "shamrock", "tendril", "thorn", "toadstool", "tree", "vine", "grape vine", "willow", "coral", "seascape", "shell", "wave", "volcano", "apple", "berry", "cherry", "cake", "cookie", "fruit", "honeycomb", "muffin", "pie", "pie slice", "pineapple", "potato", "strawberry", "tart", "waffle", "watermelon", "marallis berry", "sovyn clove", "sweetfern", "garlic clove"];
-		const designs_pattern = ["---PATTERNS---", "anchor", "arrow", "bell", "chevron", "cityscape", "coffin", "diamond", "feather", "heart", "square", "triangle", "interlocked ring", "spiderweb", "spiral", "wisp"];
-		const designs_profession = ["---PROFESSIONS---", "bow", "claidhmore", "sword", "shield", "shield and sword", "crossed sword", "scimitar", "sickle", "boat", "brigantine", "carrack", "frigate", "galleon", "ship", "airship", "pirate", "pirate flag", "bottle", "wine bottle", "gear", "sprocket", "coin", "lock", "key", "lock and key", "lockpick", "scarab", "playing card", "clasped hands", "praying hands", "open hand", "skull", "demon", "eye", "rune", "runestaff", "runestone", "shrunken head", "scroll", "wand", "cauldron", "mortar and pestle", "book", "quill", "artist's brush", "brush stroke", "palette", "palette and brush", "lute", "flute", "harp", "music note", "skillet", "butter churn", "needle", "needle and thread", "spindle", "mitten", "sleigh", "wagon", "giftbox", "present", "spoon", "fork", "teapot", "teacup", "bride", "bridesmaid", "groom", "maiden", "cigar", "guillotine", "bone", "brain", "corpse", "fang", "finger", "fingernail", "fist", "intestine", "incisor", "kidney", "liver", "spleen", "toe", "toenail", "tooth", "gravestone", "headstone", "tombstone", "broomstick", "mop", "candelabra", "chalice", "lamp", "lantern", "sconce"];
-		const designs_religion = ["---RELIGION---", "angel", "anvil", "artist's brush", "black widow", "broken skull", "cat's head", "chelioboros", "clenched fist", "conjoined circles", "crescent moon", "crown", "crystal ball", "dagger", "dagger-pierced heart", "doe", "dolphin", "eight-pointed star", "feather", "flame", "gate and key", "grain sheaf", "heart", "hourglass", "jackal's head", "key", "leaf", "lily", "lute", "musical note", "ouroboros", "pegasus", "rose", "tentacled star", "six-tentacled star", "slit-pupiled eye", "scimitar", "scroll", "serpent", "shield", "sickle", "skull", "star", "stone giant", "stone giantess", "sunburst", "sword", "trident", "two-headed serpent"];		
-		const designs_all = designs_basic.concat(designs_animal, designs_floral, designs_nature, designs_pattern, designs_profession, designs_religion);		
-		const materials_common = ["---COMMON YARN---", "broadcloth", "chainsil", "cotton", "flax", "fleece", "flysilk", "linen", "paeline", "raw silk", "sailcloth", "sea silk", "silk", "spidersilk", "tweed", "wild silk", "wool"];
-		const materials_rare = [];		
-		const materials_all = materials_common.concat(materials_rare);
+		const description_all = ["---BASIC---", "knitted", "crocheted", "---DETAILED---", "aged knitted", "bloodstained knitted", "coarse knitted", "frayed knitted", "frosted knitted", "fuzzy knitted", "gradient knitted", "knotted knitted", "lightweight knitted", "lustrous knitted", "scorched knitted", "shiny knitted", "soft knitted", "thick knitted", "thin knitted", "waterlogged knitted", "weathered knitted", "winterweight knitted"];
+		const designs_basic = ["cable-knit", "cheveron-patterned", "diamond-patterned", "floral-patterned", "gartered-stitched", "ribbed", "striped", "zig zag-patterned"];
+		const designs_animal = ["alligator", "bat", "bear", "bird", "blood eagle", "bluebird", "bronco", "buck", "bug", "bumblebee", "bunny", "butterfly", "capybara", "cardinal", "caribou", "cat", "centaur", "chicken", "chinchilla", "cobra", "cow", "crab", "crow", "deer", "damselfly", "dog", "doe", "dolphin", "dove", "dragon", "duck", "fly", "dragonfly", "eagle", "eel", "egret", "elephant", "elk", "fairywren", "fawn", "finch", "fish", "firefly", "flamingo", "flycatcher", "fox", "frog", "gazelle", "goat", "griffin", "ghost", "ghostfly", "glimaerfly", "hart", "hawk", "hog", "hedgehog", "heron", "hind", "horse", "hummingbird", "ibis", "iguana", "jackal", "kitten", "koala", "kobold", "koi", "kraken", "ladybug", "lemur", "lion", "lizard", "lobster", "loris", "macaw", "mantis", "merlin", "minotaur", "monkey", "moose", "morduska", "moth", "mouse", "mustang", "narwhal", "octopus", "orc", "otter", "owl", "panda", "parrot", "peacock", "pegasus", "pelican", "penguin", "pheasant", "phoenix", "pig", "pixie", "polar bear", "pony", "puppy", "qahzumar", "rabbit", "raccoon", "raven", "reindeer", "roa'ter", "rolton", "rook", "rooster", "sea anemone", "seagull", "selshis", "serpent", "shark", "skeleton", "skull", "snake", "songbird", "spider", "sprite", "stag", "stallion", "starfish", "swan", "teadragon", "tentacle", "tiger", "toad", "tortoise", "troll", "turkey", "turtle", "unicorn", "weasel", "wendigo", "whale", "witch", "wolf", "wombat", "wraith", "wren", "wyvern", "yierka"];
+		const designs_floral = ["alpine violet", "alyssum", "amaranth", "anemone", "angelica", "aster", "begonia", "bleeding heart", "blood lily", "blossom", "bluebell", "bougainvillea", "buttercup", "butterfly weed", "campion", "cactus flower", "calla lily", "carnation", "cherry blossom", "chrysanthemum", "clematis", "clivia", "columbine", "cothinar flower", "crocus", "daffodil", "dahlia", "daisy", "dandelion", "datura", "daylily", "dragonstalk", "edelweiss", "feverfew", "flamestalk", "floral", "flower", "forget-me-not", "freesia", "frostflower", "gardenia", "geranium", "ginger blossom", "goldenrod", "heather", "heliotrope", "hellebore", "hibiscus", "honeysuckle", "honeywort", "hyacinth", "hydrangea", "iceblossom", "iris", "lavender", "lilac", "lily", "lotus blossom", "jasmine", "jessamine", "larkspur", "lupine", "magnolia", "monkeyflower", "moonflower", "morning glory", "mournbloom", "nightshade", "orange blossom", "orchid", "pansy", "snow pansy", "passionflower", "peony", "petunia", "phlox", "plumeria", "poinsettia", "poppy", "posy", "rose", "rosebud", "dog rose", "primrose", "fairy primrose", "tea rose", "winter rose", "sirenflower", "snapdragon", "snow lily", "stargazer lily", "sunflower", "thistle", "tiger lily", "trillium", "tulip", "tuberose", "violet", "water lily", "wood violet", "wildflower", "wisteria", "zinnia"];
+		const designs_nature = ["apple", "autumnal", "berry", "cake", "celestial", "cherry", "heraldic", "moon phase", "paisley", "frost", "tropical", "star", "starburst", "sunburst", "moon", "moon and star", "crescent moon", "threefold moon", "nightscape", "eclipse", "solar eclipse", "lunar eclipse", "cloud", "storm cloud", "thundercloud", "rainbow", "lightning bolt", "raindrop", "snowflake", "snowman", "flame", "fire", "rising smoke", "paw print", "footprint", "handprint", "claw", "talon", "jack-o-lantern", "bramble", "branch", "cactus", "cookie", "fern", "forest", "frond", "fruit", "garlic clove", "honeycomb", "ivy", "leaf", "maple leaf", "mushroom", "palm frond", "pie", "pie slice", "pineapple", "pine needle", "potato", "pumpkin", "wreath", "holly", "marallis berry", "mistletoe", "muffin", "reed", "rosette", "shamrock", "tendril", "thorn", "toadstool", "tree", "vine", "grape vine", "willow", "coral", "seascape", "shell", "sovyn clove", "strawberry", "sweetfern", "tart", "volcano", "waffle", "watermelon", "wave"];
+		const designs_pattern = ["anchor", "arrow", "bell", "chevron", "cityscape", "coffin", "diamond", "feather", "heart", "square", "triangle", "interlocked ring", "spiderweb", "spiral", "wisp"];
+		const designs_profession = ["---ARTIST---", "quill", "artist's brush", "brush stroke", "palette", "palette and brush", "lute", "flute", "harp", "music note", "---COOKING---", "bottle", "butter churn", "fork", "skillet", "spoon", "teapot", "teacup", "wine bottle", "---FIGHTING---", "bow", "claidhmore", "crossed sword", "scimitar", "shield", "shield and sword", "sickle", "sword", "---ROGUE---", "coin", "key", "lock", "lockpick", "lock and key", "scarab", "---SAILING---", "airship", "boat", "brigantine", "carrack", "frigate", "galleon", "pirate", "pirate flag", "ship", "---SORCERERY---", "bone", "brain", "corpse", "fang", "finger", "fingernail", "fist", "gravestone", "guillotine", "headstone", "intestine", "incisor", "kidney", "liver", "spleen", "toe", "toenail", "tooth", "tombstone", "---WIZARDRY---", "book", "cauldron", "demon", "eye", "mortar and pestle", "rune", "runestaff", "runestone", "scroll", "shrunken head", "skull", "wand", "---OTHER---", "bride", "bridesmaid", "broomstick", "candelabra", "chalice", "cigar", "clasped hands", "giftbox", "gear", "groom", "lamp", "lantern", "maiden", "mitten", "mop", "open hand", "playing card", "praying hands", "present", "needle", "needle and thread", "sconce", "sleigh", "spindle", "sprocket", "wagon"];
+		const designs_religion = ["angel", "anvil", "artist's brush", "black widow", "broken skull", "cat's head", "chelioboros", "clenched fist", "conjoined circles", "crescent moon", "crown", "crystal ball", "dagger", "dagger-pierced heart", "doe", "dolphin", "eight-pointed star", "feather", "flame", "gate and key", "grain sheaf", "heart", "hourglass", "jackal's head", "key", "leaf", "lily", "lute", "musical note", "ouroboros", "pegasus", "rose", "tentacled star", "six-tentacled star", "slit-pupiled eye", "scimitar", "scroll", "serpent", "shield", "sickle", "skull", "star", "stone giant", "stone giantess", "sunburst", "sword", "trident", "two-headed serpent"];		
+		//const designs_all = designs_basic.concat(designs_animal, designs_floral, designs_nature, designs_pattern, designs_profession, designs_religion);		
+		const materials_common = ["alpaca", "angora", "linen", "mohair", "paeline", "silk", "wool"];
+		const materials_rare = ["aneula", "Aldoran wool", "bamboo", "bresuna", "buckram", "cameline", "captiql", "cavelta", "chainsil", "chenille", "cotton", "dagswain", "fraelhan", "flannel", "flax", "fleece", "gossamer", "heather", "inytela", "jute", "krinklevelt", "lamb's wool", "lambilen", "maedatha", "malghavan wool", "merino wool", "moreen", "myssamere", "oiremere", "oxilen", "pashmina", "plumille", "qiviut", "ramie linen", "roltalen", "rolton wool", "ruhani wool", "rackhal", "sailcloth", "flyrsilk", "lotus silk", "ramie silk", "raw silk", "sea silk", "spidersilk", "starsilk", "stoutfoot wool", "tartan", "tweed", "vaslavilen", "vicuna", "wild silk", "woolen", "wylten", "wynelen", "yierkale", "yierka wool"];		
+		//const materials_all = materials_common.concat(materials_rare);
 		const items_clothing = ["---CLOTHING---", "armband", "brooch", "dress", "earmuffs", "gloves", "gown", "hartie", "hat", "headband", "leggings", "mittens", "muffler", "overdress", "pants", "petticoat", "scarf", "shawl", "skirt", "snood", "socks", "stockings", "sundress", "sweater", "tunic", "undershirt"];
 		const items_container = ["---CONTAINERS---", "apron", "basket", "backpack", "bag", "cape", "carryall", "cloak", "coat", "clutch", "jacket", "pouch", "purse", "robe", "satchel", "tote", "wrap", "vest"];
 		const items_mount = ["---FOR MOUNTS---", "headband", "foreleg wraps", "hind leg wraps", "scarf", "neck wrap", "blanket", "capelet", "hat", "spider booties", "beetle booties"];
@@ -67,8 +84,8 @@
 		assign everything to their default values.
 		*/
 		function init() {		
-			combo_selectors = ["pick_color1", "pick_color2", "pick_design", "pick_description", "pick_material", "pick_item_type"];
-			combo_arrays = [colors_all, colors_all, designs_all, description_all, materials_all, items_all];
+			combo_selectors = ["pick_color1", "pick_color2", "pick_normal_custom_color1", "pick_normal_custom_color2", "pick_design_basic", "pick_design_animal", "pick_design_floral", "pick_design_nature", "pick_design_pattern", "pick_design_profession", "pick_design_religion", "pick_description", "pick_material_common", "pick_material_rare", "pick_item_type"];
+			combo_arrays = [colors_all, colors_all, colors_all, colors_all, designs_basic, designs_animal, designs_floral, designs_nature, designs_pattern, designs_profession, designs_religion, description_all, materials_common, materials_rare, items_all];
 
 			/*
 			A second for loop is needed here for large arrays that combine multiple lists with 
@@ -114,17 +131,28 @@
 			
 			if(caller_id == "pick_description") {
 			    new_value = changeValueDescription(set_value, caller_id);
-				text_field = "description";			
+				text_field = "description";	
 			}			
-			else if(caller_id == "pick_design" || caller_id == "pick_design_extra") {
+			else if(caller_id == "pick_design" || caller_id == "pick_design_extra" ||
+			        caller_id == "pick_design_basic" || caller_id == "pick_design_animal" ||
+					caller_id == "pick_design_floral" || caller_id == "pick_design_nature" ||
+					caller_id == "pick_design_pattern" || caller_id == "pick_design_religion" || 
+					caller_id == "pick_design_profession") {
 			    new_value = changeValueDesign(set_value, caller_id);
 				text_field = "design";					
 			}		
-			else if(caller_id == "pick_color1" || caller_id == "pick_color2") {
+			else if(caller_id == "pick_color1" || caller_id == "pick_color2" ||
+					caller_id == "custom_color_input1" || caller_id == "custom_color_input2" ||
+					caller_id == "pick_normal_custom_color1" ||
+					caller_id == "pick_normal_custom_color2" ||
+					caller_id == "custom_color_normal_custom_input1" ||
+					caller_id == "custom_color_normal_custom_input2" ||
+					caller_id == "pick_color") {
 			    new_value = changeValueColor(set_value, prev_value, caller_id);
 				text_field = "color";			
 			}
-			else if(caller_id == "pick_material") {				
+			else if(caller_id == "pick_material" || caller_id == "pick_material_common" || 
+					caller_id == "pick_material_rare" || caller_id == "custom_material_input") {				
 			    new_value = changeValueMaterial(set_value, caller_id);
 				text_field = "material";					
 			}
@@ -147,110 +175,365 @@
 		*/		
 		function changeValueDescription(set_value, caller_id) {
 			if(set_value == "crocheted") {
-				document.getElementById("pick_design").value = "Nothing"
-				document.getElementById("design_div").style.display = 'none';					
-				document.getElementById("design").innerHTML = "";
+				document.getElementById("pick_design").value = "Nothing"				
+				document.getElementById("design_div_basic").style.display = 'none';				
+				document.getElementById("design_div_animal").style.display = 'none';				
+				document.getElementById("design_div_floral").style.display = 'none';				
+				document.getElementById("design_div_nature").style.display = 'none';			
+				document.getElementById("design_div_pattern").style.display = 'none';						
+				document.getElementById("design_div_profession").style.display = 'none';				
+				document.getElementById("design_div_religion").style.display = 'none';			
+				document.getElementById("design_div_extra").style.display = 'none';		
+			    document.getElementById("design").innerHTML = "";
 			}		
 			return set_value;
 		}
 
 		/*
 		Update the Material text field with a new value.
-		This is mostly a placeholder since no extra logic is needed at this time
 		*/		
-		function changeValueMaterial(set_value, caller_id) {			
-			new_value = set_value;
-			return new_value;
+		function changeValueMaterial(set_value, caller_id) {	
+			common_div = document.getElementById("material_div_common");	
+			rare_div = document.getElementById("material_div_rare");			
+			custom_div = document.getElementById("material_div_custom");
+			common_value = document.getElementById("pick_material_common").value;	
+			rare_value = document.getElementById("pick_material_rare").value;			
+			custom_value = document.getElementById("custom_material_input").value;
+						
+			
+			if(caller_id == "pick_material") {
+				common_div.style.display = 'none';				
+				rare_div.style.display = 'none';				
+				custom_div.style.display = 'none';
+				
+				if(set_value == "Common Yarn...") {
+					common_div.style.display = 'block';	
+					return common_value;
+				}
+				else if(set_value == "Rare Yarn...") {
+					rare_div.style.display = 'block';
+					return rare_value;
+				}
+				else if(set_value == "Custom Yarn...") {
+					custom_div.style.display = 'block';
+					return "...";
+				}
+			}
+			else if(caller_id = "pick_material_common") {
+				return set_value;
+			}
+			else if(caller_id = "pick_material_rare") {
+				return set_value;
+			}
+			else if(caller_id = "custom_material_input") {
+				if(set_value == "") {
+					return "...";
+				}
+				
+				return set_value;
+			}
 		}
 
 		/*
 		Update the Design Style text field with a new value.
 		*/				
 		function changeValueDesign(set_value, caller_id) {		
-			design_div = document.getElementById("design_div");			
+			design_div_basic = document.getElementById("design_div_basic");
+			design_div_animal = document.getElementById("design_div_animal");
+			design_div_floral = document.getElementById("design_div_floral");
+			design_div_nature = document.getElementById("design_div_nature");
+			design_div_pattern = document.getElementById("design_div_pattern");
+			design_div_profession = document.getElementById("design_div_profession");
+			design_div_religion = document.getElementById("design_div_religion");
+			design_div_extra = document.getElementById("design_div_extra");
+			basic_value = document.getElementById("pick_design_basic").value;
+			animal_value = document.getElementById("pick_design_animal").value;
+			floral_value = document.getElementById("pick_design_floral").value;
+			nature_value = document.getElementById("pick_design_nature").value;
+			pattern_value = document.getElementById("pick_design_pattern").value;
+			profession_value = document.getElementById("pick_design_profession").value;
+			religion_value = document.getElementById("pick_design_religion").value;
+			extra_value = document.getElementById("pick_design_extra").value;
+			pick_value = document.getElementById("pick_design").value;
+			base_value = "";
 			
-			if(caller_id == "pick_design") {
+			if(document.getElementById("pick_description").value == "crocheted") {
+				document.getElementById("pick_description").value = "knitted";		
+			    document.getElementById("description").innerHTML = "knitted";
+			}
+
+			
+			if(caller_id == "pick_design") {		
+				design_div_basic.style.display = 'none';				
+				design_div_animal.style.display = 'none';				
+				design_div_floral.style.display = 'none';				
+				design_div_nature.style.display = 'none';			
+				design_div_pattern.style.display = 'none';						
+				design_div_profession.style.display = 'none';				
+				design_div_religion.style.display = 'none';			
+				design_div_extra.style.display = 'none';		
+				
 				if(set_value == "Nothing") {
-					design_div.style.display = 'none';
-					new_value = "";
+					return "";
 				}
-				else {
-					design_div.style.display = 'block';			
-					new_value = set_value + "-" + document.getElementById("pick_design_extra").value;				
-				}			
+				else if(set_value == "Basic Designs...") {
+					design_div_basic.style.display = 'block';	
+					return basic_value;
+				}
+				else if(set_value == "Animal Designs...") {
+					design_div_animal.style.display = 'block';					
+					design_div_extra.style.display = 'block';			
+					base_value = animal_value;
+				}
+				else if(set_value == "Floral Designs...") {
+					design_div_floral.style.display = 'block';					
+					design_div_extra.style.display = 'block';			
+					base_value = floral_value;
+				}
+				else if(set_value == "Nature Designs...") {				
+					design_div_nature.style.display = 'block';	
+					design_div_extra.style.display = 'block';			
+					base_value = nature_value;
+				}
+				else if(set_value == "Pattern Designs...") {				
+					design_div_pattern.style.display = 'block';	
+					design_div_extra.style.display = 'block';			
+					base_value = pattern_value;
+				}
+				else if(set_value == "Profession Designs...") {				
+					design_div_profession.style.display = 'block';	
+					design_div_extra.style.display = 'block';			
+					base_value = profession_value;
+				}
+				else if(set_value == "Religion Designs...") {				
+					design_div_religion.style.display = 'block';	
+					design_div_extra.style.display = 'block';			
+					base_value = religion_value;
+				}
+								
+				return base_value + "-" + extra_value;		
 			}
 			else if(caller_id == "pick_design_extra") {
-				new_value = document.getElementById("pick_design").value + "-" + set_value;			
+				if(pick_value == "Animal Designs...") {		
+					return animal_value + "-" + extra_value;
+				}
+				else if(pick_value == "Floral Designs...") {		
+					return floral_value + "-" + extra_value;
+				}
+				else if(pick_value == "Nature Designs...") {				
+					return nature_value + "-" + extra_value;
+				}
+				else if(pick_value == "Pattern Designs...") {				
+					return pattern_value + "-" + extra_value;
+				}
+				else if(pick_value == "Profession Designs...") {			
+					return profession_value + "-" + extra_value;
+				}
+				else if(pick_value == "Religion Designs...") {			
+					return religion_value + "-" + extra_value;
+				}			
+			}
+			else if(caller_id == "pick_design_basic") {
+				return set_value;			
 			}
 			else {
-				new_value = set_value;
-			}
-			
-			return new_value;		
+				base_value = set_value;
+				return base_value + "-" + extra_value;	
+			}			
 		}
 
 		/*
 		Update the Color text field with a new value.
-		Because there can be two colors, extra code is needed.
+		Because there can be two colors, possibly custom colors, a lot of extra code is needed.
 		*/		
 		function changeValueColor(set_value, prev_value, caller_id) {
-			if(caller_id == "pick_color1") {
+			color1_div = document.getElementById("color1_div");
+			color2_div = document.getElementById("color2_div");		
+			color1_custom_div = document.getElementById("color_custom_one_div");		
+			color2_custom_div = document.getElementById("color_custom_two_div");		
+			color1_normal_custom_div = document.getElementById("color_normal_custom_one_div");		
+			color2_normal_custom_div = document.getElementById("color_normal_custom_two_div");		
+
+				
+			if(caller_id == "pick_color") {			
+				color1_div.style.display = 'none';
+				color2_div.style.display = 'none';		
+				color1_custom_div.style.display = 'none';		
+				color2_custom_div.style.display = 'none';		
+				color1_normal_custom_div.style.display = 'none';		
+				color2_normal_custom_div.style.display = 'none';		
+				
+				if(set_value == 'Nothing') {
+					return "";
+				}
+				else if(set_value == 'Multicolored') {
+					return "multicolored";
+				}
+				else if(set_value == 'One Normal Color...') {
+					color1_div.style.display = 'block';
+					
+					return document.getElementById("pick_color1").value
+				}
+				else if(set_value == 'Two Normal Colors...') {
+					color1_div.style.display = 'block';
+					color2_div.style.display = 'block';
+					
+					return document.getElementById("pick_color1").value + " and " + document.getElementById("pick_color2").value
+				}
+				else if(set_value == 'One Custom Color...') {
+					color1_custom_div.style.display = 'block'
+					;
+					if(document.getElementById("custom_color_input1").value == "") {
+						return "...";
+					}
+					
+					return document.getElementById("custom_color_input1").value;
+				}
+				else if(set_value == 'Two Custom Colors...') {
+					color1_custom_div.style.display = 'block';		
+					color2_custom_div.style.display = 'block';
+					custom_color1 = document.getElementById("custom_color_input1").value;
+					custom_color2 = document.getElementById("custom_color_input2").value;
+					
+					if(custom_color1 == "") {
+						custom_color1 = "...";
+					}
+					
+					if(custom_color2 == "") {
+						custom_color2 = "...";
+					}
+					
+					return custom_color1 + " and " + custom_color2;
+				}
+				else if(set_value == 'One Normal and One Custom Color...') {
+					color1_normal_custom_div.style.display = 'block';			
+					color = document.getElementById("pick_normal_custom_color1").value;			
+					custom_color = document.getElementById("custom_color_normal_custom_input1").value;	
+					
+					if(custom_color == "") {
+						custom_color = "...";
+					}					
+					
+					return color + " and " + custom_color;
+				}
+				else if(set_value == 'One Custom and One Normal Color...') {
+					color2_normal_custom_div.style.display = 'block';	
+					custom_color = document.getElementById("custom_color_normal_custom_input2").value;	
+					color = document.getElementById("pick_normal_custom_color2").value;	
+										
+					if(custom_color == "") {
+						custom_color = "...";
+					}
+					
+					return custom_color + " and " + color;					
+				}
+			}
+			else if(caller_id == "pick_color1") {
+				color_option = document.getElementById("pick_color").value;	
 				extra_value = document.getElementById("pick_color2").value;	
 				
-				if(set_value == 'Nothing') {	
-					document.getElementById("color_div").style.display = 'none';	
-					document.getElementById("pick_color2").value = "Nothing";
-					return "";	
-				}
-				else if(set_value == 'multicolored') {
-					document.getElementById("color_div").style.display = 'none';	
-					document.getElementById("pick_color2").value = "Nothing";
-					return set_value;	
-				}
 				
-				document.getElementById("color_div").style.display = 'block';	
-				
-				if(extra_value == "Nothing") {
+				if(color_option == "One Normal Color...") {		
+					if(extra_value == set_value) {
+						document.getElementById("pick_color2").value = prev_value;
+					}				
+					
 					return set_value;
-				}				
-				else if(extra_value == set_value) {
-					document.getElementById("pick_color2").value = prev_value;
-					return set_value + " and " + prev_value;
 				}
-				else {
-					return set_value + " and " + extra_value;	
+				else if(color_option == "Two Normal Colors..."){
+					if(extra_value == set_value) {
+						document.getElementById("pick_color2").value = prev_value;
+						
+						return set_value + " and " + prev_value;
+					}										
+					else {
+						return set_value + " and " + extra_value;
+					}
 				}
 			}
 			else if(caller_id == "pick_color2") {
 				base_value = document.getElementById("pick_color1").value;
-				if(set_value == "Nothing") {
-					return base_value;
-				}
-				else if(set_value == 'multicolored') {
-					document.getElementById("color_div").style.display = 'none';	
-					document.getElementById("pick_color1").value = set_value;
-					document.getElementById("pick_color2").value = "Nothing";
-					return set_value;	
-				}
-				else if(base_value == set_value) {
-					if(prev_value == 'Nothing') {
-						document.getElementById("pick_color1").value = set_value;
-						document.getElementById("pick_color2").value = 'Nothing';
-						return set_value;								
-					}
-					else {
-						document.getElementById("pick_color1").value = prev_value;
-						return prev_value + " and " + set_value;
-					}						
+				
+				if(base_value == set_value) {
+					document.getElementById("pick_color1").value = prev_value;
+					
+					return prev_value + " and " + set_value;
 				}
 				else {
 					return base_value + " and " + set_value;				
 				}
 			}		
+			else if(caller_id == "custom_color_input1") {
+				color_option = document.getElementById("pick_color").value;	
+				custom_value2 = document.getElementById("custom_color_input2").value;	
 
-			return set_value;
+				if(set_value == "") {
+					set_value = "...";
+				}
+
+				if(custom_value2 == "") {
+					custom_value2 =  "...";
+				}
+
+				if(color_option == "Two Custom Colors...") {
+					return set_value + " and " + custom_value2;				
+				}
+				else {
+					return set_value;
+				}
+			}
+			else if(caller_id == "custom_color_input2") {
+				custom_value1 = document.getElementById("custom_color_input1").value;
+				
+				if(set_value == "") {
+					set_value = "...";
+				}
+
+				if(custom_value1 == "") {
+					custom_value1 =  "...";
+				}
+				
+				return custom_value1 + " and " + set_value;
+			}			
+			else if(caller_id == "pick_normal_custom_color1") {
+				custom_value1 = document.getElementById("custom_color_normal_custom_input1").value;				
+
+				if(custom_value1 == "") {
+					custom_value1 =  "...";
+				}
+				
+				return set_value + " and " + custom_value1;				
+			}			
+			else if(caller_id == "pick_normal_custom_color2") {
+				custom_value2 = document.getElementById("custom_color_normal_custom_input2").value;				
+
+				if(custom_value2 == "") {
+					custom_value2 =  "...";
+				}
+				
+				return custom_value2 + " and " + set_value;				
+			}
+			else if(caller_id == "custom_color_normal_custom_input1") {
+				if(set_value == "") {
+					set_value =  "...";
+				}				
+				
+				return document.getElementById("pick_normal_custom_color1").value + " and " + set_value;	
+			}
+			else if(caller_id == "custom_color_normal_custom_input2") {
+				if(set_value == "") {
+					set_value =  "...";
+				}				
+				
+				return set_value + " and " + document.getElementById("pick_normal_custom_color2").value;	
+			}			
 		}
-			
+
+
+		/*
+		Update the Design Style text field with a new value.
+		Not much to do, so this is placeholder if needed.
+		*/							
 		function changeValueItemType(set_value, caller_id) {			
 			new_value = set_value;
 			return new_value;
@@ -295,23 +578,55 @@
 				
 			if(!document.getElementById("design_lock").checked) {
 				document.getElementById("pick_design").value = "Nothing";
-				document.getElementById("pick_design_extra").value = "motif";				
-				document.getElementById("design_div").style.display = 'none';				
+				document.getElementById("pick_design_basic").value = "cable-knit";		
+				document.getElementById("pick_design_animal").value = "alligator";		
+				document.getElementById("pick_design_floral").value = "alpine violet";		
+				document.getElementById("pick_design_nature").value = "apple";		
+				document.getElementById("pick_design_pattern").value = "anchor";		
+				document.getElementById("pick_design_profession").value = "quil";		
+				document.getElementById("pick_design_religion").value = "angel";		
+				document.getElementById("pick_design_extra").value = "motif";		
+				document.getElementById("design_div_basic").style.display = 'none';				
+				document.getElementById("design_div_animal").style.display = 'none';				
+				document.getElementById("design_div_floral").style.display = 'none';				
+				document.getElementById("design_div_nature").style.display = 'none';			
+				document.getElementById("design_div_pattern").style.display = 'none';						
+				document.getElementById("design_div_profession").style.display = 'none';				
+				document.getElementById("design_div_religion").style.display = 'none';			
+				document.getElementById("design_div_extra").style.display = 'none';				
 				obj = document.getElementById("pick_design")
 				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
 				
 			if(!document.getElementById("color_lock").checked) {
-				document.getElementById("pick_color1").value = "Nothing";	
-				document.getElementById("pick_color2").value = "Nothing";			
-				document.getElementById("color_div").style.display = 'none';					
-				document.getElementById("color").innerHTML = "";			
+				document.getElementById("pick_color").value = "Nothing";
+				document.getElementById("pick_color1").value = "black";
+				document.getElementById("pick_color2").value = "coal black";
+				document.getElementById("custom_color_input1").value = "";
+				document.getElementById("custom_color_input2").value = "";
+				document.getElementById("pick_normal_custom_color1").value = "black";
+				document.getElementById("pick_normal_custom_color2").value = "black";
+				document.getElementById("custom_color_normal_custom_input1").value = "";
+				document.getElementById("custom_color_normal_custom_input2").value = "";
+				document.getElementById("color1_div").style.display = 'none';
+				document.getElementById("color2_div").style.display = 'none';
+				document.getElementById("color_custom_one_div").style.display = 'none';		
+				document.getElementById("color_custom_two_div").style.display = 'none';		
+				document.getElementById("color_normal_custom_one_div").style.display = 'none';		
+				document.getElementById("color_normal_custom_two_div").style.display = 'none';		
+				document.getElementById("color").innerHTML = "";				
 			}
 			
 			if(!document.getElementById("material_lock").checked) {
-				document.getElementById("pick_material").value = "broadcloth";
+				document.getElementById("pick_material").value = "Common Yarn...";
+				document.getElementById("pick_material_common").value = "alpaca";
+				document.getElementById("pick_material_rare").value = "aneula";
+				document.getElementById("custom_material_input").value = "";
+				document.getElementById("material_div_common").style.display = 'none';				
+				document.getElementById("material_div_rare").style.display = 'none';				
+				document.getElementById("material_div_custom").style.display = 'none';		
 				obj = document.getElementById("pick_material")
-				changeValue(obj.value, obj.oldvalue, obj.id);
+				changeValue("Common Yarn...", obj.oldvalue, obj.id);
 			}
 				
 			if(!document.getElementById("item_type_lock").checked) {
@@ -329,71 +644,101 @@
 		Code is made to make sure that each field unhides the menues with the right choices selected.		
 		*/
 		function createRandomItem() {			
-			
+			design_dict = {"Basic Designs...":"pick_design_basic", "Animal Designs...":"pick_design_animal", "Floral Designs...":"pick_design_floral", "Nature Designs...":"pick_design_nature", "Pattern Designs...":"pick_design_pattern", "Profession Designs...":"pick_design_profession", "Religion Designs...":"pick_design_religion"};
+			material_dict = {"Common Yarn...":"pick_material_common", "Rare Yarn...":"pick_material_rare"}
+		
 			//Reset all values before doing anything.
 			resetAll();		
 			
 			//Select a random option for section: design
 			if(!document.getElementById("design_lock").checked) {
 				do {
-					select  = document.getElementById("pick_design");
-					options = select.children;  
+					select_design  = document.getElementById("pick_design");
+					options = select_design.children;  
 					random  = Math.floor(Math.random() * options.length);
 				} while (options[random].value[1] == "-");
 				
-				select.value = options[random].value;
-				changeValue(select.value, select.oldvalue, select.id);
-
-				if(select.value != "Nothing" && select.value != "striped" &&
-				   select.value != "ribbed" && select.value != "cable-knit" &&
-				   select.value != "cheveron-patterned" && 
-				   select.value != "diamond-patterned" &&
-				   select.value != "zig zag-patterned" &&
-				   select.value != "floral-patterned" &&
-				   select.value != "gartered-stitched")
-				{
+				select_design.value = options[random].value;
+				changeValue(select_design.value, select_design.oldvalue, select_design.id);						
+					
+				if(select_design.value != "Nothing") {	
+					if(select_design.value != "Basic Designs...") {
+						do {
+							select  = document.getElementById("pick_design_extra");
+							options = select.children;  
+							random  = Math.floor(Math.random() * options.length);
+						} while (options[random].value[1] == "-");
+						
+						select.value = options[random].value;
+						changeValue(select.value, select.oldvalue, select.id);				
+					}		
+					
 					do {
-						select  = document.getElementById("pick_design_extra");
+						select  = document.getElementById(design_dict[select_design.value]);
 						options = select.children;  
 						random  = Math.floor(Math.random() * options.length);
-					} while (options[random].value[1] == "-");
-					
-					select.value = options[random].value;
-					changeValue(select.value, select.oldvalue, select.id);				
-				}		
+					} while (options[random].value[1] == "-");				
+					select.value = options[random].value;	
+					changeValue(select.value, select.oldvalue, select.id);	
+				}
 				
 			//Select a random option for section: color
-			if(!document.getElementById("color_lock").checked) {
+			if(!document.getElementById("color_lock").checked) {			
 				do {
-					select_color1  = document.getElementById("pick_color1");
-					options = select_color1.children;
-					random  = Math.floor(Math.random() * (options.length - 2));	
+					select_pick_color  = document.getElementById("pick_color");
+					options = select_pick_color.children;
+					random  = Math.floor(Math.random() * (options.length - 4));	
 					color1_value = options[random].value;
-				} while(options[random].value[1] == "-");
-					
-					
-				if(color1_value != "Nothing" && color1_value != "multicolor") {
-					do {				
-						select  = document.getElementById("pick_color2");
-						options = select.children;  
-						random  = Math.floor(Math.random() * options.length);			
-						select.value = options[random].value;
-					} while (options[random].value[1] == "-" || select.value == color1_value);
+				} while(options[random].value[1] == "-");				
+			
+			
+				select_pick_color.value = color1_value;		
+				changeValue(select_pick_color.value, select_pick_color.oldvalue, select_pick_color.id);			
+			
+				if(select_pick_color.value != "Nothing" && select_pick_color.value != "Multicolored") {
+					do {
+						select_color1  = document.getElementById("pick_color1");
+						options = select_color1.children;
+						random  = Math.floor(Math.random() * options.length);	
+						color1_value = options[random].value;
+					} while(options[random].value[1] == "-");			
+			
+					select_color1.value = color1_value;		
+					changeValue(select_color1.value, select_color1.oldvalue, select_color1.id);						
+						
+					if(select_pick_color.value == "Two Colors...") {
+						do {				
+							select_color2  = document.getElementById("pick_color2");
+							options = select_color2.children;  
+							random  = Math.floor(Math.random() * options.length);			
+							color2_value = options[random].value;
+						} while (options[random].value[1] == "-" || select_color2.value == color1_value);
+						select_color2.value = color2_value;		
+						changeValue(select_color2.value, select_color2.oldvalue, select_color2.id);
+					}
 				}
-				select_color1.value = color1_value;		
-				changeValue(select_color1.value, select_color1.oldvalue, select_color1.id);
 			}
 			
 			//Select a random option for section: material
 			if(!document.getElementById("material_lock").checked) {
 				do {
-					select  = document.getElementById("pick_material");
+					select_material  = document.getElementById("pick_material");
+					options = select_material.children;  
+					random  = Math.floor(Math.random() * (options.length - 1));
+				} while (options[random].value[1] == "-");
+				
+				select_material.value = options[random].value;
+				changeValue(select_material.value, select_material.oldvalue, select_material.id);		
+
+				
+				do {
+					select  = document.getElementById(material_dict[select_material.value]);
 					options = select.children;  
 					random  = Math.floor(Math.random() * options.length);
 				} while (options[random].value[1] == "-");
 				
 				select.value = options[random].value;
-				changeValue(select.value, select.oldvalue, select.id);			
+				changeValue(select.value, select.oldvalue, select.id);		
 			}
 			
 			//Select a random option for section: item type
@@ -442,9 +787,37 @@
 		  <td valign="top" width="20%">
 			Design: (Lock:<input type="checkbox" id="design_lock">)<br>
 			<select id="pick_design" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
-				<option id="Nothing" selected>Nothing</option>
-			</select><br>				
-			<div id="design_div"></input>
+				<option selected>Nothing</option>
+				<option>Basic Designs...</option>
+				<option>Animal Designs...</option>
+				<option>Floral Designs...</option>
+				<option>Nature Designs...</option>
+				<option>Pattern Designs...</option>
+				<option>Profession Designs...</option>
+				<option>Religion Designs...</option>
+			</select>
+			<div id="design_div_basic">
+				<select id="pick_design_basic" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>
+			<div id="design_div_animal">
+				<select id="pick_design_animal" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>
+			<div id="design_div_floral">
+				<select id="pick_design_floral" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>
+			<div id="design_div_nature">
+				<select id="pick_design_nature" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>
+			<div id="design_div_pattern">
+				<select id="pick_design_pattern" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>	
+			<div id="design_div_profession">
+				<select id="pick_design_profession" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>	
+			<div id="design_div_religion">
+				<select id="pick_design_religion" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>				
+			<div id="design_div_extra">
 				<select id="pick_design_extra" onchange="changeValue(this.value, this.oldvalue, this.id)">
 					<option selected>motif</option>
 					<option>patterned</option>
@@ -452,21 +825,58 @@
 			</div>
 		  </td>
 		  <td valign="top" width="20%">
-			Colors: (Lock:<input type="checkbox" id="color_lock">)<br>		
-				<select id="pick_color1" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
-					<option id="Nothing" selected>Nothing</option>
-				</select> 			
-				<div id="color_div"></input>
-					<select id="pick_color2" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
-						<option id="Nothing" selected>Nothing</option>
-					</select>
-				</div>
-
+			Colors: (Lock:<input type="checkbox" id="color_lock">)<br>	
+			<select id="pick_color" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+				<option>Nothing</option>
+				<option>Multicolored</option>
+				<option>One Normal Color...</option>
+				<option>Two Normal Colors...</option>
+				<option>One Custom Color...</option>
+				<option>Two Custom Colors...</option>
+				<option>One Normal and One Custom Color...</option>
+				<option>One Custom and One Normal Color...</option>
+				</select> 	
+			<div id="color1_div">	
+				C1:<select id="pick_color1" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+				</select> 		
+			</div>
+			<div id="color2_div">		
+				C2:<select id="pick_color2" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+				</select>
+			</div>
+			<div id="color_custom_one_div">
+				C1:<input type="text" id="custom_color_input1" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>			
+			</div>
+			<div id="color_custom_two_div">
+				C2:<input type="text" id="custom_color_input2" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>			
+			</div>
+			<div id="color_normal_custom_one_div">
+				C1:<select id="pick_normal_custom_color1" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+				</select><br>
+				C2:<input type="text" id="custom_color_normal_custom_input1" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>			
+			</div>
+			<div id="color_normal_custom_two_div">
+				C1:<input type="text" id="custom_color_normal_custom_input2" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input><br>
+				C2:<select id="pick_normal_custom_color2" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+				</select>	
+			</div>
 		  </td>
 		  <td valign="top" width="20%">
 			Material: (Lock:<input type="checkbox" id="material_lock">)<br>
 			<select id="pick_material" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+				<option>Common Yarn...</option>
+				<option>Rare Yarn...</option>
+				<option>Custom Yarn...</option>
 			</select>
+			<div id="material_div_common">
+				<select id="pick_material_common" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>
+			<div id="material_div_rare">
+				<select id="pick_material_rare" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>
+			<div id="material_div_custom">
+				<input type="text" id="custom_material_input" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>			
+			</div>
 		  </td>
 		  <td valign="top" width="20%">
 			Item Type: (Lock:<input type="checkbox" id="item_type_lock">)<br>
@@ -478,7 +888,8 @@
 		</td>
 		 </tr>
 		</table>
-		<br><br><br><br><br><br>
-		<a href="./index.html">Back to Main Page</a>
+		<div class="link_text">
+			<a href="./index.html">Back to Main Page</a>
+		</div>
 	</BODY>
 </HTML>
