@@ -1,35 +1,11 @@
 # hymore246.github.io
-Public Repository for the Warrior Sheath Designer tool
+Public Repository for Hymore's Handy Tools. These are open sourced tools that work without a server
+and can be run by themselves offline if an individual file is downloaded.
 
-ABOUT
-The Warrior Sheath Designer was created by Hymore.
-This is a tool that helps design of warrior sheaths. The tool was made for the Gemstone 4 community
-and is free to use and open sourced. The tool uses only HTML and client side javascript. Meaning, it
-doesn't need an internet connection to function. The designer can be used offline by downloading
-the HTML page and opening it in a web browser.
+Version changes can be found in the source code of each tool's file.
 
-VERSION HISTORY:
-v1.0  
-- Initial release.
+Warrior Sheath Designer
+- Assists users in creating a warrior sheath.
 
-v1.1  
-- Fixed typos. Removed "stones" word from stone gems. Added more gem types.
-
-v1.2  
-- Fixed typos. Added sizes for pearl gems and ki-lin horn fringing.
-- Removed incorrect Dagger Sheath/Scabbard location text. 
-- Updated plural versions of many gems.        
-- Color categories are now alphabetical, ending with Misc Colors.
-         
-v1.3  
-- Fixed even more typos.
-- Added wrap category to materials (no skins with wrap noun exist yet).
-        
-v1.4  
-- Fixed some more typos. Added Ascension area gems.
-
-v1.5  
-- Fixed typos. 
-- Updated changeValue() to be a wrapper for four sub-functions that handle value changing.        
-- Added Lock checkboxes. Keeps option choice when using Clear All and Random Sheath buttons.        
-- Added Custom Fringing and Inlaid Gem input boxes for anything that does not naturall spawn.		
+Knitting Designer
+- Assists users in creating knitting projects.
