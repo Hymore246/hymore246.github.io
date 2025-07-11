@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Knitting Designer v1.2</TITLE>
+	<TITLE>Hymore's Knitting Designer v1.3</TITLE>
 	<STYLE>
 		div.knitted_text {
 			font-size: 30px;
@@ -36,6 +36,12 @@
 		- Added a bunch of new color fields due to custom color possibilities.
 		- Reorder several options to be alphabetical.
 		- Changed return link to be inside a position div.
+		
+		v1.3
+		- Added several new item types.
+		- Changed profession title ROGUE to LOCKSMITHING.
+		- Removed unneeded commented-out lines.
+		- Fixed a bug in createRandomItem().
 		*/		
 		
 		
@@ -67,15 +73,14 @@
 		const designs_floral = ["alpine violet", "alyssum", "amaranth", "anemone", "angelica", "aster", "begonia", "bleeding heart", "blood lily", "blossom", "bluebell", "bougainvillea", "buttercup", "butterfly weed", "campion", "cactus flower", "calla lily", "carnation", "cherry blossom", "chrysanthemum", "clematis", "clivia", "columbine", "cothinar flower", "crocus", "daffodil", "dahlia", "daisy", "dandelion", "datura", "daylily", "dragonstalk", "edelweiss", "feverfew", "flamestalk", "floral", "flower", "forget-me-not", "freesia", "frostflower", "gardenia", "geranium", "ginger blossom", "goldenrod", "heather", "heliotrope", "hellebore", "hibiscus", "honeysuckle", "honeywort", "hyacinth", "hydrangea", "iceblossom", "iris", "lavender", "lilac", "lily", "lotus blossom", "jasmine", "jessamine", "larkspur", "lupine", "magnolia", "monkeyflower", "moonflower", "morning glory", "mournbloom", "nightshade", "orange blossom", "orchid", "pansy", "snow pansy", "passionflower", "peony", "petunia", "phlox", "plumeria", "poinsettia", "poppy", "posy", "rose", "rosebud", "dog rose", "primrose", "fairy primrose", "tea rose", "winter rose", "sirenflower", "snapdragon", "snow lily", "stargazer lily", "sunflower", "thistle", "tiger lily", "trillium", "tulip", "tuberose", "violet", "water lily", "wood violet", "wildflower", "wisteria", "zinnia"];
 		const designs_nature = ["apple", "autumnal", "berry", "cake", "celestial", "cherry", "heraldic", "moon phase", "paisley", "frost", "tropical", "star", "starburst", "sunburst", "moon", "moon and star", "crescent moon", "threefold moon", "nightscape", "eclipse", "solar eclipse", "lunar eclipse", "cloud", "storm cloud", "thundercloud", "rainbow", "lightning bolt", "raindrop", "snowflake", "snowman", "flame", "fire", "rising smoke", "paw print", "footprint", "handprint", "claw", "talon", "jack-o-lantern", "bramble", "branch", "cactus", "cookie", "fern", "forest", "frond", "fruit", "garlic clove", "honeycomb", "ivy", "leaf", "maple leaf", "mushroom", "palm frond", "pie", "pie slice", "pineapple", "pine needle", "potato", "pumpkin", "wreath", "holly", "marallis berry", "mistletoe", "muffin", "reed", "rosette", "shamrock", "tendril", "thorn", "toadstool", "tree", "vine", "grape vine", "willow", "coral", "seascape", "shell", "sovyn clove", "strawberry", "sweetfern", "tart", "volcano", "waffle", "watermelon", "wave"];
 		const designs_pattern = ["anchor", "arrow", "bell", "chevron", "cityscape", "coffin", "diamond", "feather", "heart", "square", "triangle", "interlocked ring", "spiderweb", "spiral", "wisp"];
-		const designs_profession = ["---ARTIST---", "quill", "artist's brush", "brush stroke", "palette", "palette and brush", "lute", "flute", "harp", "music note", "---COOKING---", "bottle", "butter churn", "fork", "skillet", "spoon", "teapot", "teacup", "wine bottle", "---FIGHTING---", "bow", "claidhmore", "crossed sword", "scimitar", "shield", "shield and sword", "sickle", "sword", "---ROGUE---", "coin", "key", "lock", "lockpick", "lock and key", "scarab", "---SAILING---", "airship", "boat", "brigantine", "carrack", "frigate", "galleon", "pirate", "pirate flag", "ship", "---SORCERERY---", "bone", "brain", "corpse", "fang", "finger", "fingernail", "fist", "gravestone", "guillotine", "headstone", "intestine", "incisor", "kidney", "liver", "spleen", "toe", "toenail", "tooth", "tombstone", "---WIZARDRY---", "book", "cauldron", "demon", "eye", "mortar and pestle", "rune", "runestaff", "runestone", "scroll", "shrunken head", "skull", "wand", "---OTHER---", "bride", "bridesmaid", "broomstick", "candelabra", "chalice", "cigar", "clasped hands", "giftbox", "gear", "groom", "lamp", "lantern", "maiden", "mitten", "mop", "open hand", "playing card", "praying hands", "present", "needle", "needle and thread", "sconce", "sleigh", "spindle", "sprocket", "wagon"];
-		const designs_religion = ["angel", "anvil", "artist's brush", "black widow", "broken skull", "cat's head", "chelioboros", "clenched fist", "conjoined circles", "crescent moon", "crown", "crystal ball", "dagger", "dagger-pierced heart", "doe", "dolphin", "eight-pointed star", "feather", "flame", "gate and key", "grain sheaf", "heart", "hourglass", "jackal's head", "key", "leaf", "lily", "lute", "musical note", "ouroboros", "pegasus", "rose", "tentacled star", "six-tentacled star", "slit-pupiled eye", "scimitar", "scroll", "serpent", "shield", "sickle", "skull", "star", "stone giant", "stone giantess", "sunburst", "sword", "trident", "two-headed serpent"];		
-		//const designs_all = designs_basic.concat(designs_animal, designs_floral, designs_nature, designs_pattern, designs_profession, designs_religion);		
+		const designs_profession = ["---ARTIST---", "quill", "artist's brush", "brush stroke", "palette", "palette and brush", "lute", "flute", "harp", "music note", "---COOKING---", "bottle", "butter churn", "fork", "skillet", "spoon", "teapot", "teacup", "wine bottle", "---FIGHTING---", "bow", "claidhmore", "crossed sword", "scimitar", "shield", "shield and sword", "sickle", "sword", "---LOCKSMITH---", "coin", "key", "lock", "lockpick", "lock and key", "scarab", "---SAILING---", "airship", "boat", "brigantine", "carrack", "frigate", "galleon", "pirate", "pirate flag", "ship", "---SORCERERY---", "bone", "brain", "corpse", "fang", "finger", "fingernail", "fist", "gravestone", "guillotine", "headstone", "intestine", "incisor", "kidney", "liver", "spleen", "toe", "toenail", "tooth", "tombstone", "---WIZARDRY---", "book", "cauldron", "demon", "eye", "mortar and pestle", "rune", "runestaff", "runestone", "scroll", "shrunken head", "skull", "wand", "---OTHER---", "bride", "bridesmaid", "broomstick", "candelabra", "chalice", "cigar", "clasped hands", "giftbox", "gear", "groom", "lamp", "lantern", "maiden", "mitten", "mop", "open hand", "playing card", "praying hands", "present", "needle", "needle and thread", "sconce", "sleigh", "spindle", "sprocket", "wagon"];
+		const designs_religion = ["angel", "anvil", "artist's brush", "black widow", "broken skull", "cat's head", "chelioboros", "clenched fist", "conjoined circles", "crescent moon", "crown", "crystal ball", "dagger", "dagger-pierced heart", "doe", "dolphin", "eight-pointed star", "feather", "flame", "gate and key", "grain sheaf", "heart", "hourglass", "jackal's head", "key", "leaf", "lily", "lute", "musical note", "ouroboros", "pegasus", "rose", "tentacled star", "six-tentacled star", "slit-pupiled eye", "scimitar", "scroll", "serpent", "shield", "sickle", "skull", "star", "stone giant", "stone giantess", "sunburst", "sword", "trident", "two-headed serpent"];			
 		const materials_common = ["alpaca", "angora", "linen", "mohair", "paeline", "silk", "wool"];
-		const materials_rare = ["aneula", "Aldoran wool", "bamboo", "bresuna", "buckram", "cameline", "captiql", "cavelta", "chainsil", "chenille", "cotton", "dagswain", "fraelhan", "flannel", "flax", "fleece", "gossamer", "heather", "inytela", "jute", "krinklevelt", "lamb's wool", "lambilen", "maedatha", "malghavan wool", "merino wool", "moreen", "myssamere", "oiremere", "oxilen", "pashmina", "plumille", "qiviut", "ramie linen", "roltalen", "rolton wool", "ruhani wool", "rackhal", "sailcloth", "flyrsilk", "lotus silk", "ramie silk", "raw silk", "sea silk", "spidersilk", "starsilk", "stoutfoot wool", "tartan", "tweed", "vaslavilen", "vicuna", "wild silk", "woolen", "wylten", "wynelen", "yierkale", "yierka wool"];		
-		//const materials_all = materials_common.concat(materials_rare);
-		const items_clothing = ["---CLOTHING---", "armband", "brooch", "dress", "earmuffs", "gloves", "gown", "hartie", "hat", "headband", "leggings", "mittens", "muffler", "overdress", "pants", "petticoat", "scarf", "shawl", "skirt", "snood", "socks", "stockings", "sundress", "sweater", "tunic", "undershirt"];
+		const materials_rare = ["aneula", "Aldoran wool", "bamboo", "bresuna", "buckram", "cameline", "captiql", "cavelta", "chainsil", "chenille", "cotton", "dagswain", "fraelhan", "flannel", "flax", "fleece", "gossamer", "heather", "inytela", "jute", "krinklevelt", "lamb's wool", "lambilen", "maedatha", "malghavan wool", "merino wool", "moreen", "myssamere", "oiremere", "oxilen", "pashmina", "plumille", "qiviut", "ramie linen", "roltalen", "rolton wool", "ruhani wool", "rackhal", "sailcloth", "flyrsilk", "lotus silk", "ramie silk", "raw silk", "sea silk", "spidersilk", "starsilk", "stoutfoot wool", "tartan", "tweed", "vaslavilen", "vicuna", "wild silk", "woolen", "wylten", "wynelen", "yierkale", "yierka wool"];
+		const items_clothing = ["---CLOTHING---", "armband", "brooch", "dress", "earmuffs", "gloves", "gown", "hartie", "hat", "headband", "leggings", "mittens", "muffler", "oven mitt", "oven mitts", "overdress", "pants", "petticoat", "scarf", "shawl", "skirt", "snood", "socks", "stockings", "sundress", "sweater", "trukt", "tunic", "undershirt"];
 		const items_container = ["---CONTAINERS---", "apron", "basket", "backpack", "bag", "cape", "carryall", "cloak", "coat", "clutch", "jacket", "pouch", "purse", "robe", "satchel", "tote", "wrap", "vest"];
 		const items_mount = ["---FOR MOUNTS---", "headband", "foreleg wraps", "hind leg wraps", "scarf", "neck wrap", "blanket", "capelet", "hat", "spider booties", "beetle booties"];
+		const items_mount = ["---OTHER---", "carpet",  "picnic napkin", "puppy bandana", "puppy bow", "rug", "weapon wrap"];
 		const items_all = items_clothing.concat(items_container, items_mount);
 	
 	
@@ -529,7 +534,6 @@
 			}			
 		}
 
-
 		/*
 		Update the Design Style text field with a new value.
 		Not much to do, so this is placeholder if needed.
@@ -537,8 +541,7 @@
 		function changeValueItemType(set_value, caller_id) {			
 			new_value = set_value;
 			return new_value;
-		}
-		
+		}		
 		
 		/*
 		Simple function that prepends either 'a' or 'an' depending on the first letter of the
@@ -681,7 +684,8 @@
 					select.value = options[random].value;	
 					changeValue(select.value, select.oldvalue, select.id);	
 				}
-				
+			}
+			
 			//Select a random option for section: color
 			if(!document.getElementById("color_lock").checked) {			
 				do {
@@ -763,8 +767,7 @@
 				
 				select.value = options[random].value;
 				changeValue(select.value, select.oldvalue, select.id);			
-			}		   
-			}
+			}		
 		}		
 	</SCRIPT>
 	<BODY onload="init()">
