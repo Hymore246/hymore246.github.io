@@ -2,12 +2,23 @@
 	<TITLE>Hymore's Cobbling Designer v1.0</TITLE>
 	<STYLE>
 		div.cobbling_text {
+			color: black;
+			font-size: 30px;
+		}
+		div.cobbling_text_toohigh {
+			color: red;
 			font-size: 30px;
 		}
 		div.link_text {
 			position: fixed;
 			bottom: 15px;
 			left: 15px;
+		}
+		div.character_length_normal {
+			color: black;
+		}
+		div.character_length_toohigh {
+			color: red;
 		}
 	</STYLE>
 	<SCRIPT>
@@ -59,11 +70,11 @@
 		const adornments_beads = [];
 		const adornments_studded = [];
 		const adornments_trimming = [];
-		const adornments_laces = ["black lace ribbons", "black leather bootlaces ", "braided hemp", "braided horsehair", "braided Linen Laces ", "brided suede laces", "brown suede shoelaces ", "coils of barbed wire", "dirge-vaon vines", "dried trumpetvine laces", "ecru alce ribbons", "filamentous netting", "flora-burnt ribbons", "gilded chains", "gold filaments", "gold-threaded shoelaces ", "gossamer thread", "knotted bootlaces", "knotted silk ribbons", "knotted twine", "lattice laces", "latticed straps", "leather laces", "oiled leather laces", "pale satin ribbon", "pearl-linked chains", "plaited nymph hair laces", "raw silk ribbons", "rawhide laces", "rivet-tipped cords", "round woven bootlaces ", "satin cord shoelaces ", "sea silk", "silk cord laces", "silk laces", "silver filament webwork", "strips of pale lace", "sturdy cotton bootlaces ", "suede laces", "tonal paeline", "velvet laces", "willow withe laces"];
+		const adornments_laces = ["---LACES---", "black lace ribbons", "black leather bootlaces ", "braided hemp", "braided horsehair", "braided Linen Laces ", "brided suede laces", "brown suede shoelaces ", "coils of barbed wire", "dirge-vaon vines", "dried trumpetvine laces", "ecru alce ribbons", "filamentous netting", "flora-burnt ribbons", "gilded chains", "gold filaments", "gold-threaded shoelaces ", "gossamer thread", "knotted bootlaces", "knotted silk ribbons", "knotted twine", "lattice laces", "latticed straps", "leather laces", "oiled leather laces", "pale satin ribbon", "pearl-linked chains", "plaited nymph hair laces", "raw silk ribbons", "rawhide laces", "rivet-tipped cords", "round woven bootlaces ", "satin cord shoelaces ", "sea silk", "silk cord laces", "silk laces", "silver filament webwork", "strips of pale lace", "sturdy cotton bootlaces ", "suede laces", "tonal paeline", "velvet laces", "willow withe laces"];
 		const adornments_settings_gems = ["---GEM SETTINGS---", "polished dark blue amber", "teardrops of green amber", "pieces of muted red amber", "jewel cabochons", "unfaceted mistvein diamonds", "purple stormcloud diamonds", "hematite disks", "hazy red sea glass disks", "mist blue sea glass disks", "round amber sea glass disks", "chalky cubes of feldspar", "wine-dark garnets", "dark purple sunset garnets", "sunset garnets", "mirrored orbs of hematite", "ivory", "pieces of smoky white jade", "cones of ember jasper", "ovoids of lunar jasper", "ovoids of leopard jaspers", "ovoids of monsoon jasper", "nodules of peacock jasper", "pieces of green-veined marble", "shimmering nodules of marcasite", "glossy pale beige mekrets", "glossy sable mekrets", "mother-of-pearl", "oblong pieces of nephrite", "pieces of snowflake obsidian", "purple black thunderhead opals", "tiny pearls", "green pearls", "cream pearls", "freshwater baroque pearls", "frosty pale violet pearls", "midnight blue pearls", "irregular cluster of blue quartz", "clusters of red roestone", "clusters of pink roestone", "clusters of yellow roestone", "Alhan'aht rivertears", "pale gold firefly saewehna", "iridescent azure butterfly saewehna", "shifting multihued auboralines", "bright orange butterfly saewehna", "jewel-toned dragonfly saewehna", "silvery mint green moth saewehna", "russet and cream moth saewehna", "pale sapphires", "pale mistvein sapphire", "scrimshawed", "honey amber shards", "fossilized sponges", "inky blue smoldereyes", "scarlet smoldereyes", "dark turquoise stones", "thunderheads", "pieces of smoky blue topaz", "crystals of silvery wraithaline", "crystals of shadowy wraithaline", "twisted nacreous blue waterweb", "waterweb"];
 		const adornments_settings_other = ["---OTHER SETTINGS---", "enamel cherry blossoms", "jade coils", "lush marabou down", "parrot feathers", "blue sea glass", "round-scaled glass", "petrified elm knots", "jewel-toned leaves", "jewel mosaic", "tattered netting", "carved onyx roses", "pink spinel roses", "tortoise shells", "silver snowflakes", "vaalin snowflakes", "burnished gold spikes", "glazed alder squares", "golden suns", "shark's teeth", "onyx thorns", "carmine winterberry"];
-		const adornments_buckles = ["alum", "antique brass", "balenite", "barbed faenor", "blackened steel", "bronze", "brushed gold", "brushed mithril", "bubbled glass", "cast iron", "clockwork", "cog-fused metal", "copper", "corrugated alum", "crystal-set vaalin", "dark steel", "electrum", "etched laje", "faenor", "faewood", "filigree-etched", "flora-wrought", "floral enamel", "frosted faenor", "gear-cut", "gilt-foiled jet", "glaes", "gold gilt", "grooved haon", "hematite", "infinity knot", "infinity knot", "jeweled vaalin", "kiramon chitin", "lapis-set gold", "latticed suede", "leather", "malachite glass", "mottled pewter", "nielloed silver", "niveous marble", "orase", "pearl-scattered", "perforated metal", "polished bone", "polished mithril", "porcelain", "potion-etched faenor", "riveted steel", "rose copper", "rose gold", "scrimshaw ivory", "segmented brass", "segmented steel", "serpent-etched", "silver gilt", "silver", "stained glass", "tortoise shell", "velvet", "veniom", "warped metal", "white vaalorn", "wide vaalin", "wood"];
-		const adornments_type = ["beaded", "buckled", "buttoned", "capped", "fringed", "inset", "laced", "lined", "strapped", "studded", "toed"];
+		const adornments_buckles = ["---BUCKLES---", "alum", "antique brass", "balenite", "barbed faenor", "blackened steel", "bronze", "brushed gold", "brushed mithril", "bubbled glass", "cast iron", "clockwork", "cog-fused metal", "copper", "corrugated alum", "crystal-set vaalin", "dark steel", "electrum", "etched laje", "faenor", "faewood", "filigree-etched", "flora-wrought", "floral enamel", "frosted faenor", "gear-cut", "gilt-foiled jet", "glaes", "gold gilt", "grooved haon", "hematite", "infinity knot", "infinity knot", "jeweled vaalin", "kiramon chitin", "lapis-set gold", "latticed suede", "leather", "malachite glass", "mottled pewter", "nielloed silver", "niveous marble", "orase", "pearl-scattered", "perforated metal", "polished bone", "polished mithril", "porcelain", "potion-etched faenor", "riveted steel", "rose copper", "rose gold", "scrimshaw ivory", "segmented brass", "segmented steel", "serpent-etched", "silver gilt", "silver", "stained glass", "tortoise shell", "velvet", "veniom", "warped metal", "white vaalorn", "wide vaalin", "wood"];
+		//const adornments_type = ["beaded", "buckled", "buttoned", "capped", "fringed", "inset", "laced", "lined", "strapped", "studded", "toed"];
 		const colors_black = ["---BLACK COLORS---", "atrous", "black", "black cherry", "blood-hued black", "blue-black", "charcoal", "charcoal black", "coal black", "dark", "dark ebony", "deep black", "deep ebony", "dingy black", "dull black", "dusky black", "ebon", "ebon black", "ebony", "faded black", "flat black", "fuliginous", "gamboge", "gingerline", "glossy black", "griseous", "inky black", "iridescent black", "jet", "jet black", "licorice", "matte black", "matte obsidian", "midnight black", "midnight ebon", "moonshade black", "mottled black", "murky black", "night black", "obsidian black", "ombre deep black and white", "ombre night-hued", "onyx", "onyx black", "pitch black", "pitch black", "rainbow-flecked licorice", "raven black", "raven-hued", "red-speckled black", "sable", "scorched black", "shadowed dye", "shadowy black", "silver-flecked atrous", "silver-sheened deep raven black", "sooty black", "twilight black"];
 		const colors_blue = ["---BLUE COLORS---", "ahmdir blue", "aqua", "aquamarine", "ashen blue", "azalea", "azure", "azurite", "baby blue", "blue", "blue-green", "celestial blue", "cerulean", "cerulean blue", "cobalt", "cobalt blue", "cornflower", "cyan", "dark azure", "dark blue", "dark cerulean", "dark cyan", "deep blue", "dusky blue", "glacial blue", "glaucous", "glossy blue", "gold-flecked turquoise", "ice blue", "icy blue", "indigo", "inky blue", "iridescent turquoise", "iris blue", "jewel-tone teal", "lapis blue", "light blue", "marbled deep ahmdir blue", "midnight blue", "murky indigo", "navy blue", "ocean blue", "ombre celestial blue", "ombre pastel blue and white", "pale blue", "pallid teal", "peacock blue", "periwinkle", "poppy blue", "powder blue", "robin's egg blue", "royal blue", "sapphire", "sapphire blue", "sea blue", "silvery blue", "silver-swirled celestial blue", "silvered teal", "sky blue", "slate blue", "smalt blue", "smoky blue", "steel blue", "storm grey", "teal", "turquoise", "twilight blue", "ultramarine", "vivid ahmdir blue", "vivid indigo", "water", "zaffre"];
 		const colors_brown = ["---BROWN COLORS---", "ale brown", "auburn", "bistre", "bronze", "brown", "brown camouflage", "burnt umber", "caramel", "caramel-hued", "chestnut", "chestnut brown", "chocolate", "chocolate brown", "chocolate-hued", "coffee", "coffee-hued", "coppery brown", "dark brown", "dark russet", "dark sienna", "deep brown", "deep cordovan", "dirt brown", "earthen brown", "ecru", "golden brown", "greyish brown", "hazel", "hazel-brown", "henna", "light brown", "light caramel", "mahogany", "marbled mocha", "maroon", "matte fawn", "mocha", "mottled brown", "nut brown", "oak brown", "pinkish brown", "puce", "roan", "russet", "rust-colored", "sorrel", "tan", "tawny", "tawny sable", "twig brown", "umber"];
@@ -78,7 +89,7 @@
 		const colors_yellow = ["---YELLOW COLORS---", "almond", "amber", "banana yellow", "blonde", "bright golden", "butterscotch yellow", "dandelion gold", "citron", "champagne", "chartreuse", "flaxen", "golden", "gold-swirled tawny", "gold-swirled vibrant sienna", "honey gold", "honey-colored", "honey-hued", "lemon yellow", "light yellow", "marigold", "matte gold", "ocher", "ochre", "pale citrine", "pale golden", "rich cream", "sallow", "sand-colored", "sand-hued", "sulfur-tinged", "sunny yellow", "tawny gold", "tawny yellow", "topaz", "yellow", "toffee"];
 		const colors_misc = ["---MISC COLORS---", "black-swirled vivid multihued ", "iridescent", "jewel-toned", "matte", "ombre", "ombre dye ", "opalescent", "opaline", "rainbow", "rainbow-flecked", "rainbow-hued", "silver-sheened prismatic", "variegated", "vivid rainbow-hued"];
 		const colors_all = colors_black.concat(colors_blue, colors_brown, colors_green, colors_grey, colors_metallic, colors_orange, colors_pink, colors_purple, colors_red, colors_white, colors_yellow, colors_misc);		
-		const fringe_generic = ["antler", "appendage", "beard", "bone", "branch", "canine", "claw", "ear", "eye", "fang", "feather", "foreclaw", "horn", "incisor", "jawbone", "jaw", "mane", "mandible", "paw", "pincer", "plume", "rattle", "scale", "stinger", "tail", "tailfeather", "tail", "talon", "teeth", "tendril", "tentacle", "thorn", "tusk", "whisker"];
+		const fringe_generic = ["---GENERIC FRINGINGS---", "antler", "appendage", "beard", "bone", "branch", "canine", "claw", "ear", "eye", "fang", "feather", "foreclaw", "horn", "incisor", "jawbone", "jaw", "mane", "mandible", "paw", "pincer", "plume", "rattle", "scale", "stinger", "tail", "tailfeather", "tail", "talon", "teeth", "tendril", "tentacle", "thorn", "tusk", "whisker"];
 		const fringe_generic_plural = ["---GENERIC FRINGINGS---", "antlers", "appendages", "beards", "bones", "branches", "canines", "claws", "ears", "eyes", "fangs", "feathers", "foreclaws", "horns", "incisors", "jawbones", "jaws", "manes", "mandibles", "paws", "pincers", "plumes", "rattles", "scales", "stingers", "tails", "tailfeathers", "tails", "talons", "teeth", "tendrils", "tentacles", "thorns", "tusks", "whiskers"];
 		const fringe_antler = ["---ANTLERS---", "antlers", "caribou antlers"];
 		const fringe_appendage = ["---APPENDAGES---", "thorn-ridden appendages"];
@@ -265,15 +276,15 @@
 		const gems_zircon = ["---ZIRCONS---", "brown zircons", "clear zircons", "green zircons", "snowflake zircons", "uncut zircons", "yellow zircons"];
 		const gems_zoisite = ["---ZOISITES---", "green and pink zoisites"];
 		const gems_all = gems_aetherstone.concat(gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fishscale, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_shale, gems_shard, gems_shell, gems_smoldereye, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
-		const materials_buyable_cloth = ["---SILK---", "aneula", "byssine", "dupioni silk", "flyrsilk", "fringed silk", "silk", "lace", "lavender silk", "looped silk", "maedatha", "moire silk",  "mykal", "pale-marbled starsilk", "sea silk", "Vornavian silk", "---WOOL---", "brushed wool", "rolton wool", "combed wool", "soft lambswool", "---OTHER---", "bourde", "canvas", "crisp taffeta", "embroidered velvet", "faviform brocade", "floral jacquard", "leather-bound tartan", "oilcloth", "plush velvet", "quilted satin", "raw silk", "ridgeweaver silk", "sailcloth", "satin", "scallop-weave brocatelle", "soft velvet", "spun cotton", "striped chambray", "striped damask", "suede-bound tweed", "watered silk"];
-		const materials_buyable_fur = ["---BUYABLE FURS---", "black puma fur", "matted bear fur", "mottled warcat fur", "rabbit fur", "smoky-hued coyote fur"];
+		const materials_buyable_cloth = ["---SILK---", "aneula", "byssine", "dupioni silk", "flyrsilk", "fringed silk", "raw silk", "silk", "lace", "lavender silk", "looped silk", "maedatha", "moire silk",  "mykal", "pale-marbled starsilk", "ridgeweaver silk", "sea silk", "Vornavian silk", "watered silk", "---WOOL---", "brushed wool", "rolton wool", "combed wool", "soft lambswool", "---OTHER---", "bourde", "canvas", "crisp taffeta", "embroidered velvet", "faviform brocade", "floral jacquard", "leather-bound tartan", "oilcloth", "plush velvet", "quilted satin","sailcloth", "satin", "scallop-weave brocatelle", "soft velvet", "spun cotton", "striped chambray", "striped damask", "suede-bound tweed"];
+		const materials_buyable_fur = ["---BUYABLE FUR---", "puma fur", "matted bear fur", "mottled warcat fur", "rabbit fur", "coyote fur"];
 		const materials_buyable_hide = ["---BUYABLE HIDES---", "boar hide", "brindlecat hide", "crocodile hide", "morduska hide", "panther hide", "puma hide", "pyrothag hide", "rolton hide", "thrak hide", "triton magus hide", "troll hide", "warthog hide"];
-		const materials_buyable_pelt = ["---BUYABLE PELTS---", "black panther pelt", "dark panther pelt", "rat pelt", "spotted leaper pelt"];
+		const materials_buyable_pelt = ["---BUYABLE PELTS---", "panther pelt", "panther pelt", "rat pelt", "spotted leaper pelt"];
 		const materials_buyable_skin = ["---BUYABLE SKINS---", "albino viper skin ", "eel skin", "gnoll hide", "goblin skin", "halibut skin", "iguana skin", "goat skin", "leopard skin", "salmon skin", "shark skin", "smooth shark skin", "manta ray skin", "minotaur hide", "kidskin", "kobold skin", "porpoise skin", "python skin", "rat skin", "rattlesnake skin", "sheep skin", "soft buckskin", "smooth doeskin", "stitched zombie skin", "troll chieftain skin", "troll hide", "tsark skin", "velnalin hide", "whale skin", "worm skin", "yeti hide"];	
 		const materials_hair = ["---HAIR---", "goat hair", "lion hair"];		
-		const materials_fur = ["---FURS---", "fenghai fur", "waern fur"];		
+		const materials_critter_fur = ["---CRITTER FUR---", "fenghai fur", "waern fur"];		
 		const materials_buyable_natural = ["---BUYABLE NATURAL---", "balsa", "driftwood", "ebonwood", "lacewood", "mistwood", "rosewood", "sea glass", "teak", "willow"];	
-		const materials_buyable_leather = ["---BUYABLE LEATHER---", "brushed suede", "distressed leather", "laceworked leather", "latticed suede", "leather", "marbled leather", "oiled leather", "sleek calfskin", "soft calfskin", "soft doeskin", "suede shearling", "walrus leather"];
+		const materials_buyable_leather = ["---BUYABLE LEATHER---", "leather", "calfskin", "doeskin", "suede", "distressed leather", "laceworked leather", "marbled leather", "tanned leather", "walrus leather", "oiled leather", "brushed suede", "latticed suede", "sleek calfskin", "soft calfskin", "soft doeskin", "suede shearling"];
 		const materials_buyable_metal = ["---BUYABLE METAL---", "interlocked ringmail", "silver mesh", "woven chain mesh"];
 		const materials_natural = ["---NATURAL---", "birch bark", "papyrus", "linden bark", "waxed paper", "willow bark", "woven grass"];
 		const materials_hide = ["---CRITTER HIDES---", "bear hide", "boar hide", "brindlecat hide", "centaur hide", "centaur ranger hide", "gak hide", "grizzly bear hide", "jungle toad hide", "leaper hide", "minotaur hide", "night hound hide", "orc hide", "puma hide", "pyrothag hide", "thrak hide", "trali hide", "triton hide", "troll hide", "urgh hide", "velnalin hide"];
@@ -281,6 +292,8 @@
 		const materials_skin = ["---CRITTER SKINS---", "bear skin", "boar skin", "caedera skin", "cobra skin", "cave nipper skin", "dirge skin", "giant skin", "glowing worm skin", "goblin skin", "hisskra skin", "kobold skin", "leopard skin", "madrinol skin", "mountain lion skin", "plains lion skin", "polar bear skin", "roa'ter skin", "salamander skin", "siren lizard skin", "snake skin", "spectre skin", "tsark skin", "troll skin", "viper skin", "vruul skin", "water moccasin skin", "wight skin"];
 		const materials_buyable_skins = materials_buyable_hide.concat(materials_buyable_pelt, materials_buyable_skin);
 		const materials_critter_skins = materials_hide.concat(materials_pelt, materials_skin);
+		const materials_skins_generic = ["---GENERIC---", "hide", "pelt", "skin"];
+		const materials_all_skins = [].concat(materials_skins_generic,materials_buyable_skins, materials_critter_skins);
 		const qualities_magnificent = ["---MAGNIFICENT---", "astonishing", "astounding", "exquisite", "incredible", "magnificent", "marvelous", "remarkable", "splendid", "striking", "superb", "wonderful", "wondrous"];
 		const qualities_superb = ["---SUPERB---", "adorable", "bewitching", "dazzling", "distinguished", "elegant", "enchanting", "first-rate", "gorgeous", "luxurious", "refined", "resplendent", "superior"];
 		const qualities_outstanding = ["---OUTSTANDING---", "charming", "courtly", "dashing", "delightful", "fashionable", "gaudy", "lovely", "polished", "showy", "smart-looking", "splendid", "stylish"];
@@ -298,14 +311,16 @@
 		const types_all = [].concat(types_boots, types_sandals, types_shoes, types_slippers);
 		const adornments_all_beads = [].concat(adornments_buttons, gems_generic_plural, gems_all);
 		const adornments_all_buttons = [].concat(adornments_buttons, gems_generic_plural, gems_all);
-		const adornments_all_fringed = [].concat(fringe_generic_plural, fringe_all);
-		const adornments_all_inset = [].concat(adornments_settings_gems, adornments_settings_other, gems_generic_plural, gems_all);
+		const adornments_all_fringed = [].concat(fringe_generic, fringe_all);
+		const adornments_all_fringed_plural = [].concat(fringe_generic_plural, fringe_all);
+		const adornments_all_inset = [].concat(adornments_settings_gems, adornments_settings_other, gems_generic, gems_all);
+		const adornments_all_inset_plural = [].concat(adornments_settings_gems, adornments_settings_other, gems_generic_plural, gems_all);
 		const adornments_all_plates = adornments_buckles;
 		const adornments_all_laces = adornments_laces.concat(materials_buyable_skins, materials_critter_skins);
 		const adornments_all_lining = adornments_lining.concat(materials_buyable_skins, materials_critter_skins);
 		const adornments_all_straps = adornments_trimming.concat(materials_buyable_skins, materials_critter_skins);
 		const adornments_all_studded = [].concat(adornments_studded, gems_generic_plural, gems_all);
-		const adornments_all_trimming = adornments_trimming.concat(materials_buyable_skins, materials_critter_skins);
+		const adornments_all_trimming = [].concat(adornments_trimming, materials_buyable_fur, materials_critter_fur, materials_buyable_skins, materials_critter_skins);
 	
 		//skins - generic plural????
 	
@@ -338,8 +353,21 @@
 			populateDropDown("pick_material_cloth", materials_buyable_cloth);
 			populateDropDown("pick_material_leather", materials_buyable_leather);
 			populateDropDown("pick_material_metal", materials_buyable_metal);
-			populateDropDown("pick_material_buyable_skins", materials_buyable_skins);
-			populateDropDown("pick_material_critter_skins", materials_critter_skins);
+			populateDropDown("pick_material_skins", materials_all_skins);
+			
+			//Populate all the menus under the second adornment section
+			populateDropDown("pick_adornment2_beaded", adornments_all_beads);
+			populateDropDown("pick_adornment2_buckled", adornments_all_plates);
+			populateDropDown("pick_adornment2_buttoned", adornments_all_buttons);
+			populateDropDown("pick_adornment2_capped", adornments_all_plates);
+			populateDropDown("pick_adornment2_fringed", adornments_all_fringed_plural);
+			populateDropDown("pick_adornment2_inset", adornments_all_inset_plural);
+			populateDropDown("pick_adornment2_toed", adornments_all_plates);
+			populateDropDown("pick_adornment2_laced", adornments_all_laces);
+			populateDropDown("pick_adornment2_lining", adornments_all_lining);
+			populateDropDown("pick_adornment2_strapped", adornments_all_straps);
+			populateDropDown("pick_adornment2_studded", adornments_all_studded);
+			populateDropDown("pick_adornment2_trimmed", adornments_all_trimming);
 			
 			//Set everything to their default values
 			document.getElementById("article_lock").checked = false;
@@ -353,6 +381,9 @@
 		}
 		
 		
+		/*
+			
+		*/
 		function populateDropDown(menu_id, values_array) {		
 			select = document.getElementById(menu_id);
 			for(var j = 0; j < values_array.length; j++) {
@@ -365,6 +396,17 @@
 				}
 				select.appendChild(el);
 			}
+		}
+		
+		/*
+		
+		*/
+		function pluralizeNoun(noun) {
+			if(noun in plural_dict) {
+				return plural_dict[noun];
+			}
+			
+			return noun;
 		}
 		
 		/*
@@ -382,7 +424,7 @@
 			adornment1_array1 = ["pick_all_adornment1", "adornment1_shoes1_div", "pick_shoes2_adornment1", "pick_shoes3_adornment1", "pick_shoes4_adornment1", "pick_shoes5_adornment1", "pick_boots1_adornment1", "pick_slippers_adornment1", "pick_sandals_adornment1"];
 			adornment1_array2 = ["pick_adornment1_beaded", "pick_adornment1_buckled", "pick_adornment1_buttoned", "pick_adornment1_capped", "pick_adornment1_fringed", "pick_adornment1_inset", "pick_adornment1_laced", "pick_adornment1_strapped", "pick_adornment1_studded", "pick_adornment1_toed", "pick_adornment1_trimmed", "custom_adornment1_input", "custom_adornment1_ender"];
 			adornment2_array1 = ["pick_all_adornment2", "adornment2_shoes1_div", "pick_shoes2_adornment2", "pick_shoes3_adornment2", "pick_shoes4_adornment2", "pick_shoes5_adornment2", "pick_boots1_adornment2", "pick_slippers_adornment2", "pick_sandals_adornment2"];
-			adornment2_array2 = ["pick_adornment2_beaded", "pick_adornment2_buckled", "pick_adornment2_buttoned", "pick_adornment2_capped", "pick_adornment2_fringed", "pick_adornment2_inset", "pick_adornment2_laced", "pick_adornment2_strapped", "pick_adornment2_studded", "pick_adornment2_toed", "pick_adornment2_trimmed", "custom_adornment2_input", "custom_adornment1_ender"];
+			adornment2_array2 = ["pick_adornment2_beaded", "pick_adornment2_buckled", "pick_adornment2_buttoned", "pick_adornment2_capped", "pick_adornment2_fringed", "pick_adornment2_inset", "pick_adornment2_laced", "pick_adornment2_strapped", "pick_adornment2_studded", "pick_adornment2_toed", "pick_adornment2_trimmed", "custom_adornment2_input", "custom_adornment2_beginner"];
 			
 			
 			new_value = "";
@@ -401,8 +443,8 @@
 			}		
 			else if(caller_id == "pick_material" || caller_id == "pick_material_cloth" || 
 					caller_id == "pick_material_leather" || caller_id == "pick_material_metal" || 
-					caller_id == "pick_material_buyable_skins" || caller_id == "pick_material_critter_skins" || 
-					caller_id == "custom_material_input") {				
+					caller_id == "pick_material_skins" || caller_id == "custom_material_input"
+					) {				
 			    new_value = changeValueMaterial(set_value, caller_id);
 				text_field = "material";					
 			}
@@ -450,14 +492,6 @@
 		Update the Adornment1 text field with a new value.
 		*/				
 		function changeValueAdornment1(set_value, caller_id) {
-			all_div = document.getElementById("adornment1_all_div");
-			shoes1_div = document.getElementById("adornment1_shoes1_div");
-			shoes2_div = document.getElementById("adornment1_shoes2_div");
-			shoes3_div = document.getElementById("adornment1_shoes3_div");
-			shoes4_div = document.getElementById("adornment1_shoes4_div");
-			boots1_div = document.getElementById("adornment1_boots1_div");
-			slippers_div = document.getElementById("adornment1_slippers_div");
-			sandals_div = document.getElementById("adornment1_sandals_div");
 			//
 			beaded_div = document.getElementById("adornment1_div_beaded");
 			buckled_div = document.getElementById("adornment1_div_buckled");
@@ -472,15 +506,41 @@
 			toed_div = document.getElementById("adornment1_div_toed");
 			trimmed_div = document.getElementById("adornment1_div_trimmed");
 			custom_div = document.getElementById("adornment1_div_custom");
+			//
+			beaded_div2 = document.getElementById("adornment2_div_beaded");
+			buckled_div2 = document.getElementById("adornment2_div_buckled");
+			buttoned_div2 = document.getElementById("adornment2_div_buttoned");
+			capped_div2 = document.getElementById("adornment2_div_capped");
+			fringed_div2 = document.getElementById("adornment2_div_fringed");
+			inset_div2 = document.getElementById("adornment2_div_inset");
+			laced_div2 = document.getElementById("adornment2_div_laced");
+			lining_div2 = document.getElementById("adornment2_div_lining");
+			strapped_div2 = document.getElementById("adornment2_div_strapped");
+			studded_div2 = document.getElementById("adornment2_div_studded");
+			toed_div2 = document.getElementById("adornment2_div_toed");
+			trimmed_div2 = document.getElementById("adornment2_div_trimmed");
+			custom_div2 = document.getElementById("adornment2_div_custom");
 			
-			div_array = [beaded_div, buckled_div, buttoned_div, capped_div, fringed_div, inset_div, laced_div, lining_div, strapped_div, studded_div, toed_div, trimmed_div, custom_div];			
-			top_choice_array = ["Nothing", "Custom Adornment...", "Beaded...", "Buckled...", "Buttoned...", "Finged...", "Inset...", "Laced...", "Lined...", "Strapped...", "Studded...", "Toed...", "Trimmed..."];
+			div_array = [beaded_div, buckled_div, buttoned_div, capped_div, fringed_div, inset_div, laced_div, lining_div, strapped_div, studded_div, toed_div, trimmed_div, custom_div, beaded_div2, buckled_div2, buttoned_div2, capped_div2, fringed_div2, inset_div2, laced_div2, lining_div2, strapped_div2, studded_div2, toed_div2, trimmed_div2, custom_div2];			
+			top_choice_array = ["Nothing", "Custom Adornment...", "Beaded...", "Buckled...", "Buttoned...", "Capped...", "Finged...", "Inset...", "Laced...", "Lined...", "Strapped...", "Studded...", "Toed...", "Trimmed..."];
 			id = caller_id;
 			value = set_value;
 			second_choice = "";			
 			ender = "";
 			
+			//Clear the other adornment option
+			document.getElementById("pick_all_adornment2").value = "Nothing";
+			document.getElementById("pick_shoes1_adornment2").value = "Nothing";
+			document.getElementById("pick_shoes2_adornment2").value = "Nothing";
+			document.getElementById("pick_shoes3_adornment2").value = "Nothing";
+			document.getElementById("pick_shoes4_adornment2").value = "Nothing";
+			document.getElementById("pick_boots1_adornment2").value = "Nothing";
+			document.getElementById("pick_slippers_adornment2").value = "Nothing";
+			document.getElementById("pick_sandals_adornment2").value = "Nothing";
+			document.getElementById("adornment2").innerHTML = "";
 			
+			
+			//Hide all the divs
 			if(top_choice_array.includes(set_value)) {				
 				for(i=0; i < div_array.length; i++) {
 					div_array[i].style.display = 'none';			
@@ -595,8 +655,7 @@
 					break;
 			}
 			
-			return value + ender;
-		
+			return value + ender;		
 		}
 
 		/*
@@ -643,21 +702,19 @@
 			cloth_div = document.getElementById("material_div_cloth");	
 			leather_div = document.getElementById("material_div_leather");
 			metal_div = document.getElementById("material_div_metal");
-			bskins_div = document.getElementById("material_div_buyable_skins");			
-			cskins_div = document.getElementById("material_div_critter_skins");
+			skins_div = document.getElementById("material_div_skins");		
 			custom_div = document.getElementById("material_div_custom");
 			cloth_value = document.getElementById("pick_material_cloth").value;	
 			leather_value = document.getElementById("pick_material_leather").value;
 			metal_value = document.getElementById("pick_material_metal").value;	
-			bskins_value = document.getElementById("pick_material_buyable_skins").value;	
-			cskins_value = document.getElementById("pick_material_critter_skins").value;	custom_value = document.getElementById("custom_material_input").value;						
+			skins_value = document.getElementById("pick_material_skins").value;	
+			custom_value = document.getElementById("custom_material_input").value;						
 			
 			if(caller_id == "pick_material") {
 				cloth_div.style.display = 'none';				
 				leather_div.style.display = 'none';
 				metal_div.style.display = 'none';
-				bskins_div.style.display = 'none';
-				cskins_div.style.display = 'none';
+				skins_div.style.display = 'none';
 				custom_div.style.display = 'none';
 								
 				if(set_value == "Nothing") {
@@ -684,13 +741,9 @@
 					metal_div.style.display = 'block';
 					return metal_value;
 				}
-				else if(set_value == "Buyable Hide/Pelt/Skins...") {
-					bskins_div.style.display = 'block';
+				else if(set_value == "Hides/Pelts/Skins...") {
+					skins_div.style.display = 'block';
 					return bskins_value;
-				}
-				else if(set_value == "Critter Hide/Pelt/Skins...") {
-					cskins_div.style.display = 'block';
-					return cskins_value;
 				}
 			}
 			else if(caller_id = "custom_material_input") {
@@ -761,10 +814,180 @@
 		
 				
 		/*
-			PLACEHOLDER
-		*/
+		Update the Adornment2 text field with a new value.
+		*/				
 		function changeValueAdornment2(set_value, caller_id) {
-			return set_value;
+			//
+			beaded_div = document.getElementById("adornment1_div_beaded");
+			buckled_div = document.getElementById("adornment1_div_buckled");
+			buttoned_div = document.getElementById("adornment1_div_buttoned");
+			capped_div = document.getElementById("adornment1_div_capped");
+			fringed_div = document.getElementById("adornment1_div_fringed");
+			inset_div = document.getElementById("adornment1_div_inset");
+			laced_div = document.getElementById("adornment1_div_laced");
+			lining_div = document.getElementById("adornment1_div_lining");
+			strapped_div = document.getElementById("adornment1_div_strapped");
+			studded_div = document.getElementById("adornment1_div_studded");
+			toed_div = document.getElementById("adornment1_div_toed");
+			trimmed_div = document.getElementById("adornment1_div_trimmed");
+			custom_div = document.getElementById("adornment1_div_custom");
+			//
+			beaded_div2 = document.getElementById("adornment2_div_beaded");
+			buckled_div2 = document.getElementById("adornment2_div_buckled");
+			buttoned_div2 = document.getElementById("adornment2_div_buttoned");
+			capped_div2 = document.getElementById("adornment2_div_capped");
+			fringed_div2 = document.getElementById("adornment2_div_fringed");
+			inset_div2 = document.getElementById("adornment2_div_inset");
+			laced_div2 = document.getElementById("adornment2_div_laced");
+			lining_div2 = document.getElementById("adornment2_div_lining");
+			strapped_div2 = document.getElementById("adornment2_div_strapped");
+			studded_div2 = document.getElementById("adornment2_div_studded");
+			toed_div2 = document.getElementById("adornment2_div_toed");
+			trimmed_div2 = document.getElementById("adornment2_div_trimmed");
+			custom_div2 = document.getElementById("adornment2_div_custom");
+			
+			div_array = [beaded_div, buckled_div, buttoned_div, capped_div, fringed_div, inset_div, laced_div, lining_div, strapped_div, studded_div, toed_div, trimmed_div, custom_div, beaded_div2, buckled_div2, buttoned_div2, capped_div2, fringed_div2, inset_div2, laced_div2, lining_div2, strapped_div2, studded_div2, toed_div2, trimmed_div2, custom_div2];			
+			top_choice_array = ["Nothing", "Custom Adornment...", "Beaded with...", "Buckled with...", "Buttoned with...", "Capped with...", "Finged with...", "Inset with...", "Laced with...", "Lined with...", "Strapped with...", "Studded with...", "With ... Toes", "Trimmed with..."];
+			id = caller_id;
+			value = set_value;
+			second_choice = "";			
+			beginner = "";
+			
+			//Clear the other adornment option
+			document.getElementById("pick_all_adornment1").value = "Nothing";
+			document.getElementById("pick_shoes1_adornment1").value = "Nothing";
+			document.getElementById("pick_shoes2_adornment1").value = "Nothing";
+			document.getElementById("pick_shoes3_adornment1").value = "Nothing";
+			document.getElementById("pick_shoes4_adornment1").value = "Nothing";
+			document.getElementById("pick_boots1_adornment1").value = "Nothing";
+			document.getElementById("pick_slippers_adornment1").value = "Nothing";
+			document.getElementById("pick_sandals_adornment1").value = "Nothing";
+			document.getElementById("adornment1").innerHTML = "";			
+			
+			if(top_choice_array.includes(set_value)) {				
+				for(i=0; i < div_array.length; i++) {
+					div_array[i].style.display = 'none';			
+				}
+			
+				switch(set_value) {
+					case "Nothing":
+						return "";
+					case "Custom Adornment...":
+						custom_div2.style.display = 'block';
+						second_choice = "custom_adornment2_input";
+						break;
+					case "Beaded with...":
+						beaded_div2.style.display = 'block';
+						second_choice = "pick_adornment2_beaded";
+						break;
+					case "Buckled with...":
+						buckled_div2.style.display = 'block';
+						second_choice = "pick_adornment2_buckled";
+						break;
+					case "Buttoned with...":
+						buttoned_div2.style.display = 'block';
+						second_choice = "pick_adornment2_buttoned";
+						break;
+					case "Capped with...":
+						capped_div2.style.display = 'block';
+						second_choice = "pick_adornment2_capped";
+						break;
+					case "Finged with...":
+						fringed_div2.style.display = 'block';
+						second_choice = "pick_adornment2_fringed";
+						break;
+					case "Inset with...":
+						inset_div2.style.display = 'block';
+						second_choice = "pick_adornment2_inset";
+						break;
+					case "Laced with...":
+						laced_div2.style.display = 'block';
+						second_choice = "pick_adornment2_laced";
+						break;
+					case "Lined with...":
+						lining_div2.style.display = 'block';
+						second_choice = "pick_adornment2_lining";
+						break;
+					case "Strapped with...":
+						strapped_div2.style.display = 'block';
+						second_choice = "pick_adornment2_strapped";
+						break;
+					case "Studded with...":
+						studded_div2.style.display = 'block';
+						second_choice = "pick_adornment2_studded";
+						break;
+					case "With ... Toes":
+						toed_div2.style.display = 'block';
+						second_choice = "pick_adornment2_toed";
+						break;
+					case "Trimmed with...":
+						trimmed_div2.style.display = 'block';
+						second_choice = "pick_adornment2_trimmed";
+						break;									
+				}
+				
+				id = second_choice;
+				value = document.getElementById(second_choice).value;
+			}
+			
+			switch(id) {
+				case "pick_adornment2_beaded":
+					beginner = "beaded with ";
+					break;
+				case "pick_adornment2_buckled":
+					beginner = "buckled with ";
+					break;
+				case "pick_adornment2_buttoned":
+					beginner = "buttoned with ";
+					break;
+				case "pick_adornment2_capped":
+					beginner = "capped with ";
+					break;
+				case "pick_adornment2_fringed":
+					beginner = "fringed with ";
+					break;
+				case "pick_adornment2_inset":
+					beginner = "inset with ";
+					break;
+				case "pick_adornment2_laced":
+					beginner = "laced with ";
+					break;
+				case "pick_adornment2_lining":
+					beginner = "lined with ";
+					break;
+				case "pick_adornment2_strapped":
+					beginner = "strapped with ";
+					break;
+				case "pick_adornment2_studded":
+					beginner = "studded with ";
+					break;
+				case "pick_adornment2_toed":
+					beginner = "with ";
+					break;
+				case "pick_adornment2_trimmed":
+					beginner = "trimmed with ";
+					break;
+				case "custom_adornment2_input":
+				case "custom_adornment2_beginner":
+					value = document.getElementById("custom_adornment2_input").value;
+					beginner = document.getElementById("custom_adornment2_beginner").value + " ";
+					if(value == "" ) {
+						value = "...";
+					}
+					if(beginner == "BLANK " ) {
+						beginner = "";
+					}
+					else if(beginner == "with ... toes ") {
+						beginner = "with ";					
+					}
+					break;
+			}
+				//toed footwear has extra text
+				if(id == "pick_adornment2_toed" || beginner == "with ") {
+					return beginner + value + " toes";
+				}
+				
+				return beginner + value	
 		}
 		
 		
@@ -790,6 +1013,15 @@
 			
 			document.getElementById("field_spaces").innerHTML = "Spaces between fields: " + field_spaces;
 			document.getElementById("total_length").innerHTML = "Total Character Length: " + total_length;
+			
+			if(total_length > 75) {
+				document.getElementById("cobblingitem").className = "cobbling_text_toohigh";
+				document.getElementById("total_length").className = "character_length_toohigh";
+			}
+			else {
+				document.getElementById("cobblingitem").className = "cobbling_text";
+				document.getElementById("total_length").className = "character_length_normal";
+			}
 		}
 		
 		
@@ -853,6 +1085,7 @@
 				setInitialValue(document.getElementById("pick_adornment1_toed"));
 				setInitialValue(document.getElementById("pick_adornment1_trimmed"));
 				
+				setInitialValue(document.getElementById("custom_adornment1_ender"));
 				document.getElementById("custom_adornment1_input").value = "";				
 								
 				document.getElementById("adornment1_all_div").style.display = 'block';
@@ -862,8 +1095,7 @@
 				document.getElementById("adornment1_shoes4_div").style.display = 'none';
 				document.getElementById("adornment1_boots1_div").style.display = 'none';
 				document.getElementById("adornment1_slippers_div").style.display = 'none';
-				document.getElementById("adornment1_sandals_div").style.display = 'none';
-				
+				document.getElementById("adornment1_sandals_div").style.display = 'none';				
 				
 				document.getElementById("adornment1_div_beaded").style.display = 'none';
 				document.getElementById("adornment1_div_buckled").style.display = 'none';
@@ -887,14 +1119,12 @@
 				setInitialValue(document.getElementById("pick_material_cloth"));
 				setInitialValue(document.getElementById("pick_material_leather"));
 				setInitialValue(document.getElementById("pick_material_metal"));
-				setInitialValue(document.getElementById("pick_material_buyable_skins"));
-				setInitialValue(document.getElementById("pick_material_critter_skins"));
+				setInitialValue(document.getElementById("pick_material_skins"));
 				document.getElementById("custom_material_input").value = "";	
 				document.getElementById("material_div_cloth").style.display = 'none';
 				document.getElementById("material_div_leather").style.display = 'none';
 				document.getElementById("material_div_metal").style.display = 'none';
-				document.getElementById("material_div_buyable_skins").style.display = 'none';
-				document.getElementById("material_div_critter_skins").style.display = 'none';
+				document.getElementById("material_div_skins").style.display = 'none';
 				document.getElementById("material_div_custom").style.display = 'none';
 				
 				document.getElementById("material").innerHTML = "";
@@ -908,46 +1138,52 @@
 			
 			if(!document.getElementById("adornment2_lock").checked) {
 				setInitialValue(document.getElementById("pick_all_adornment2"));
-				document.getElementById("adornment2_div_custom").style.display = 'none';
+				setInitialValue(document.getElementById("pick_shoes1_adornment2"));
+				setInitialValue(document.getElementById("pick_shoes2_adornment2"));
+				setInitialValue(document.getElementById("pick_shoes3_adornment2"));
+				setInitialValue(document.getElementById("pick_shoes4_adornment2"));
+				setInitialValue(document.getElementById("pick_boots1_adornment2"));
+				setInitialValue(document.getElementById("pick_slippers_adornment2"));
+				setInitialValue(document.getElementById("pick_sandals_adornment2"));
+				setInitialValue(document.getElementById("pick_adornment2_beaded"));
+				setInitialValue(document.getElementById("pick_adornment2_buckled"));
+				setInitialValue(document.getElementById("pick_adornment2_buttoned"));
+				setInitialValue(document.getElementById("pick_adornment2_capped"));
+				setInitialValue(document.getElementById("pick_adornment2_fringed"));
+				setInitialValue(document.getElementById("pick_adornment2_inset"));
+				setInitialValue(document.getElementById("pick_adornment2_laced"));
+				setInitialValue(document.getElementById("pick_adornment2_lining"));
+				setInitialValue(document.getElementById("pick_adornment2_strapped"));
+				setInitialValue(document.getElementById("pick_adornment2_studded"));
+				setInitialValue(document.getElementById("pick_adornment2_toed"));
+				setInitialValue(document.getElementById("pick_adornment2_trimmed"));
 				
-				/*
-				document.getElementById("pick_all_adornment2").selectedIndex = 0;
-				document.getElementById("pick_shoes1_adornment2").selectedIndex = 0;
-				document.getElementById("pick_shoes2_adornment2").selectedIndex = 0;
-				document.getElementById("pick_shoes3_adornment2").selectedIndex = 0;
-				document.getElementById("pick_shoes4_adornment2").selectedIndex = 0;
-				document.getElementById("pick_boots1_adornment2").selectedIndex = 0;
-				document.getElementById("pick_slippers_adornment2").selectedIndex = 0;
-				document.getElementById("pick_sandals_adornment2").selectedIndex = 0;
-				document.getElementById("pick_adornment2_beaded").selectedIndex = 0;
-				document.getElementById("pick_adornment2_buckled").selectedIndex = 0;
-				document.getElementById("pick_adornment2_buttoned").selectedIndex = 0;
-				document.getElementById("pick_adornment2_capped").selectedIndex = 0;
-				document.getElementById("pick_adornment2_fringed").selectedIndex = 0;
-				document.getElementById("pick_adornment2_inset").selectedIndex = 0;
-				document.getElementById("pick_adornment2_laced").selectedIndex = 0;
-				document.getElementById("pick_adornment2_lined").selectedIndex = 0;
-				document.getElementById("pick_adornment2_strapped").selectedIndex = 0;
-				document.getElementById("pick_adornment2_studded").selectedIndex = 0;
-				document.getElementById("pick_adornment2_toed").selectedIndex = 0;
-				document.getElementById("pick_adornment2_trimmed").selectedIndex = 0;
-				document.getElementById("custom_adornment2_input").value = "";
+				setInitialValue(document.getElementById("custom_adornment2_beginner"));
+				document.getElementById("custom_adornment2_input").value = "";		
+								
+				document.getElementById("adornment2_all_div").style.display = 'block';
+				document.getElementById("adornment2_shoes1_div").style.display = 'none';
+				document.getElementById("adornment2_shoes2_div").style.display = 'none';
+				document.getElementById("adornment2_shoes3_div").style.display = 'none';
+				document.getElementById("adornment2_shoes4_div").style.display = 'none';
+				document.getElementById("adornment2_boots1_div").style.display = 'none';
+				document.getElementById("adornment2_slippers_div").style.display = 'none';
+				document.getElementById("adornment2_sandals_div").style.display = 'none';				
 				
-				document.getElementById("adornment2_all_div").style.display = 'block';document.getElementById("adornment2_div_beaded").style.display = 'none';
+				document.getElementById("adornment2_div_beaded").style.display = 'none';
 				document.getElementById("adornment2_div_buckled").style.display = 'none';
 				document.getElementById("adornment2_div_buttoned").style.display = 'none';
 				document.getElementById("adornment2_div_capped").style.display = 'none';
 				document.getElementById("adornment2_div_fringed").style.display = 'none';
 				document.getElementById("adornment2_div_inset").style.display = 'none';
 				document.getElementById("adornment2_div_laced").style.display = 'none';
-				document.getElementById("adornment2_div_lined").style.display = 'none';
+				document.getElementById("adornment2_div_lining").style.display = 'none';
 				document.getElementById("adornment2_div_strapped").style.display = 'none';
 				document.getElementById("adornment2_div_studded").style.display = 'none';
 				document.getElementById("adornment2_div_toed").style.display = 'none';
 				document.getElementById("adornment2_div_trimmed").style.display = 'none';
 				document.getElementById("adornment2_div_custom").style.display = 'none';
 				
-				*/
 				document.getElementById("adornment2").innerHTML = "";
 			}
 						
@@ -1045,7 +1281,6 @@
 				
 				select_material.value = options[random].value;
 				changeValue(select_material.value, select_material.oldvalue, select_material.id);		
-
 				
 				do {
 					select  = document.getElementById(material_dict[select_material.value]);
@@ -1092,7 +1327,8 @@
 			<span id="material"></span>
 			<span id="item_type"></span>
 			<span id="adornment2"></span>
-		</b></div><br><br><br>
+		</b></div><br><br><br>		
+		<div id="total_length" class="character_length_normal" align="center">Total Character Length: 0</div>
 		<table width="100%">
 		 <tr height="150">
 		  <td valign="top" width="20%">		    
@@ -1313,7 +1549,7 @@
 		  </td>
 		  <td valign="top" width="20%">
 			<button value="" onclick="resetAll()">Clear All</button><br>
-			<button value="" onclick="createRandomItem()" >Random Item</button>
+			<button value="" onclick="alert('Not implemented yet');" >Random Item</button>
 		  </td>		
 		 </tr>
 		 <tr height="150">
@@ -1326,8 +1562,7 @@
 				<option>Cloth...</option>
 				<option>Leather...</option>
 				<option>Metal...</option>
-				<option>Buyable Hide/Pelt/Skins...</option>
-				<option>Critter Hide/Pelt/Skins...</option>
+				<option>Hides/Pelts/Skins...</option>
 			</select>
 			<div id="material_div_cloth">
 				<select id="pick_material_cloth" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
@@ -1338,11 +1573,8 @@
 			<div id="material_div_metal">
 				<select id="pick_material_metal" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
 			</div>
-			<div id="material_div_buyable_skins">
-				<select id="pick_material_buyable_skins" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
-			</div>
-			<div id="material_div_critter_skins">
-				<select id="pick_material_critter_skins" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			<div id="material_div_skins">
+				<select id="pick_material_skins" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
 			</div>
 			<div id="material_div_custom">
 				<input type="text" id="custom_material_input" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>
@@ -1356,17 +1588,194 @@
 		  <td valign="top" width="20%">		    
 			<b>Long Desc Adornment: (Lock:<input type="checkbox" id="adornment2_lock">)</b><br>
 			Character Length: <span id="adornment2_text_length">0</span><br>
-			<select id="pick_all_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
-				<option>Nothing</option></select>
+			<div id="adornment2_all_div">
+				<select id="pick_all_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Buckled with...</option>
+					<option>Buttoned with...</option>
+					<option>Capped with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Laced with...</option>
+					<option>Lined with...</option>
+					<option>Strapped with...</option>
+					<option>Studded with...</option>
+					<option>With ... Toes</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<!-- brogues, divit-toed, open-toed shoes -->
+			<div id="adornment2_shoes1_div">
+				<select id="pick_shoes1_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Buckled with...</option>
+					<option>Buttoned with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Laced with...</option>
+					<option>Strapped with...</option>
+					<option>With ... Toes.</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<!-- dancing shoes, low-heeled shoes, moccasins, round-toed shoes -->
+			<div id="adornment2_shoes2_div">
+				<select id="pick_shoes2_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Buckled with...</option>
+					<option>Buttoned with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Laced with...</option>
+					<option>Lined with...</option>
+					<option>Strapped with...</option>
+					<option>Studded with...</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<!-- poulaines -->
+			<div id="adornment2_shoes3_div">
+				<select id="pick_shoes3_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Buckled with...</option>
+					<option>Buttoned with...</option>
+					<option>Capped with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Laced with...</option>
+					<option>Lined with...</option>
+					<option>Studded with...</option>
+					<option>With ... Toes</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<!-- squared-toed shoes -->
+			<div id="adornment2_shoes4_div">
+				<select id="pick_shoes4_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Buckled with...</option>
+					<option>Buttoned with...</option>
+					<option>Capped with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Laced with...</option>
+					<option>Lined with...</option>
+					<option>Studded with...</option>
+					<option>With ... Toes</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<!-- workboots -->
+			<div id="adornment2_boots1_div">
+				<select id="pick_boots1_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Buckled with...</option>
+					<option>Buttoned with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Laced with...</option>
+					<option>Strapped with...</option>
+					<option>With ... Toes</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<div id="adornment2_slippers_div">
+				<select id="pick_slippers_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Studded with...</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<div id="adornment2_sandals_div">
+				<select id="pick_sandals_adornment2" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option>Nothing</option>
+					<option>Custom Adornment...</option>
+					<option>Beaded with...</option>
+					<option>Buckled with...</option>
+					<option>Finged with...</option>
+					<option>Inset with...</option>
+					<option>Laced with...</option>
+					<option>Strapped with...</option>
+					<option>Studded with...</option>
+					<option>Trimmed with...</option>
+				</select>
+			</div>
+			<div id="adornment2_div_beaded">
+				<select id="pick_adornment2_beaded" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_buckled">
+				<select id="pick_adornment2_buckled" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_buttoned">
+				<select id="pick_adornment2_buttoned" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_capped">
+				<select id="pick_adornment2_capped" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_fringed">
+				<select id="pick_adornment2_fringed" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_inset">
+				<select id="pick_adornment2_inset" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_laced">
+				<select id="pick_adornment2_laced" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_lining">
+				<select id="pick_adornment2_lining" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_strapped">
+				<select id="pick_adornment2_strapped" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_studded">
+				<select id="pick_adornment2_studded" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_toed">
+				<select id="pick_adornment2_toed" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
+			<div id="adornment2_div_trimmed">
+				<select id="pick_adornment2_trimmed" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
+			</div>
 			<div id="adornment2_div_custom">
-				<input type="text" id="custom_adornment_input" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>
+				<select id="custom_adornment2_beginner" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+					<option>beaded with</option>
+					<option>buckled with</option>
+					<option>buttoned with</option>
+					<option>capped with</option>
+					<option>fringed with</option>
+					<option>inset with</option>
+					<option>laced with</option>
+					<option>lined with</option>
+					<option>strapped with</option>
+					<option>studded with</option>
+					<option>with ... toes</option>
+					<option>trimmed with</option>
+					<option>BLANK</option>
+				</select>			
+				<input type="text" id="custom_adornment2_input" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>	
 			</div>
 		  </td>
 		  <td>
 		  </td>
 		  <td valign="top">
+			OTHER INFORMATION:<br>
 			<span id="field_spaces">Spaces between fields: 0</span><br>
-			<span id="total_length">Total Character Length: 0</span>
 		  </td>
 		 </tr>		 
 		</table>
