@@ -9,3 +9,7 @@ Warrior Sheath Designer
 
 Knitting Designer
 - Assists users in creating knitting projects.
+
+Cobbling Designer
+- Assists users in designing footwear that can be created from the Cobbling artisan system.
+- This tool is larger in scale due to the huge amount of options available for footwear.
