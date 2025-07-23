@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Cobbling Designer v1.0</TITLE>
+	<TITLE>Hymore's Cobbling Designer v1.1</TITLE>
 	<STYLE>
 		div.cobbling_text {
 			color: black;
@@ -28,41 +28,27 @@
 	<SCRIPT>
 		/*
 		ABOUT
-		The Knitting Designer was created by Hymore.
-		This is a tool that helps design of knitting projects. The tool was made for the Gemstone 4 community
+		The Cobbling Designer was created by Hymore.
+		This is a tool that helps design of cobbling projects. The tool was made for the Gemstone 4 community
 		and is free to use and open sourced. The tool uses only HTML and client side javascript. Meaning, it
 		doesn't need an internet connection to function. The designer can be used offline by downloading
 		the HTML page and opening it in a web browser.
-		Special Thanks to Darrgo for help explaining how knitted items are made.
+		Special Thanks to Darrgo and Riend for help explaining how cobbling items are made and providing
+		documentation of the GIANT amount of options for cobbling items.
 		
 		VERSION HISTORY:
 		v1.0  
 		- Initial release.
 		
 		v1.1  
-		- Fixed crocheted option error.
-		- Added more yarn material types.
-		- Reorder several options to be alphabetical.
-		- Reorganized several options.
-		
-		v1.2  
-		- Split Color, Design, and Material choices into submenues.
-		- Added input boxes for color and material.
-		- Added a bunch of new color fields due to custom color possibilities.
-		- Reorder several options to be alphabetical.
-		- Changed return link to be inside a position div.
-		
-		v1.3
-		- Added several new item types.
-		- Changed profession title ROGUE to LOCKSMITHING.
-		- Removed unneeded commented-out lines.
-		- Fixed a bug in createRandomItem().
-		*/		
+		- Fixed typos.
+		- Removed unneeded plural arrays
+		- Added Sailor's Grief gems
 		
 		
 		/*
 		Lists section.
-		Contains all the customization choices for knitted items. This section is very large but needed.
+		Contains all the customization choices for cobbling items. This section is very, very large but completely needed.
 		I thought about moving this into it's own js file but decided it was better to keep the tool as a single file.
 		For very large lists like colors, they are separated into different lists for ease of editing.
 		Each list has a header (non-option choice) to make reading the list easier.
@@ -75,7 +61,7 @@
 		const adornments_studded = [];
 		const adornments_trimming = [];
 		const adornments_laces = ["---LACES---", "black lace ribbons", "black leather bootlaces ", "braided hemp", "braided horsehair", "braided linen laces", "brided suede laces", "brown suede shoelaces ", "coils of barbed wire", "dirge-vaon vines", "dried trumpetvine laces", "ecru alce ribbons", "filamentous netting", "flora-burnt ribbons", "gilded chains", "gold filaments", "gold-threaded shoelaces ", "gossamer thread", "knotted bootlaces", "knotted silk ribbons", "knotted twine", "lattice laces", "latticed straps", "leather laces", "oiled leather laces", "pale satin ribbon", "pearl-linked chains", "plaited nymph hair laces", "raw silk ribbons", "rawhide laces", "rivet-tipped cords", "round woven bootlaces ", "satin cord shoelaces ", "sea silk", "silk cord laces", "silk laces", "silver filament webwork", "strips of pale lace", "sturdy cotton bootlaces ", "suede laces", "tonal paeline", "velvet laces", "willow withe laces"];
-		const adornments_settings_gems = ["---GEM SETTINGS---", "polished dark blue amber", "teardrops of green amber", "pieces of muted red amber", "jewel cabochons", "unfaceted mistvein diamonds", "purple stormcloud diamonds", "hematite disks", "hazy red sea glass disks", "mist blue sea glass disks", "round amber sea glass disks", "chalky cubes of feldspar", "wine-dark garnets", "dark purple sunset garnets", "sunset garnets", "mirrored orbs of hematite", "ivory", "pieces of smoky white jade", "cones of ember jasper", "ovoids of lunar jasper", "ovoids of leopard jaspers", "ovoids of monsoon jasper", "nodules of peacock jasper", "pieces of green-veined marble", "shimmering nodules of marcasite", "glossy pale beige mekrets", "glossy sable mekrets", "mother-of-pearl", "oblong pieces of nephrite", "pieces of snowflake obsidian", "purple black thunderhead opals", "tiny pearls", "green pearls", "cream pearls", "freshwater baroque pearls", "frosty pale violet pearls", "midnight blue pearls", "irregular cluster of blue quartz", "clusters of red roestone", "clusters of pink roestone", "clusters of yellow roestone", "Alhan'aht rivertears", "pale gold firefly saewehna", "iridescent azure butterfly saewehna", "shifting multihued auboralines", "bright orange butterfly saewehna", "jewel-toned dragonfly saewehna", "silvery mint green moth saewehna", "russet and cream moth saewehna", "pale sapphires", "pale mistvein sapphire", "scrimshawed", "honey amber shards", "fossilized sponges", "inky blue smoldereyes", "scarlet smoldereyes", "dark turquoise stones", "thunderheads", "pieces of smoky blue topaz", "crystals of silvery wraithaline", "crystals of shadowy wraithaline", "twisted nacreous blue waterweb", "waterweb"];
+		const adornments_settings_gems = ["---GEM SETTINGS---", "polished dark blue amber", "teardrops of green amber", "pieces of muted red amber", "jewel cabochons", "unfaceted mistvein diamonds", "purple stormcloud diamonds", "hematite disks", "hazy red sea glass disks", "mist blue sea glass disks", "round amber sea glass disks", "chalky cubes of feldspar", "wine-dark garnets", "dark purple sunset garnets", "sunset garnets", "mirrored orbs of hematite", "ivory", "pieces of smoky white jade", "cones of ember jasper", "ovoids of lunar jasper", "ovoids of leopard jaspers", "ovoids of monsoon jasper", "nodules of peacock jasper", "pieces of green-veined marble", "shimmering nodules of marcasite", "glossy pale beige mekrets", "glossy sable mekrets", "mother-of-pearl", "oblong pieces of nephrite", "pieces of snowflake obsidian", "purple black thunderhead opals", "tiny pearls", "green pearls", "cream pearls", "freshwater baroque pearls", "frosty pale violet pearls", "midnight blue pearls", "irregular cluster of blue quartz", "clusters of red roestone", "clusters of pink roestone", "clusters of yellow roestone", "Alhan'aht rivertears", "pale gold firefly saewehna", "iridescent azure butterfly saewehna", "shifting multihued auboralines", "bright orange butterfly saewehna", "jewel-toned dragonfly saewehna", "silvery mint green moth saewehna", "russet and cream moth saewehna", "pale sapphires", "pale mistvein sapphire", "scrimshawed", "honey amber shards", "fossilized sponges", "inky blue smoldereyes", "scarlet smoldereyes", "dark turquoise stones", "thunderheads", "pieces of smoky blue primaryaz", "crystals of silvery wraithaline", "crystals of shadowy wraithaline", "twisted nacreous blue waterweb", "waterweb"];
 		const adornments_settings_other = ["---OTHER SETTINGS---", "enamel cherry blossoms", "jade coils", "lush marabou down", "parrot feathers", "blue sea glass", "round-scaled glass", "petrified elm knots", "jewel-toned leaves", "jewel mosaic", "tattered netting", "carved onyx roses", "pink spinel roses", "tortoise shells", "silver snowflakes", "vaalin snowflakes", "burnished gold spikes", "glazed alder squares", "golden suns", "shark's teeth", "onyx thorns", "carmine winterberry"];
 		const adornments_buckles = ["---BUCKLES---", "alum", "antique brass", "balenite", "barbed faenor", "blackened steel", "bronze", "brushed gold", "brushed mithril", "bubbled glass", "cast iron", "clockwork", "cog-fused metal", "copper", "corrugated alum", "crystal-set vaalin", "dark steel", "electrum", "etched laje", "faenor", "faewood", "filigree-etched", "flora-wrought", "floral enamel", "frosted faenor", "gear-cut", "gilt-foiled jet", "glaes", "gold gilt", "grooved haon", "hematite", "infinity knot", "jeweled vaalin", "kiramon chitin", "lapis-set gold", "latticed suede", "leather", "malachite glass", "mottled pewter", "nielloed silver", "niveous marble", "orase", "pearl-scattered", "perforated metal", "polished bone", "polished mithril", "porcelain", "potion-etched faenor", "riveted steel", "rose copper", "rose gold", "scrimshaw ivory", "segmented brass", "segmented steel", "serpent-etched", "silver gilt", "silver", "stained glass", "tortoise shell", "velvet", "veniom", "warped metal", "white vaalorn", "wide vaalin", "wood"];
 		const colors_black = ["---BLACK COLORS---", "atrous", "black", "black cherry", "blood-hued black", "blue-black", "charcoal", "charcoal black", "coal black", "dark", "dark ebony", "deep black", "deep ebony", "dingy black", "dull black", "dusky black", "ebon", "ebon black", "ebony", "faded black", "flat black", "fuliginous", "gamboge", "gingerline", "glossy black", "griseous", "inky black", "iridescent black", "jet", "jet black", "licorice", "matte black", "matte obsidian", "midnight black", "midnight ebon", "moonshade black", "mottled black", "murky black", "night black", "obsidian black", "ombre deep black and white", "ombre night-hued", "onyx", "onyx black", "pitch black", "pitch black", "rainbow-flecked licorice", "raven black", "raven-hued", "red-speckled black", "sable", "scorched black", "shadowed dye", "shadowy black", "silver-flecked atrous", "silver-sheened deep raven black", "sooty black"];
@@ -89,11 +75,10 @@
 		const colors_purple = ["---PURPLE COLORS---", "amaranth", "amethyst", "amethyst orchid", "amethyst purple", "aubergine", "blackberry", "blackened violet", "boysenberry", "cherry red", "cherry-hued", "crocus purple", "currant", "dark purple", "deep purple", "deep violet", "gold-flecked plum", "grape", "heather grey", "heliotrope", "hyacinth", "ianthine", "lavender", "lavender-grey", "lilac", "magenta", "mauve", "mulberry", "nacreous violet", "nearly-black plum", "nightshade purple", "ochre", "orchid", "pale raspberry", "pale violet", "pastel purple", "pearlescent lavender", "periwinkle", "phlox", "plum", "plum-colored", "purple", "raspberry-hued", "rich lilac-hued", "royal purple", "shiraz purple", "tanzanite", "thistle", "twilight purple", "twilight violet", "violet", "violet-washed", "vivid violet", "wine", "wisteria"];
 		const colors_red = ["---RED COLORS---", "alizarin", "annatto red", "ashen rose", "auburn", "berry", "berry red", "bistre", "black-flecked carnelian", "blood orange", "blood red", "blood-hued black", "blush", "blush", "brick red", "bright honey", "burgundy", "cameo pink", "cardinal", "cardinal red", "carnelian", "carnelian red", "cerise", "cherry red", "claret", "copper-sheened", "copper-swirled", "coppery rosewood", "coral pink", "coral red", "cranberry red", "cranberry-hued", "crimson", "dark crimson", "dark red", "dark russet", "deep crimson", "deep red", "dusky rose", "ebon-suffused garnet", "ember-hued", "fiery coral", "fiery red", "fiery rose", "flame red", "fulvous", "garnet", "gilded roseate", "henna red", "lava-colored", "lava red", "livid", "magma red", "mallow pink", "marbled pale primrose", "matte bisque", "melon", "metallic scarlet", "nacarat", "pale primrose", "pale rose", "pastel pink", "pink", "pink-plum", "pomegranate", "poppy red", "primrose", "raspberry-hued", "red", "red-orange", "red-speckled black", "red-tinged", "red-tinted orange", "rich carmine", "rose", "rose madder", "rose pink", "rose red", "roseate", "rosy copper", "rosy red", "ruby red", "ruddy crimson", "rufescent", "russet", "rust-colored", "salmon pink", "sanguine", "scarlet", "shadowed rose pink", "vermilion", "vivid berry", "watermelon"];
 		const colors_white = ["---WHITE COLORS---", "alabaster", "alabastrine", "almond", "beige", "bleached white", "bone white", "brilliant white", "chalk white", "cream", "cream-hued", "creamy beige", "creamy white", "dark cream", "ecru", "fawn", "ghost white", "ghostly white", "glacial white", "gleaming white", "gold-swirled deep winter white", "gold-swirled pale winter white", "gold-swirled winter white ", "greyish beige", "hoary", "ivory", "ivory white", "lily white", "milky", "milky white", "moonlight silver", "niveous", "nude", "off-white", "pale", "pale caramel", "pale ecru", "pale ivory", "pale taupe", "pale white", "pearl-hued", "pearlescent", "pearly", "pearly white", "pristine white", "pure white", "radiant white", "rich cream", "silvery", "silvery white", "snow white", "snowy", "snowy white", "stark white", "swan white", "taupe", "vanilla", "vanilla-hued", "white", "white-swirled", "winter white"];
-		const colors_yellow = ["---YELLOW COLORS---", "almond", "amber", "banana yellow", "blonde", "bright golden", "butterscotch yellow", "dandelion gold", "citron", "champagne", "chartreuse", "flaxen", "golden", "gold-swirled tawny", "gold-swirled vibrant sienna", "honey gold", "honey-colored", "honey-hued", "lemon yellow", "light yellow", "marigold", "matte gold", "ocher", "ochre", "pale citrine", "pale golden", "rich cream", "sallow", "sand-colored", "sand-hued", "sulfur-tinged", "sunny yellow", "tawny gold", "tawny yellow", "topaz", "yellow", "toffee"];
+		const colors_yellow = ["---YELLOW COLORS---", "almond", "amber", "banana yellow", "blonde", "bright golden", "butterscotch yellow", "dandelion gold", "citron", "champagne", "chartreuse", "flaxen", "golden", "gold-swirled tawny", "gold-swirled vibrant sienna", "honey gold", "honey-colored", "honey-hued", "lemon yellow", "light yellow", "marigold", "matte gold", "ocher", "ochre", "pale citrine", "pale golden", "rich cream", "sallow", "sand-colored", "sand-hued", "sulfur-tinged", "sunny yellow", "tawny gold", "tawny yellow", "primaryaz", "yellow", "toffee"];
 		const colors_misc = ["---MISC COLORS---", "black-swirled vivid multihued ", "iridescent", "jewel-toned", "matte", "ombre", "ombre dye ", "opalescent", "opaline", "rainbow", "rainbow-flecked", "rainbow-hued", "silver-sheened prismatic", "variegated", "vivid rainbow-hued"];
 		const colors_all = colors_black.concat(colors_blue, colors_brown, colors_green, colors_grey, colors_metallic, colors_orange, colors_pink, colors_purple, colors_red, colors_white, colors_yellow, colors_misc);		
 		const fringe_generic = ["---GENERIC FRINGINGS---", "antler", "appendage", "beard", "bone", "branch", "canine", "claw", "ear", "eye", "fang", "feather", "foreclaw", "horn", "incisor", "jawbone", "jaw", "mane", "mandible", "paw", "pincer", "plume", "rattle", "scale", "stinger", "tail", "tailfeather", "tail", "talon", "teeth", "tendril", "tentacle", "thorn", "tusk", "whisker"];
-		const fringe_generic_plural = ["---GENERIC FRINGINGS---", "antlers", "appendages", "beards", "bones", "branches", "canines", "claws", "ears", "eyes", "fangs", "feathers", "foreclaws", "horns", "incisors", "jawbones", "jaws", "manes", "mandibles", "paws", "pincers", "plumes", "rattles", "scales", "stingers", "tails", "tailfeathers", "tails", "talons", "teeth", "tendrils", "tentacles", "thorns", "tusks", "whiskers"];
 		const fringe_antler = ["---ANTLERS---", "antler", "caribou antler"];
 		const fringe_appendage = ["---APPENDAGES---", "thorn-ridden appendage"];
 		const fringe_beard = ["---BEARD---", "mossy beard", "orc beard", "troll beard"];
@@ -104,7 +89,7 @@
 		const fringe_ear = ["---EARS---", "hawk-owl ear", "hobgoblin ear", "hound ear", "kobold ear", "orc ear", "rolton ear", "troll ear"];
 		const fringe_eye = ["---EYES---", "cyclops eye", "eye", "rolton eye", "seeker eye", "spider eye", "troll eye", "wraith eye"];
 		const fringe_fang = ["---FANGS---", "direbear fang", "faeroth fang", "goblin fang", "rodent fang", "snake fang", "troll fang", "viper fang"];
-		const fringe_feather = ["---FEATHERS---", "cockatrice feather", "eagle feather", "red firebird feather", "griffin feather", "raptor feather", "vulture feather"];
+		const fringe_feather = ["---FEATHERS---", "cockatrice feather", "eagle feather", "harpy feather", "red firebird feather", "griffin feather", "raptor feather", "vulture feather"];
 		const fringe_foreclaw = ["---FORECLAWS---", "kresh foreclaw"];
 		const fringe_horn = ["---HORNS---", "gnarp horn", "minotaur horn", "rolton horn", "velnalin horn", "vor'taz horn"];
 		const fringe_incisor = ["---INCISORS---", "tiger incisor"];
@@ -128,14 +113,13 @@
 		const fringe_tusk = ["---TUSKS---", "boar tusk", "mammoth tusk", "ogre tusk", "tusk", "troll tusk", "ursian tusk"];
 		const fringe_whisker = ["---WHISKERS---", "warcat whisker"];
 		const fringe_all = fringe_antler.concat(fringe_appendage, fringe_beard, fringe_bone, fringe_branch, fringe_canine, fringe_claw, fringe_ear, fringe_eye, fringe_fang, fringe_feather, fringe_foreclaw, fringe_horn, fringe_incisor, fringe_jaw, fringe_jawbone, fringe_mandible, fringe_mane, fringe_paw, fringe_pincer, fringe_plume, fringe_rattle, fringe_scale, fringe_stinger, fringe_tail, fringe_tailfeather, fringe_talon, fringe_tooth, fringe_tendril, fringe_tentacle, fringe_thorn, fringe_tusk, fringe_whisker);
-		const gems_generic = ["---GENERIC GEMS---", "aetherstone", "agate", "alexandrite", "amber", "ambergris", "ametrine", "amethyst", "aquamarine", "aranthium-bloom", "auboraline", "auroraline", "azurite", "bauxite", "beryl", "bismuth", "blazestar", "bloodjewel", "bloodstone", "bluerock", "caederine", "carbuncle", "carnelian",  "chalcedony", "chrysoberyl", "cinderstone", "citrine", "coral", "cordierite", "corestone", "crescent", "crowstone", "crystal", "deathstone", "despanal", "diamond", "diopside", "disk", "dreamstone", "duskjewel", "emerald", "eostone", "everine", "eye", "faenor-bloom", "fang", "feldspar", "feystone", "firedrop", "firestone", "fishscale", "fluorite", "galena", "garnet", "gem", "glacialite", "glimaerstone", "goldstone", "gypsum", "haon", "hoarstone", "heliodor", "heliotrope", "hematite", "hyacinth", "idocrase", "iolite", "ivory", "jacinth", "jade", "jasper", "labradorite", "lapis lazuli", "lichstone", "malachite", "maoral", "marble", "marcasite", "melanite", "mica", "mithril-bloom", "mekret", "modwir", "moonstone", "mournstone", "nephrite", "nightstone", "nugget", "obsidian", "onyx", "ora-bloom", "opal", "pearl", "peridot", "petalite", "prehnite", "pumice", "pyrite", "quartz", "razern-bloom", "rhimar-bloom", "riftshard", "riftstone", "rivertear", "rock", "roestone", "rosespar", "ruby", "saewehna", "sandsilver", "sapphire", "sandruby", "sard", "sardonyx", "scarab", "scolecite", "serpentine", "shard", "shale", "shell", "smoldereye", "snowdrop", "snowstone", "soulstone", "spectrolite", "sphene", "spherine", "spinel", "spiral", "sponge", "starstone", "stone", "sunstone", "talon", "tanzanite", "thanot", "thunderstone", "tooth", "titanite", "toadstool", "topaz", "tourmaline", "turquoise", "viridine", "vultite-bloom", "waterweb", "wispstone", "wraithaline", "wulfenite", "wyrdshard", "wyrmwood", "zircon", "zoisite"];
-		const gems_generic_plural = ["---GENERIC GEMS---", "aetherstones", "agates", "alexandrites", "amber", "ambergris", "ametrines", "amethysts", "aquamarines", "aranthium-blooms", "auboralines", "auroralines", "azurites", "bauxites", "beryls", "bismuths", "blazestars", "bloodjewels", "bloodstones", "bluerocks", "caederines", "carbuncles", "carnelians",  "chalcedonies", "chrysoberyls", "cinderstones", "citrines", "corals", "cordierites", "corestones", "crescents", "crowstones", "crystals", "deathstones", "despanals", "diamonds", "diopsides", "disks", "dreamstones", "duskjewels", "emeralds", "eostones", "everines", "eyes", "faenor-blooms", "fangs", "feldspars", "feystones", "firedrops", "firestones", "fishscales", "fluorites", "galenas", "garnets", "gems", "glacialites", "glimaerstones", "goldstones", "gypsum", "haon", "hoarstones", "heliodors", "heliotropes", "hematites", "hyacinths", "idocrases", "iolites", "ivory", "jacinths", "jade", "jaspers", "labradorites", "lapis lazulis", "lichstones", "malachites", "maorals", "marbles", "marcasites", "melanites", "micas", "mithril-blooms", "mekrets", "modwirs", "moonstones", "mournstones", "nephrites", "nightstones", "nuggets", "obsidians", "onyx", "ora-blooms", "opals", "pearls", "peridots", "petalites", "prehnites", "pumices", "pyrites", "quartz", "razern-blooms", "rhimar-blooms", "riftshards", "riftstones", "rivertears", "rocks", "roestones", "rosespars", "rubies", "saewehnas", "sandsilvers", "sapphires", "sandrubies", "sards", "sardonyxes", "scarabs", "scolecites", "serpentines", "shards", "shales", "shells", "smoldereyes", "snowdrops", "snowstones", "soulstones", "spectrolites", "sphenes", "spherines", "spinels", "spirals", "sponges", "starstones", "stones", "sunstones", "talons", "tanzanites", "thanots", "thunderstones", "teeth", "titanites", "toadstools", "topazes", "tourmalines", "turquoises", "viridines", "vultite-blooms", "waterwebs", "wispstones", "wraithalines", "wulfenites", "wyrdshards", "wyrmwoods", "zircons", "zoisites"];
-		const gems_aetherstone = ["---AETHERSTONES---", "swirling aetherstones"];
-		const gems_agate = ["---AGATES---", "banded agates", "blue lace agates", "chameleon agates", "cloud agates", "fire agates", "frost agates", "moss agates", "mottled agates", "tigereye agates"];
-		const gems_alexandrite = [];
+		const gems_generic = ["---GENERIC GEMS---", "aetherstone", "agate", "alexandrite", "amber", "ambergris", "ametrine", "amethyst", "aquamarine", "aranthium-bloom", "auboraline", "auroraline", "azurite", "bauxite", "beryl", "bismuth", "blazestar", "bloodjewel", "bloodstone", "bluerock", "caederine", "carbuncle", "carnelian",  "chalcedony", "chrysoberyl", "cinderstone", "citrine", "coral", "cordierite", "corestone", "crescent", "crowstone", "crystal", "deathstone", "despanal", "diamond", "diopside", "disk", "dreamstone", "duskjewel", "emerald", "eostone", "everine", "eye", "faenor-bloom", "fang", "feldspar", "feystone", "firedrop", "firestone", "fishscale", "fluorite", "galena", "garnet", "gem", "glacialite", "glimaerstone", "goldstone", "gypsum", "haon", "hoarstone", "heliodor", "heliotrope", "hematite", "hyacinth", "idocrase", "iolite", "ivory", "jacinth", "jade", "jasper", "labradorite", "lapis lazuli", "lichstone", "malachite", "maoral", "marble", "marcasite", "melanite", "mica", "mithril-bloom", "mekret", "modwir", "moonstone", "mournstone", "nephrite", "nightstone", "nugget", "obsidian", "onyx", "ora-bloom", "opal", "pearl", "peridot", "petalite", "prehnite", "pumice", "pyrite", "quartz", "razern-bloom", "rhimar-bloom", "riftshard", "riftstone", "rivertear", "rock", "roestone", "rosespar", "ruby", "saewehna", "sandsilver", "sapphire", "sandruby", "sard", "sardonyx", "scarab", "scolecite", "serpentine", "shard", "shale", "shell", "smoldereye", "snowdrop", "snowstone", "soulstone", "spectrolite", "sphene", "spherine", "spinel", "spiral", "sponge", "starstone", "stone", "sunstone", "talon", "tanzanite", "thanot", "thunderstone", "tooth", "titanite", "toadstool", "primaryaz", "tourmaline", "turquoise", "viridine", "vultite-bloom", "waterweb", "wispstone", "wraithaline", "wulfenite", "wyrdshard", "wyrmwood", "zircon", "zoisite"];
+		const gems_aetherstone = ["---AETHERSTONES---", "swirling aetherstone"];
+		const gems_agate = ["---AGATES---", "banded agate", "blue lace agate", "chameleon agate", "cloud agate", "fire agate", "frost agate", "moss agate", "mottled agate", "tigereye agate"];
+		const gems_alexandrite = ["---ALEXANDRITE---", "dusky grey storm alexandrite"];
 		const gems_amber = ["---AMBER---", "honey amber", "blood amber", "golden amber", "green amber", "milky amber", "polished dark blue amber"];
 		const gems_ambergris = ["---AMBERGRIS---", "black ambergris", "grey ambergris"];
-		const gems_ametrine = ["---AMETRINES---", "lilac-crested molten gold ametrine"];
+		const gems_ametrine = ["---AMETRINES---", "lilac-crested molten gold ametrine", "tiny cut ametrine"];
 		const gems_amethyst = ["---AMETHYSTS---", "brilliant wyrm's-tooth amethyst", "deep purple amethyst", "frosted pale violet amethyst", "indigo-cored stormy violet amethyst", "rutilated frostbite amethyst", "shadow amethyst", "smoky amethyst"];
 		const gems_aquamarine = ["---AQUAMARINES---", "pale green-blue aquamarine"];
 		const gems_aranthiumbloom = ["---ARANTHIUM-BLOOM---", "dark ivory aranthium-bloom"];
@@ -151,7 +135,7 @@
 		const gems_bluerock = ["---BLUEROCKS---", "bright bluerock"];
 		const gems_caederine = ["---CAEDERINES---", "cabochon torchlight carnelian", "waxy grey caederine"];
 		const gems_carbuncle = ["---CARBUNCLES---", "deep red carbuncle"];
-		const gems_chalcedony = ["---CHALCEDONIES---", "sand-smoothed chalcedony", "grey chalcedony", "white chalcedony"];
+		const gems_chalcedony = ["---CHALCEDONIES---", "mottled algae chalcedony", "sand-smoothed chalcedony", "grey chalcedony", "white chalcedony"];
 		const gems_chrysoberyl = [];
 		const gems_cinderstone = ["---CINDERSTONES---", "radiant green cinderstone"];
 		const gems_citrine = ["---CITRINES---", "pear-shaped greenish-yellow citrine"];
@@ -169,7 +153,7 @@
 		const gems_disk = ["---DISKS---", "round amber sea glass disk", "mist blue sea glass disk", "hazy red sea glass disk", "smooth green sea glass disk"];
 		const gems_dreamstone = ["---DREAMSTONES---", "black dreamstone", "blue dreamstone", "green dreamstone", "pink dreamstone", "sparkling ice blue dreamstone", "red dreamstone", "yellow dreamstone", "white dreamstone"];
 		const gems_duskjewel = ["---DUSKJEWELS---", "deep violet duskjewel"];
-		const gems_emerald = ["---EMERALDS---", "dappled moss green emerald", "dragonfire emerald", "dragon's-tear emerald", "dwarf-cut emerald", "gold-green auroral emerald", "nebulous emerald", "star emerald", "Eye-of-Koar emerald", "uncut emerald"];
+		const gems_emerald = ["---EMERALDS---", "dappled moss green emerald", "dragonfire emerald", "dragon's-tear emerald", "dwarf-cut emerald", "gold-green auroral emerald", "grey-green mist emerald", "nebulous emerald", "star emerald", "Eye-of-Koar emerald", "uncut emerald"];
 		const gems_eostone = ["---EOSTONES---", "deep blue eostone"];
 		const gems_everine = [];
 		const gems_eye = ["---EYES---", "milky quartz eye", "obsidian eye"];
@@ -181,7 +165,7 @@
 		const gems_firestone = ["---FIRESTONES---", "firestone"];
 		const gems_fishscale = [];
 		const gems_fluorite = ["---FLUORITES---", "striated fluorite"];
-		const gems_galena = ["---GALENAS---", "silvery galena"];
+		const gems_galena = ["---GALENAS---", "metallic chunk of galena", "silvery galena"];
 		const gems_garnet = ["---GARNETS---", "almandine garnet", "blood red garnet", "dark purple sunset garnet", "deep red-violet garnet", "green garnet", "lustrous black garnet", "nearly black pomegranate red garnet", "orange spessartine garnet", "sanguine wyrm's-eye garnet", "blood-hued garnet", "uncut garnet"];
 		const gems_gem = ["---GEMS---", "ametrine gem", "aquamarine gem", "bright chrysoberyl gem", "clear blue gem", "ethereal blue gem", "fiery red gem", "flawless aquamarine gem", "golden beryl gem", "green chrysoprase gem"];
 		const gems_glacialite = ["---GLACIALITES---", "fragments of pale blue glacialite"];
@@ -198,13 +182,13 @@
 		const gems_iolite = ["---IOLITES---", "lavender-grey iolite" ];
 		const gems_ivory = ["---IVORIES---", "jet-flecked ivory", "polished ivory"];
 		const gems_jacinth = ["---JACINTH---", "fiery jacinthe"];
-		const gems_jade = ["---JADES---", "black jade", "blue jade", "brown jade", "green jade", "white jade", "yellow jade", "icicle jade"];
-		const gems_jasper = ["---JASPERS---", "ember jasper", "black jasper", "red jasper", "yellow jasper", "leopard jasper", "leopard skin jasper", "lunar jasper", "monsoon jasper", "mottled green jasper", "orbicular jasper", "peacock jasper", "variegated mushroom-hued jasper"];
+		const gems_jade = ["---JADES---", "black jade", "blue jade", "brown jade", "cabochon of striated grape jade",  "green jade", "white jade", "yellow jade", "icicle jade"];
+		const gems_jasper = ["---JASPERS---", "blue-whorled greenish ocean jasper", "ember jasper", "black jasper", "red jasper", "yellow jasper", "leopard jasper", "leopard skin jasper", "lunar jasper", "monsoon jasper", "mottled green jasper", "orbicular jasper", "peacock jasper", "variegated mushroom-hued jasper"];
 		const gems_lapislazuli = ["---LAPIS LAZULIS---", "blue lapis lazuli"];
         const gems_labradorite = [];
 		const gems_lichstone = [];
 		const gems_maoral = ["---MAORALS---", "petrified maoral"];
-		const gems_malachite = [];
+		const gems_malachite = ["---MALACHITE---", "whorled jungle malachite"];
 		const gems_marble = ["---MARBLES---", "pale marble", "black marble", "blood marble", "green marble", "pink marble", "white marble"];
 		const gems_marcasite = ["---MARCASITES---", "shimmering marcasite"];
 		const gems_melanite = [];
@@ -217,12 +201,12 @@
 		const gems_nephrite = ["---NEPHRITES---", "oblong nephrite"];
 		const gems_nightstone = ["---NIGHTSTONES---", "inky black nightstone"];
 		const gems_nugget = ["---NUGGETS---", "gold nugget", "platinum nugget", "large gold nugget", "large platinum nugget", "oblong platinum nugget", "silver-white palladium nugget", "small copper nugget"];
-		const gems_obsidian = ["---OBSIDIAN---", "jet black obsidian", "mahogany obsidian", "snowflake obsidian", "spiderweb obsidian", "glossy black obsidian", "raven's wing obsidian"];
+		const gems_obsidian = ["---OBSIDIAN---", "blue-veined volcanic obsidian", "jet black obsidian", "mahogany obsidian", "snowflake obsidian", "spiderweb obsidian", "glossy black obsidian", "raven's wing obsidian"];
 		const gems_onyx = ["---ONYXES---", "banded onyx", "black onyx", "blue onyx", "gold-banded onyx", "small round graupel onyx"];
 		const gems_orabloom = ["---ORA-BLOOMS---", "green ora-bloom"];
-		const gems_opal = ["---OPALS---", "aster opal", "black opal", "blue-white frost opal", "blue green lagoon opal", "blue sky opal", "boulder opal", "brilliant purple opal", "fire opal", "cloud opal", "dragonfire opal", "iridescent wood opal", "jelly opal", "moonglae opal", "purple black thunderhead opal", "silvery nimbus opal", "white opal"];
-		const gems_pearl = ["---PEARLS---", "absinthe green pearl", "brilliant fire pearl", "frosty pale violet pearl", "iridescent pearl", "metallic black pearl", "midnight blue pearl", "pastel-hued winterbite pearl", "large black pearl", "large grey pearl", "large pink pearl", "large white pearl", "medium black pearl", "medium grey pearl", "medium pink pearl", "medium white pearl", "tiny black pearl", "tiny grey pearl", "tiny pink pearl", "tiny white pearl"];
-		const gems_peridot = ["---PERIDOTS---", "blue peridot", "cloudy winter peridot", "green peridot", "pink peridot"];
+		const gems_opal = ["---OPALS---", "aster opal", "black opal", "blue-white frost opal", "blue green lagoon opal", "blue sky opal", "boulder opal", "brilliant purple opal", "deep blue tide's heart opal", "fire opal", "cloud opal", "dragonfire opal", "iridescent wood opal", "jelly opal", "moonglae opal", "purple black thunderhead opal", "silvery nimbus opal", "white opal"];
+		const gems_pearl = ["---PEARLS---", "absinthe green pearl", "asymmetrical rough grey pearl", "brilliant fire pearl", "clouded cream orange pearl", "frosty pale violet pearl", "iridescent pearl", "metallic black pearl", "midnight blue pearl", "pastel-hued winterbite pearl", "large black pearl", "large grey pearl", "large pink pearl", "large white pearl", "medium black pearl", "medium grey pearl", "medium pink pearl", "medium white pearl", "tiny black pearl", "tiny grey pearl", "tiny pink pearl", "tiny white pearl"];
+		const gems_peridot = ["---PERIDOTS---", "blue peridot", "cloudy winter peridot", "gold-dappled olive peridot", "green peridot", "pink peridot"];
 		const gems_petalite = ["---PETALITES---", "pink petalite"];
 		const gems_prehnite = ["---PREHNITES---", "luminous prehnite"];
 		const gems_pumice = ["---PUMICE---", "hole-ridden pumice"];
@@ -239,7 +223,7 @@
 		const gems_ruby = ["---RUBIES---", "dragon's-tear ruby", "dwarf-cut ruby", "faceted blood red sandruby", "flickering snowfire ruby", "haloed Reim ruby", "impure blood red ruby", "pale pink mistvein ruby", "star ruby", "uncut ruby", "sylvarraend ruby", "vinous gigasblood ruby"];	
 		const gems_saewehna = ["---SAEWEHNAS---", "bright orange butterfly saewehna", "iridescent azure butterfly saewehna", "jewel-toned dragonfly saewehna", "pale gold firefly saewehna", "russet and cream moth saewehna", "silver firefly saewehna", "silvery mint green moth saewehna", "vibrant hummingbird saewehna"];
 		const gems_sandsilver = ["---SANDSILVERS---", "alabaster sandsilver"];
-		const gems_sapphire = ["---SAPPHIRES---", "blue sapphire", "blue shimmarglin sapphire", "blue shimmarglin sapphire", "dragonsbreath sapphire", "dragonseye sapphire", "deep blue mermaid's-tear sapphire", "dusky blue sapphire", "dwarf-cut sapphire", "faceted teal sapphire", "faceted wyrm's-heart sapphire", "green sapphire", "iridescent oasis sapphire", "lavender shimmarglin sapphire", "pale mistvein sapphire", "pale oasis sapphire", "pale water sapphire", "pallid sapphire", "pink sapphire", "star sapphire", "violet sapphire", "yellow sapphire"];
+		const gems_sapphire = ["---SAPPHIRES---", "blue sapphire", "blue shimmarglin sapphire", "blue shimmarglin sapphire", "dragonsbreath sapphire", "dragonseye sapphire", "deep blue mermaid's-tear sapphire", "dusky blue sapphire", "dwarf-cut sapphire", "faceted teal sapphire", "faceted wyrm's-heart sapphire", "faint blue water sapphire", "green sapphire", "iridescent oasis sapphire", "lavender shimmarglin sapphire", "pale mistvein sapphire", "pale oasis sapphire", "pale water sapphire", "pallid sapphire", "pink sapphire", "star sapphire", "violet sapphire", "yellow sapphire"];
 		const gems_sandruby = ["---SANDRUBIES---", "faceted blood red sandruby"];
 		const gems_sard = ["---SARDS---", "umber sard"];
 		const gems_sardonyx = ["---SARDONYXES---", "sardonyx"];
@@ -257,8 +241,8 @@
 		const gems_spiral = ["---SPIRALS---", "twisted iron spiral"];
 		const gems_sponge = ["---SPONGES---", "fossilized sponge"];
 		const gems_starstone = ["---STARSTONES---", "blue starstone", "green starstone", "red starstone", "scintillating fiery scarlet starstone", "white starstone"];
-		const gems_stone = ["---STONES---", "banded sardonyxe stone", "blue-green chrysocolla stone", "carmine cinnabar stone", "green alexandrite stone", "green aventurine stone", "green malachite stone", "grey-streaked malachite stone", "iridescent labradorite stone", "light pink morganite stone", "pale blue ice stone", "pearly grey ice stone", "pink rhodochrosite stone", "polished jet stone", "saffron-hued danburite stone", "snowy white ice stone", "turquoise stone"];
-		const gems_sunstone = ["---SUNSTONES---", "jet-banded amber sunstone", "titian orange sunstone", "red sunstone", "uncut sunstone", "white sunstone", "yellow sunstone"];
+		const gems_stone = ["---STONES---", "banded mauve sugar stone", "banded sardonyxe stone", "blue-green chrysocolla stone", "carmine cinnabar stone", "green alexandrite stone", "green aventurine stone", "green malachite stone", "grey-streaked malachite stone", "iridescent labradorite stone", "light pink morganite stone", "pale blue ice stone", "pearly grey ice stone", "pink rhodochrosite stone", "porous oily black stone", "polished jet stone", "saffron-hued danburite stone", "snowy white ice stone", "turquoise stone", "volcanic blue larimar stone"];
+		const gems_sunstone = ["---SUNSTONES---", "fiery gold-flecked sunstone", "jet-banded amber sunstone", "titian orange sunstone", "red sunstone", "uncut sunstone", "white sunstone", "yellow sunstone"];
 		const gems_talon = ["---TALONS---", "deep blue sapphire talon", "fiery red ruby talon", "glistening onyx talon", "sparkling emerald talon"];
 		const gems_tanzanite = ["---TANZANITES---", "variegated violet tanzanite"];
 		const gems_thanot = ["---THANOT---", "petrified thanot"];
@@ -276,7 +260,7 @@
 		const gems_wraithaline = ["---WRAITHALINES---", "shadowy wraithaline", "silvery wraithaline"];
 		const gems_wyrdshard = ["---WYRDSHARDS---", "multi-colored wyrdshard"];
 		const gems_zircon = ["---ZIRCONS---", "brown zircon", "clear zircon", "green zircon", "snowflake zircon", "uncut zircon", "yellow zircon"];
-		const gems_zoisite = ["---ZOISITES---", "green and pink zoisite"];
+		const gems_zoisite = ["---ZOISITES---", "green and pink zoisite", "plum-flecked ruby zoisite"];
 		const gems_all = gems_aetherstone.concat(gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fishscale, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_shard, gems_shell, gems_smoldereye, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
 		const materials_buyable_cloth = ["---SILK---", "aneula", "byssine", "dupioni silk", "flyrsilk", "fringed silk", "raw silk", "silk", "lace", "lavender silk", "looped silk", "maedatha", "moire silk",  "mykal", "pale-marbled starsilk", "ridgeweaver silk", "sea silk", "Vornavian silk", "watered silk", "---WOOL---", "brushed wool", "rolton wool", "combed wool", "soft lambswool", "---OTHER---", "bourde", "canvas", "crisp taffeta", "embroidered velvet", "faviform brocade", "floral jacquard", "leather-bound tartan", "oilcloth", "plush velvet", "quilted satin","sailcloth", "satin", "scallop-weave brocatelle", "soft velvet", "spun cotton", "striped chambray", "striped damask", "suede-bound tweed"];
 		const materials_buyable_fur = ["---BUYABLE FUR---", "puma fur", "matted bear fur", "mottled warcat fur", "rabbit fur", "coyote fur"];
@@ -296,7 +280,7 @@
 		const materials_buyable_skins = materials_buyable_hide.concat(materials_buyable_pelt, materials_buyable_skin);
 		const materials_critter_skins = materials_hide.concat(materials_pelt, materials_skin);
 		const materials_skins_generic = ["---GENERIC---", "hide", "pelt", "skin"];
-		const materials_all_skins = [].concat(materials_skins_generic,materials_buyable_skins, materials_critter_skins);
+		const materials_all_skins = [].concat(materials_skins_generic, materials_buyable_skins, materials_critter_skins);
 		const qualities_magnificent = ["---MAGNIFICENT---", "astonishing", "astounding", "exquisite", "incredible", "magnificent", "marvelous", "remarkable", "splendid", "striking", "superb", "wonderful", "wondrous"];
 		const qualities_superb = ["---SUPERB---", "adorable", "bewitching", "dazzling", "distinguished", "elegant", "enchanting", "first-rate", "gorgeous", "luxurious", "refined", "resplendent", "superior"];
 		const qualities_outstanding = ["---OUTSTANDING---", "charming", "courtly", "dashing", "delightful", "fashionable", "gaudy", "lovely", "polished", "showy", "smart-looking", "splendid", "stylish"];
@@ -312,18 +296,18 @@
 		const types_shoes = ["---SHOES---", "shoes", "batts", "brogues", "curly-toed shoes", "dancing shoes", "divit-toed shoes", "high-heeled shoes", "high shoes", "low-heeled shoes", "moccasins", "narrow-toed shoes", "open-toed shoes", "patterns", "poulaines", "revelins", "round-toed shoes", "spike-heeled shoes", "square-toed shoes", "yatane"];
 		const types_slippers = ["---SLIPPERS---", "slippers", "clogs", "dancing slippers", "flats", "high chopines", "low chopines", "moyles", "pantofles", "pinsons", "pointy-toed slippers", "pompes", "ruched-toe slippers", "sabots", "scarpines"];
 		const types_all = [].concat(types_boots, types_sandals, types_shoes, types_slippers);
-		const adornments_all_beads = [].concat(adornments_buttons, gems_generic_plural, gems_all);
-		const adornments_all_buttons = [].concat(adornments_buttons, gems_generic_plural, gems_all);
+		const adornments_all_beads = [].concat(adornments_buttons, gems_generic, gems_all);
+		const adornments_all_buttons = [].concat(adornments_buttons, gems_generic, gems_all);
 		const adornments_all_fringed = [].concat(fringe_generic, fringe_all);
 		const adornments_all_inset = [].concat(adornments_settings_gems, adornments_settings_other, gems_generic, gems_all);
 		const adornments_all_plates = adornments_buckles;
 		const adornments_all_laces = adornments_laces.concat(materials_buyable_skins, materials_critter_skins);
 		const adornments_all_lining = adornments_lining.concat(materials_buyable_skins, materials_critter_skins);
 		const adornments_all_straps = adornments_trimming.concat(materials_buyable_skins, materials_critter_skins);
-		const adornments_all_studded = [].concat(adornments_studded, gems_generic_plural, gems_all);
+		const adornments_all_studded = [].concat(adornments_studded, gems_generic, gems_all);
 		const adornments_all_trimming = [].concat(adornments_trimming, materials_hair, materials_buyable_fur, materials_critter_fur, materials_buyable_skins, materials_critter_skins);
 	
-		pluralize_dict = {"hide": "hides", "skin": "skins", "pelt": "pelts", "antler": "antlers", "appendage": "appendages", "beard": "beards", "bone": "bones", "branch": "branches", "canine": "canines", "claw": "claws", "ear": "ears", "fang": "fangs", "feather": "feathers", "foreclaw": "foreclaws", "horn": "horns", "incisor": "incisors", "jawbone": "jawbones", "jaw": "jaws", "mandible": "mandibles", "mane": "manes", "paw": "paws", "pincer": "pincers", "plume": "plumes", "rattle": "rattles", "scale": "scales", "stinger": "stingers", "tail": "tails", "tailfeather": "tailfeathers", "tendril": "tendrils", "tentacle": "tentacles", "thorn": "thorns", "tusk": "tusks", "whisker": "whiskers", "ametrine": "ametrines", "amethyst": "amethysts", "aquamarine": "aquamarines", "auboraline": "auboralines", "azurite": "azurites", "bauxite": "bauxites", "beryl": "beryls", "blazestar": "blazestars", "bloodjewel": "bloodjewels", "bloodstone": "bloodstones", "bluerock": "bluerocks", "carnelian": "carnelians", "carbuncle": "carbuncles", "cinderstone": "cinderstones", "citrine": "citrines", "cordierite": "cordierites", "corestone": "corestones", "crescent": "crescents", "crystal": "crystals", "deathstone": "deathstones", "despanal": "despanals", "diamond": "diamonds", "diopside": "diopsides", "disk": "disks", "dreamstone": "dreamstones", "duskjewel": "duskjewels", "emerald": "emeralds", "eostone": "eostones", "fang": "fangs", "feystone": "feystones", "firedrop": "firedrops", "firestone": "firestones", "garnet": "garnets", "gem": "gems", "glimaerstone": "glimaerstones", "goldstone": "goldstones", "heliodor": "heliodors", "heliotrope": "heliotropes", "hoarstone": "hoarstones", "hyacinthe": "hyacinthes", "idocrase": "idocrases", "iolite": "iolites", "jacinthe": "jacinthes", "mekret": "mekrets", "moonstone": "moonstones", "mournstone": "mournstones", "nightstone": "nightstones", "nugget": "nuggets", "opal": "opals", "pearl": "pearls", "peridot": "peridots", "petalite": "petalites", "prehnite": "prehnites", "quartz": "quartzes", "riftstone": "riftstones", "rivertear": "rivertears", "roestone": "roestones", "rosespar": "rosespars", "ruby": "rubies", "saewehna": "saewehnas", "sandsilver": "sandsilvers", "sapphire": "sapphires", "sandruby": "sandrubies", "sard": "sards", "sardonyx": "sardonyxes", "scarab": "scarabs", "shard": "shards", "rock": "rocks", "shell": "shells", "smoldereye": "smoldereyes", "snowstone": "snowstones", "soulstone": "soulstones", "spectrolite": "spectrolites", "sphene": "sphenes", "spherine": "spherines", "spinel": "spinels", "spiral": "spirals", "sponge": "sponges", "starstone": "starstones", "stone": "stones", "sunstone": "sunstones", "talon": "talons", "tanzanite": "tanzanites", "thunderstone": "thunderstones", "titanite": "titanites", "tooth": "teeth", "topaz": "topazes", "tourmaline": "tourmalines", "turquoise": "turquoises", "viridine": "viridines", "waterweb": "waterwebs", "wyrdshard": "wyrdshards", "zircon": "zircons"};
+		pluralize_dict = {"hide": "hides", "skin": "skins", "pelt": "pelts", "antler": "antlers", "appendage": "appendages", "beard": "beards", "bone": "bones", "branch": "branches", "canine": "canines", "claw": "claws", "ear": "ears", "fang": "fangs", "feather": "feathers", "foreclaw": "foreclaws", "horn": "horns", "incisor": "incisors", "jawbone": "jawbones", "jaw": "jaws", "mandible": "mandibles", "mane": "manes", "paw": "paws", "pincer": "pincers", "plume": "plumes", "rattle": "rattles", "scale": "scales", "stinger": "stingers", "tail": "tails", "tailfeather": "tailfeathers", "tendril": "tendrils", "tentacle": "tentacles", "thorn": "thorns", "tusk": "tusks", "whisker": "whiskers", "aetherstone": "aetherstones", "agate": "agates", "ametrine": "ametrines", "amethyst": "amethysts", "aquamarine": "aquamarines", "auboraline": "auboralines", "azurite": "azurites", "bauxite": "bauxites", "beryl": "beryls", "blazestar": "blazestars", "bloodjewel": "bloodjewels", "bloodstone": "bloodstones", "bluerock": "bluerocks", "carnelian": "carnelians", "carbuncle": "carbuncles", "cinderstone": "cinderstones", "citrine": "citrines", "cordierite": "cordierites", "corestone": "corestones", "crescent": "crescents", "crystal": "crystals", "deathstone": "deathstones", "despanal": "despanals", "diamond": "diamonds", "diopside": "diopsides", "disk": "disks", "dreamstone": "dreamstones", "duskjewel": "duskjewels", "emerald": "emeralds", "eostone": "eostones", "fang": "fangs", "feystone": "feystones", "firedrop": "firedrops", "firestone": "firestones", "garnet": "garnets", "gem": "gems", "glimaerstone": "glimaerstones", "goldstone": "goldstones", "heliodor": "heliodors", "heliotrope": "heliotropes", "hoarstone": "hoarstones", "hyacinthe": "hyacinthes", "idocrase": "idocrases", "iolite": "iolites", "jacinthe": "jacinthes", "mekret": "mekrets", "moonstone": "moonstones", "mournstone": "mournstones", "nightstone": "nightstones", "nugget": "nuggets", "opal": "opals", "pearl": "pearls", "peridot": "peridots", "petalite": "petalites", "prehnite": "prehnites", "quartz": "quartzes", "riftstone": "riftstones", "rivertear": "rivertears", "roestone": "roestones", "rosespar": "rosespars", "ruby": "rubies", "saewehna": "saewehnas", "sandsilver": "sandsilvers", "sapphire": "sapphires", "sandruby": "sandrubies", "sard": "sards", "sardonyx": "sardonyxes", "scarab": "scarabs", "shard": "shards", "rock": "rocks", "shell": "shells", "smoldereye": "smoldereyes", "snowstone": "snowstones", "soulstone": "soulstones", "spectrolite": "spectrolites", "sphene": "sphenes", "spherine": "spherines", "spinel": "spinels", "spiral": "spirals", "sponge": "sponges", "starstone": "starstones", "stone": "stones", "sunstone": "sunstones", "talon": "talons", "tanzanite": "tanzanites", "thunderstone": "thunderstones", "titanite": "titanites", "tooth": "teeth", "primaryaz": "primaryazes", "tourmaline": "tourmalines", "turquoise": "turquoises", "viridine": "viridines", "waterweb": "waterwebs", "wyrdshard": "wyrdshards", "zircon": "zircons"};
 	
 	
 		/*
@@ -402,6 +386,7 @@
 			}
 		}
 		
+		
 		/*
 			In order to save space from large string arrays,
 			this function will take a noun (or possibly several nouns)
@@ -423,6 +408,7 @@
 			
 			return noun.replace(words[words.length-1], new_noun);
 		}
+		
 		
 		/*
 		Main function of the tool. Currently serves as a wrapper for the four sub-functions
@@ -512,8 +498,7 @@
 		
 
 		/*
-			Update the Adornment1 text field with a new value.
-		
+			Update the Adornment1 text field with a new value.		
 		*/				
 		function changeValueAdornment1(set_value, caller_id) {
 			//Adornment1 divs
@@ -545,9 +530,14 @@
 			trimmed_div2 = document.getElementById("adornment2_div_trimmed");
 			custom_div2 = document.getElementById("adornment2_div_custom");
 			
-			//An array of all the divs, used by the loop.
-			div_array = [beaded_div, buckled_div, buttoned_div, capped_div, fringed_div, inset_div, laced_div, lining_div, strapped_div, studded_div, toed_div, trimmed_div, custom_div, beaded_div2, buckled_div2, buttoned_div2, capped_div2, fringed_div2, inset_div2, laced_div2, lining_div2, strapped_div2, studded_div2, toed_div2, trimmed_div2, custom_div2];			
-			top_choice_array = ["Nothing", "Custom Adornment...", "Beaded...", "Buckled...", "Buttoned...", "Capped...", "Finged...", "Inset...", "Laced...", "Lined...", "Strapped...", "Studded...", "Toed...", "Trimmed..."];
+			//A dictionary of all the divs, used by the loop to change visibility.
+			div_dict = {"Beaded...":beaded_div, "Buckled...":buckled_div, "Buttoned...":buttoned_div, "Capped...":capped_div, "Finged...":fringed_div, "Inset...":inset_div, "Laced...":laced_div, "Lined...":lining_div, "Strapped...":strapped_div, "Studded...":studded_div, "Toed...":toed_div, "Trimmed...":trimmed_div, "Custom Adornment...":custom_div, "Beaded with...":beaded_div2, "Buckled with...":buckled_div2, "Buttoned with...":buttoned_div2, "Capped with...":capped_div2, "Fringed with...":fringed_div2, "Inset with...":inset_div2, "Laced with...":laced_div2, "Lined with...":lining_div2, "Strapped with...":strapped_div2, "Studded with...":studded_div2, "With ... Toes":toed_div2, "Trimmed with...":trimmed_div2, "__":custom_div2};
+			
+			primary_choice_dict = {"Custom Adornment...":"custom_adornment1_input", "Beaded...":"pick_adornment1_beaded", "Buckled...":"pick_adornment1_buckled", "Buttoned...":"pick_adornment1_buttoned", "Capped...":"pick_adornment1_capped", "Finged...":"pick_adornment1_fringed", "Inset...":"pick_adornment1_inset", "Laced...":"pick_adornment1_laced", "Lined...":"pick_adornment1_lining", "Strapped...":"pick_adornment1_strapped", "Studded...":"pick_adornment1_studded", "Toed...":"pick_adornment1_toed", "Trimmed...":"pick_adornment1_trimmed"};
+			
+			ender_dict = {"pick_adornment1_beaded":"-beaded", "pick_adornment1_buckled":"-buckled", "pick_adornment1_buttoned":"-buttoned", "pick_adornment1_capped":"-capped", "pick_adornment1_fringed":"-fringed", "pick_adornment1_inset":"-inset", "pick_adornment1_laced":"-laced", "pick_adornment1_lining":"-lined", "pick_adornment1_strapped":"-strapped", "pick_adornment1_studded":"-studded", "pick_adornment1_toed":"-toed", "pick_adornment1_trimmed":"-trimmed"};
+			
+			div_keys = Object.keys(div_dict);		
 			id = caller_id;
 			value = set_value;
 			second_choice = "";			
@@ -558,127 +548,42 @@
 			document.getElementById("adornment2").innerHTML = "";
 			
 			/*
-				If set_value is an option from the highest(top) drop down, 
+				If set_value is an option from the highest(primary) drop down, 
 				hide all the divs then unhide the div for the new choice.
 				All the divs from the other adornment section are hidden as well.
 				This is skipped if the choice was from one of the sub menus.
-			*/
-			if(top_choice_array.includes(set_value)) {				
-				for(i=0; i < div_array.length; i++) {
-					div_array[i].style.display = 'none';			
-				}
-			
-				switch(set_value) {
-					case "Nothing":
-						return "";
-					case "Custom Adornment...":
-						custom_div.style.display = 'block';
-						second_choice = "custom_adornment1_input";
-						break;
-					case "Beaded...":
-						beaded_div.style.display = 'block';
-						second_choice = "pick_adornment1_beaded";
-						break;
-					case "Buckled...":
-						buckled_div.style.display = 'block';
-						second_choice = "pick_adornment1_buckled";
-						break;
-					case "Buttoned...":
-						buttoned_div.style.display = 'block';
-						second_choice = "pick_adornment1_buttoned";
-						break;
-					case "Capped...":
-						capped_div.style.display = 'block';
-						second_choice = "pick_adornment1_capped";
-						break;
-					case "Finged...":
-						fringed_div.style.display = 'block';
-						second_choice = "pick_adornment1_fringed";
-						break;
-					case "Inset...":
-						inset_div.style.display = 'block';
-						second_choice = "pick_adornment1_inset";
-						break;
-					case "Laced...":
-						laced_div.style.display = 'block';
-						second_choice = "pick_adornment1_laced";
-						break;
-					case "Lined...":
-						lining_div.style.display = 'block';
-						second_choice = "pick_adornment1_lining";
-						break;
-					case "Strapped...":
-						strapped_div.style.display = 'block';
-						second_choice = "pick_adornment1_strapped";
-						break;
-					case "Studded...":
-						studded_div.style.display = 'block';
-						second_choice = "pick_adornment1_studded";
-						break;
-					case "Toed...":
-						toed_div.style.display = 'block';
-						second_choice = "pick_adornment1_toed";
-						break;
-					case "Trimmed...":
-						trimmed_div.style.display = 'block';
-						second_choice = "pick_adornment1_trimmed";
-						break;									
+			*/	
+			if(div_keys.includes(set_value)) {	
+				for(i=0; i < div_keys.length; i++) {
+					if(set_value == div_keys[i]) {
+						div_dict[div_keys[i]].style.display = 'block';
+						second_choice = primary_choice_dict[set_value];
+					}
+					else {
+						div_dict[div_keys[i]].style.display = 'none';				
+					}
 				}
 				
-				//Second choice is the current value of the newly unhidden
-				//dropdown menu. We will need it for the next section.
+				if(set_value == "Nothing") {
+					return "";
+				}
+
 				id = second_choice;
 				value = document.getElementById(second_choice).value;
 			}
 			
-			//This section will always trigger either from a top choice or a sub menu choice.
+			//This section will always trigger either from a primary choice or a sub menu choice.
 			//Decide which ender to user for the new_value.
-			switch(id) {
-				case "pick_adornment1_beaded":
-					ender = "-beaded";
-					break;
-				case "pick_adornment1_buckled":
-					ender = "-buckled";
-					break;
-				case "pick_adornment1_buttoned":
-					ender = "-buttoned";
-					break;
-				case "pick_adornment1_capped":
-					ender = "-capped";
-					break;
-				case "pick_adornment1_fringed":
-					ender = "-fringed";
-					break;
-				case "pick_adornment1_inset":
-					ender = "-inset";
-					break;
-				case "pick_adornment1_laced":
-					ender = "-laced";
-					break;
-				case "pick_adornment1_lining":
-					ender = "-lined";
-					break;
-				case "pick_adornment1_strapped":
-					ender = "-strapped";
-					break;
-				case "pick_adornment1_studded":
-					ender = "-studded";
-					break;
-				case "pick_adornment1_toed":
-					ender = "-toed";
-					break;
-				case "pick_adornment1_trimmed":
-					ender = "-trimmed";
-					break;
-				case "custom_adornment1_input":
-				case "custom_adornment1_ender":
-					value = document.getElementById("custom_adornment1_input").value;
-					ender = "-" + document.getElementById("custom_adornment1_ender").value;
-					if(value == "" ) {
-						value = "...";
-						ender = "";
-					}
-					break;
+			if((Object.keys(ender_dict)).includes(id)) {				
+				ender = ender_dict[id];
+			}
+			else if(id == "custom_adornment1_input" || id == "custom_adornment1_ender"){
+				value = document.getElementById("custom_adornment1_input").value;
+				ender = "-" + document.getElementById("custom_adornment1_ender").value;
+				if(value == "" ) {
+					value = "...";
+					ender = "";
+				}			
 			}
 			
 			return value + ender;		
@@ -960,9 +865,14 @@
 			trimmed_div2 = document.getElementById("adornment2_div_trimmed");
 			custom_div2 = document.getElementById("adornment2_div_custom");
 			
-			//An array of all the divs, used by the loop.
-			div_array = [beaded_div, buckled_div, buttoned_div, capped_div, fringed_div, inset_div, laced_div, lining_div, strapped_div, studded_div, toed_div, trimmed_div, custom_div, beaded_div2, buckled_div2, buttoned_div2, capped_div2, fringed_div2, inset_div2, laced_div2, lining_div2, strapped_div2, studded_div2, toed_div2, trimmed_div2, custom_div2];			
-			top_choice_array = ["Nothing", "Custom Adornment...", "Beaded with...", "Buckled with...", "Buttoned with...", "Capped with...", "Finged with...", "Inset with...", "Laced with...", "Lined with...", "Strapped with...", "Studded with...", "With ... Toes", "Trimmed with..."];
+			//A dictionary of all the divs, used by the loop to change visibility.
+			div_dict = {"Beaded...":beaded_div, "Buckled...":buckled_div, "Buttoned...":buttoned_div, "Capped...":capped_div, "Finged...":fringed_div, "Inset...":inset_div, "Laced...":laced_div, "Lined...":lining_div, "Strapped...":strapped_div, "Studded...":studded_div, "Toed...":toed_div, "Trimmed...":trimmed_div, "__":custom_div, "Beaded with...":beaded_div2, "Buckled with...":buckled_div2, "Buttoned with...":buttoned_div2, "Capped with...":capped_div2, "Fringed with...":fringed_div2, "Inset with...":inset_div2, "Laced with...":laced_div2, "Lined with...":lining_div2, "Strapped with...":strapped_div2, "Studded with...":studded_div2, "With ... Toes":toed_div2, "Trimmed with...":trimmed_div2, "Custom Adornment...":custom_div2};
+			
+			primary_choice_dict = {"Custom Adornment...":"custom_adornment2_input", "Beaded with...":"pick_adornment2_beaded", "Buckled with...":"pick_adornment2_buckled", "Buttoned with...":"pick_adornment2_buttoned", "Capped with...":"pick_adornment2_capped", "Fringed with...":"pick_adornment2_fringed", "Inset with...":"pick_adornment2_inset", "Laced with...":"pick_adornment2_laced", "Lined with...":"pick_adornment2_lining", "Strapped with...":"pick_adornment2_strapped", "Studded with...":"pick_adornment2_studded", "Toed with...":"pick_adornment2_toed", "Trimmed with...":"pick_adornment2_trimmed"};			
+			
+			beginner_dict = {"pick_adornment2_beaded":"beaded with ", "pick_adornment2_buckled":"buckled with ", "pick_adornment2_buttoned":"buttoned with ", "pick_adornment2_capped":"capped with ", "pick_adornment2_fringed":"fringed with ", "pick_adornment2_inset":"inset with ", "pick_adornment2_laced":"laced with ", "pick_adornment2_lining":"lined with ", "pick_adornment2_strapped":"strapped with ", "pick_adornment2_studded":"studded with ", "pick_adornment2_toed":"with ", "pick_adornment2_trimmed":"trimmed with "};			
+			
+			div_keys = Object.keys(div_dict);		
 			id = caller_id;
 			value = set_value;
 			second_choice = "";			
@@ -973,152 +883,60 @@
 			document.getElementById("adornment1").innerHTML = "";			
 			
 			/*
-				If set_value is an option from the highest(top) drop down, 
+				If set_value is an option from the highest(primary) drop down, 
 				hide all the divs then unhide the div for the new choice.
 				All the divs from the other adornment section are hidden as well.
 				This is skipped if the choice was from one of the sub menus.
 			*/
-			if(top_choice_array.includes(set_value)) {				
-				for(i=0; i < div_array.length; i++) {
-					div_array[i].style.display = 'none';			
-				}
-			
-				switch(set_value) {
-					case "Nothing":
-						return "";
-					case "Custom Adornment...":
-						custom_div2.style.display = 'block';
-						second_choice = "custom_adornment2_input";
-						break;
-					case "Beaded with...":
-						beaded_div2.style.display = 'block';
-						second_choice = "pick_adornment2_beaded";
-						break;
-					case "Buckled with...":
-						buckled_div2.style.display = 'block';
-						second_choice = "pick_adornment2_buckled";
-						break;
-					case "Buttoned with...":
-						buttoned_div2.style.display = 'block';
-						second_choice = "pick_adornment2_buttoned";
-						break;
-					case "Capped with...":
-						capped_div2.style.display = 'block';
-						second_choice = "pick_adornment2_capped";
-						break;
-					case "Finged with...":
-						fringed_div2.style.display = 'block';
-						second_choice = "pick_adornment2_fringed";
-						break;
-					case "Inset with...":
-						inset_div2.style.display = 'block';
-						second_choice = "pick_adornment2_inset";
-						break;
-					case "Laced with...":
-						laced_div2.style.display = 'block';
-						second_choice = "pick_adornment2_laced";
-						break;
-					case "Lined with...":
-						lining_div2.style.display = 'block';
-						second_choice = "pick_adornment2_lining";
-						break;
-					case "Strapped with...":
-						strapped_div2.style.display = 'block';
-						second_choice = "pick_adornment2_strapped";
-						break;
-					case "Studded with...":
-						studded_div2.style.display = 'block';
-						second_choice = "pick_adornment2_studded";
-						break;
-					case "With ... Toes":
-						toed_div2.style.display = 'block';
-						second_choice = "pick_adornment2_toed";
-						break;
-					case "Trimmed with...":
-						trimmed_div2.style.display = 'block';
-						second_choice = "pick_adornment2_trimmed";
-						break;									
+			if(div_keys.includes(set_value)) {	
+				for(i=0; i < div_keys.length; i++) {
+					if(set_value == div_keys[i]) {
+						div_dict[div_keys[i]].style.display = 'block';
+						second_choice = primary_choice_dict[set_value];
+					}
+					else {
+						div_dict[div_keys[i]].style.display = 'none';				
+					}
 				}
 				
-				//Second choice is the current value of the newly unhidden
-				//dropdown menu. We will need it for the next section.
+				if(set_value == "Nothing") {
+					return "";
+				}
+
 				id = second_choice;
 				value = document.getElementById(second_choice).value;
-			}
+			}			
 			
 			/*
-				This section will always trigger either from a top choice or a sub menu choice.
+				This section will always trigger either from a primary choice or a sub menu choice.
 				Decide which ender to user for the new_value. Some some cases, pluralization may be needed.
 			*/
-			switch(id) {
-				case "pick_adornment2_beaded":
-					beginner = "beaded with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_buckled":
-					beginner = "buckled with ";
-					break;
-				case "pick_adornment2_buttoned":
-					beginner = "buttoned with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_capped":
-					beginner = "capped with ";
-					break;
-				case "pick_adornment2_fringed":
-					beginner = "fringed with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_inset":
-					beginner = "inset with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_laced":
-					beginner = "laced with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_lining":
-					beginner = "lined with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_strapped":
-					beginner = "strapped with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_studded":
-					beginner = "studded with ";
-					value = pluralizeNoun(value);
-					break;
-				case "pick_adornment2_toed":
-					beginner = "with ";
-					break;
-				case "pick_adornment2_trimmed":
-					beginner = "trimmed with ";
-					value = pluralizeNoun(value);
-					break;
-				case "custom_adornment2_input":
-				case "custom_adornment2_beginner":
-					value = document.getElementById("custom_adornment2_input").value;
-					beginner = document.getElementById("custom_adornment2_beginner").value;
-					if(value == "" ) {
-						value = "...";
-					}
-					if(beginner == "BLANK" ) {
-						beginner = "";
-					}
-					else if(beginner == "with ... toes") {
-						beginner = "with ";					
-					}
-					break;
-			}
-				//toed footwear has extra text
-				if(id == "pick_adornment2_toed" || beginner == "with ") {
-					return beginner + value + " toes";
+			if((Object.keys(beginner_dict)).includes(id)) {				
+				beginner = beginner_dict[id];
+				value = pluralizeNoun(value);
+			}			
+			else if(id == "custom_adornment2_input" || id == "custom_adornment2_beginner"){
+				value = document.getElementById("custom_adornment2_input").value;
+				beginner = document.getElementById("custom_adornment2_beginner").value + " ";
+				if(value == "" ) {
+					value = "...";
 				}
-				
-				return beginner + value	
+				if(beginner == "BLANK" ) {
+					beginner = "";
+				}
+				else if(beginner == "with ... toes") {
+					beginner = "with ";					
+				}			
+			}
+			
+			
+			//toed footwear has extra text
+			if(id == "pick_adornment2_toed" || beginner == "with ") {
+				return beginner + value + " toes";
+			}
+			
+			return beginner + value;
 		}
-		
 		
 		/*
 			Find the length of each section, the amount of spaces between sections,
@@ -1169,6 +987,7 @@
 			}			
 		}
 		
+		
 		/*
 			Resets all choices back to default. Allowing for a fresh start.
 			Includes:
@@ -1179,21 +998,21 @@
 		function resetAll() {		
 			if(!document.getElementById("article_lock").checked) {
 				setInitialValue(document.getElementById("pick_article"));
+				
 				obj = document.getElementById("pick_article")
 				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
 				
 			if(!document.getElementById("quality_lock").checked) {
 				setInitialValue(document.getElementById("pick_quality"));
-				document.getElementById("quality").innerHTML = "";
-				
+				document.getElementById("quality").innerHTML = "";				
 			}
 				
 			if(!document.getElementById("color_lock").checked) {
 				setInitialValue(document.getElementById("pick_color"));
+				document.getElementById("color").innerHTML = "";
 				document.getElementById("custom_color_input").value = "";
 				document.getElementById("color_div_custom").style.display = 'none';	
-				document.getElementById("color").innerHTML = "";
 			}
 			
 			if(!document.getElementById("adornment1_lock").checked) {
@@ -1210,7 +1029,8 @@
 				setInitialValue(document.getElementById("pick_adornment1_studded"));
 				setInitialValue(document.getElementById("pick_adornment1_toed"));
 				setInitialValue(document.getElementById("pick_adornment1_trimmed"));				
-				setInitialValue(document.getElementById("custom_adornment1_ender"));
+				setInitialValue(document.getElementById("custom_adornment1_ender"));				
+				document.getElementById("adornment1").innerHTML = "";
 				document.getElementById("custom_adornment1_input").value = "";				
 				
 				document.getElementById("option_adornment1_beaded").className = "";
@@ -1239,8 +1059,6 @@
 				document.getElementById("adornment1_div_toed").style.display = 'none';
 				document.getElementById("adornment1_div_trimmed").style.display = 'none';
 				document.getElementById("adornment1_div_custom").style.display = 'none';
-				
-				document.getElementById("adornment1").innerHTML = "";
 			}
 				
 			if(!document.getElementById("material_lock").checked) {
@@ -1250,6 +1068,7 @@
 				setInitialValue(document.getElementById("pick_material_metal"));
 				setInitialValue(document.getElementById("pick_material_natural"));
 				setInitialValue(document.getElementById("pick_material_skins"));
+				document.getElementById("material").innerHTML = "";
 				document.getElementById("custom_material_input").value = "";	
 				document.getElementById("material_div_cloth").style.display = 'none';
 				document.getElementById("material_div_leather").style.display = 'none';
@@ -1258,11 +1077,11 @@
 				document.getElementById("material_div_skins").style.display = 'none';
 				document.getElementById("material_div_custom").style.display = 'none';
 				
-				document.getElementById("material").innerHTML = "";
 			}
 				
 			if(!document.getElementById("item_type_lock").checked) {
 				setInitialValue(document.getElementById("pick_item_type"));
+				
 				obj = document.getElementById("pick_item_type")
 				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
@@ -1283,6 +1102,7 @@
 				setInitialValue(document.getElementById("pick_adornment2_trimmed"));				
 				setInitialValue(document.getElementById("custom_adornment2_beginner"));		
 				document.getElementById("custom_adornment2_input").value = "";		
+				document.getElementById("adornment2").innerHTML = "";
 				
 				document.getElementById("option_adornment2_beaded").className = "";
 				document.getElementById("option_adornment2_buckled").className = "";
@@ -1309,9 +1129,7 @@
 				document.getElementById("adornment2_div_studded").style.display = 'none';
 				document.getElementById("adornment2_div_toed").style.display = 'none';
 				document.getElementById("adornment2_div_trimmed").style.display = 'none';
-				document.getElementById("adornment2_div_custom").style.display = 'none';
-				
-				document.getElementById("adornment2").innerHTML = "";
+				document.getElementById("adornment2_div_custom").style.display = 'none';				
 			}						
 		}
 		
@@ -1323,7 +1141,7 @@
 		function createRandomItem() {
 			material_dict = {"Cloth...":"pick_material_cloth", "Leather...":"pick_material_leather", "Metal...":"pick_material_metal", "Natural...":"pick_material_natural", "Hide/Pelt/Skin...":"pick_material_skins"};
 			adornment1_dict = {"Beaded...":"pick_adornment1_beaded", "Buckled...":"pick_adornment1_buckled", "Buttoned...":"pick_adornment1_buttoned", "Capped...":"pick_adornment1_capped", "Finged...":"pick_adornment1_fringed", "Inset...":"pick_adornment1_inset", "Laced...":"pick_adornment1_laced", "Lined...":"pick_adornment1_lining", "Strapped...":"pick_adornment1_strapped", "Studded...":"pick_adornment1_studded", "Toed...":"pick_adornment1_toed", "Trimmed...":"pick_adornment1_trimmed"};
-			adornment2_dict = {"Beaded with...":"pick_adornment2_beaded", "Buckled with...":"pick_adornment2_buckled", "Buttoned with...":"pick_adornment2_buttoned", "Capped with...":"pick_adornment2_capped", "Finged with...":"pick_adornment2_fringed", "Inset with...":"pick_adornment2_inset", "Laced with...":"pick_adornment2_laced", "Lined with...":"pick_adornment2_lining", "Strapped with...":"pick_adornment2_strapped", "Studded with...":"pick_adornment2_studded", "With ... Toes":"pick_adornment2_toed", "Trimmed with...":"pick_adornment2_trimmed"};
+			adornment2_dict = {"Beaded with...":"pick_adornment2_beaded", "Buckled with...":"pick_adornment2_buckled", "Buttoned with...":"pick_adornment2_buttoned", "Capped with...":"pick_adornment2_capped", "Fringed with...":"pick_adornment2_fringed", "Inset with...":"pick_adornment2_inset", "Laced with...":"pick_adornment2_laced", "Lined with...":"pick_adornment2_lining", "Strapped with...":"pick_adornment2_strapped", "Studded with...":"pick_adornment2_studded", "With ... Toes":"pick_adornment2_toed", "Trimmed with...":"pick_adornment2_trimmed"};
 			adornment_choice = "adornment1";
 			adornment_dict = adornment1_dict;
 			random_num = Math.floor(Math.random() * 2 + 1); //a number between 1 and 2
@@ -1456,7 +1274,7 @@
 		<div id="total_length" class="character_length_normal" align="center">Total Character Length: 0</div>
 		<table width="100%">
 		 <tr height="150">
-		  <td valign="top" width="20%">		    
+		  <td valign="primary" width="20%">		    
 			<b>Article: (Lock:<input type="checkbox" id="article_lock">)</b><br>
 			Character Length: <span id="article_text_length">0</span><br>
 			<select id="pick_article" onchange="changeValue(this.value, this.oldvalue, this.id)">
@@ -1464,14 +1282,14 @@
 				<option>some</option>
 			</select>
 		  </td>
-		  <td valign="top" width="20%">
+		  <td valign="primary" width="20%">
 			<b>Quality: (Lock:<input type="checkbox" id="quality_lock">)</b><br>
 			Character Length: <span id="quality_text_length">0</span><br>
 			<select id="pick_quality" onchange="changeValue(this.value, this.oldvalue, this.id)">
 				<option>Nothing</option>
 			</select>
 		  </td>
-		  <td valign="top" width="20%">
+		  <td valign="primary" width="20%">
 			<b>Adornment: (Lock:<input type="checkbox" id="adornment1_lock">)</b><br>
 			Character Length: <span id="adornment1_text_length">0</span><br>
 				<select id="pick_adornment1" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id)">
@@ -1544,7 +1362,7 @@
 				</select>
 			</div>
 		  </td>
-		  <td valign="top" width="20%">
+		  <td valign="primary" width="20%">
 			<b>Color: (Lock:<input type="checkbox" id="color_lock">)</b><br>
 			Character Length: <span id="color_text_length">0</span><br>
 			<select id="pick_color" onchange="changeValue(this.value, this.oldvalue, this.id)">
@@ -1555,13 +1373,13 @@
 				<input type="text" id="custom_color_input" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>
 			</div>
 		  </td>
-		  <td valign="top" width="20%">
+		  <td valign="primary" width="20%">
 			<button value="" onclick="resetAll()">Clear All</button><br>
 			<button value="" onclick="createRandomItem()" >Random Item</button>
 		  </td>		
 		 </tr>
 		 <tr height="150">
-		  <td valign="top" width="20%">
+		  <td valign="primary" width="20%">
 			<b>Material (Upper): (Lock:<input type="checkbox" id="material_lock">)</b><br>
 			Character Length: <span id="material_text_length">0</span><br>
 			<select id="pick_material" onchange="changeValue(this.value, this.oldvalue, this.id)">
@@ -1592,12 +1410,12 @@
 				<input type="text" id="custom_material_input" size="15" oninput="this.oldvalue = this.value;changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></input>
 			</div>
 		  </td>
-		  <td valign="top" width="20%">
+		  <td valign="primary" width="20%">
 			<b>Item Type: (Lock:<input type="checkbox" id="item_type_lock">)</b><br>
 			Character Length: <span id="item_type_text_length">0</span><br>
 			<select id="pick_item_type" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
 		  </td>
-		  <td valign="top" width="20%">		    
+		  <td valign="primary" width="20%">		    
 			<b>Long Desc Adornment: (Lock:<input type="checkbox" id="adornment2_lock">)</b><br>
 			Character Length: <span id="adornment2_text_length">0</span><br>
 				<select id="pick_adornment2" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id)">
@@ -1607,7 +1425,7 @@
 					<option id="option_adornment2_buckled">Buckled with...</option>
 					<option id="option_adornment2_buttoned">Buttoned with...</option>
 					<option id="option_adornment2_capped">Capped with...</option>
-					<option id="option_adornment2_fringed">Finged with...</option>
+					<option id="option_adornment2_fringed">Fringed with...</option>
 					<option id="option_adornment2_inset">Inset with...</option>
 					<option id="option_adornment2_laced">Laced with...</option>
 					<option id="option_adornment2_lined">Lined with...</option>
@@ -1673,7 +1491,7 @@
 		  </td>
 		  <td>
 		  </td>
-		  <td valign="top">
+		  <td valign="primary">
 			OTHER INFORMATION:<br>
 			<span id="field_spaces">Spaces between fields: 0</span><br>
 		  </td>
