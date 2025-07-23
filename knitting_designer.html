@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Knitting Designer v1.3</TITLE>
+	<TITLE>Hymore's Knitting Designer v1.5</TITLE>
 	<STYLE>
 		div.knitted_text {
 			font-size: 30px;
@@ -41,7 +41,18 @@
 		- Added several new item types.
 		- Changed profession title ROGUE to LOCKSMITHING.
 		- Removed unneeded commented-out lines.
-		- Fixed a bug in createRandomItem().
+		- Fixed a bug in createRandomItem().		
+		
+		v1.4
+		- Fixed bug in createRandomItem() that prevent the second normal color from changing.
+		- Nature-designs are now categorized and alphabetical.
+		
+		v1.5
+		- Changed many condition statements to use dictionary "include" instead of multiple or's.
+		- Change many if-else condition logic trees to use switch instead.
+		- Added populateDropDown and setInitialValue functions.
+		- Fixed "oven mitts" not using "some" article.
+		
 		*/		
 		
 		
@@ -55,7 +66,7 @@
 		*/
 		const colors_black = ["---BLACK COLORS---", "black", "coal black", "deep ebony", "dull black", "glossy black", "inky black", "jet black", "matte black", "night black", "obsidian black", "onyx black", "pitch black", "plain black", "shadowy black", "shiny black", "soot black"];
 		const colors_blue = ["---BLUE COLORS---", "aquamarine", "aquamarine blue", "azure", "azure blue", "blizzard blue", "blue", "bright blue", "cerulean", "cobalt", "cobalt blue", "cyan", "dark blue", "dark teal", "deep blue", "deep indigo", "dingy blue", "dusky blue", "eostone blue", "glossy blue", "greyish blue", "icy blue", "indigo", "indigo blue", "marine blue", "midnight blue", "mottled blue", "pale blue", "periwinkle blue", "periwinkle", "perse", "pale blue", "powder blue", "royal blue", "sapphire blue", "sea blue", "shiny blue", "silvery blue", "sky blue", "slate blue", "steel blue", "turquoise", "turquoise blue", "twilight blue", "ultramarine blue"];
-		const colors_brown = ["---BROWN COLORS---", "ale brown", "brown", "burgundy", "burnt sienna", "burnt umber", "caramel", "chestnut brown", "chocolate brown", "cinnamon brown", "coffee-hued", "coppery brown", "dark brown", "dark russet", "dark sienna", "deep auburn", "dingy brown", "dirt brown", "dull beige", "faded tan", "dafed taupe", "glossy brown", "glossy puce", "golden brown", "honey-hued", "light ginger", "mahodany", "marbled mocha", "mottled beige", "bottled brown", "muddy crown", "but brown", "russet", "sable", "sand-hued", "sepia", "tan", "taupe", "tawny brown", "terra cotta", "terracotta", "twig brown", "umber", "warm brown"];
+		const colors_brown = ["---BROWN COLORS---", "ale brown", "brown", "burgundy", "burnt sienna", "burnt umber", "caramel", "chestnut brown", "chocolate brown", "cinnamon brown", "coffee-hued", "coppery brown", "dark brown", "dark russet", "dark sienna", "deep auburn", "dingy brown", "dirt brown", "dull beige", "faded tan", "dafed taupe", "glossy brown", "glossy puce", "golden brown", "honey-hued", "light ginger", "mahodany", "marbled mocha", "mottled beige", "bottled brown", "muddy crown", "nut brown", "russet", "sable", "sand-hued", "sepia", "tan", "taupe", "tawny brown", "terra cotta", "terracotta", "twig brown", "umber", "warm brown"];
 		const colors_green = ["---GREEN COLORS---", "apple green", "bright celadon", "bright green", "celadon", "chrysoprase green", "copper green", "dark green", "emerald", "emerald green", "grass green", "green", "hunter green", "jade green", "light green", "lime green", "mint green", "moss green", "mottled green", "olive green", "olivine", "opalescent green", "pale green", "peacock green", "peridot green", "plain green", "purplish green", "sage green", "sallow", "sapphire", "sea green", "silvery green", "slime green", "turquoise", "verdant green", "verdigris green", "viridian", "viridian green", "willow green"];
 		const colors_grey = ["---GREY COLORS---", "ash grey", "ashen", "austere grey", "charcoal grey", "cloudy grey", "dappled grey", "dark grey", "dingy grey", "dove grey", "dust grey", "faded grey", "granite", "grey", "heather grey", "leadan grey", "marbled grey", "misty grey", "mottled grey", "pearly grey", "pewter grey", "silvery grey", "slate grey", "somber grey", "speckled grey", "steel grey", "stone grey", "storm grey", "taupe", "twilight grey", "yellowish grey"];
 		const colors_metallic = ["---METALLIC COLORS---", "argent", "brass", "bright coppery", "bright silvery", "bronze", "bronzed umber", "burnished gold", "chrome", "copper green", "coppery", "dark gold", "dark golden", "dark silver", "dark silvery", "glittering golden", "golden", "metallic gold", "mica gold", "pale golden", "shiny gold", "silvery", "warm copper"];
@@ -71,11 +82,11 @@
 		const designs_basic = ["cable-knit", "cheveron-patterned", "diamond-patterned", "floral-patterned", "gartered-stitched", "ribbed", "striped", "zig zag-patterned"];
 		const designs_animal = ["alligator", "bat", "bear", "bird", "blood eagle", "bluebird", "bronco", "buck", "bug", "bumblebee", "bunny", "butterfly", "capybara", "cardinal", "caribou", "cat", "centaur", "chicken", "chinchilla", "cobra", "cow", "crab", "crow", "deer", "damselfly", "dog", "doe", "dolphin", "dove", "dragon", "duck", "fly", "dragonfly", "eagle", "eel", "egret", "elephant", "elk", "fairywren", "fawn", "finch", "fish", "firefly", "flamingo", "flycatcher", "fox", "frog", "gazelle", "goat", "griffin", "ghost", "ghostfly", "glimaerfly", "hart", "hawk", "hog", "hedgehog", "heron", "hind", "horse", "hummingbird", "ibis", "iguana", "jackal", "kitten", "koala", "kobold", "koi", "kraken", "ladybug", "lemur", "lion", "lizard", "lobster", "loris", "macaw", "mantis", "merlin", "minotaur", "monkey", "moose", "morduska", "moth", "mouse", "mustang", "narwhal", "octopus", "orc", "otter", "owl", "panda", "parrot", "peacock", "pegasus", "pelican", "penguin", "pheasant", "phoenix", "pig", "pixie", "polar bear", "pony", "puppy", "qahzumar", "rabbit", "raccoon", "raven", "reindeer", "roa'ter", "rolton", "rook", "rooster", "sea anemone", "seagull", "selshis", "serpent", "shark", "skeleton", "skull", "snake", "songbird", "spider", "sprite", "stag", "stallion", "starfish", "swan", "teadragon", "tentacle", "tiger", "toad", "tortoise", "troll", "turkey", "turtle", "unicorn", "weasel", "wendigo", "whale", "witch", "wolf", "wombat", "wraith", "wren", "wyvern", "yierka"];
 		const designs_floral = ["alpine violet", "alyssum", "amaranth", "anemone", "angelica", "aster", "begonia", "bleeding heart", "blood lily", "blossom", "bluebell", "bougainvillea", "buttercup", "butterfly weed", "campion", "cactus flower", "calla lily", "carnation", "cherry blossom", "chrysanthemum", "clematis", "clivia", "columbine", "cothinar flower", "crocus", "daffodil", "dahlia", "daisy", "dandelion", "datura", "daylily", "dragonstalk", "edelweiss", "feverfew", "flamestalk", "floral", "flower", "forget-me-not", "freesia", "frostflower", "gardenia", "geranium", "ginger blossom", "goldenrod", "heather", "heliotrope", "hellebore", "hibiscus", "honeysuckle", "honeywort", "hyacinth", "hydrangea", "iceblossom", "iris", "lavender", "lilac", "lily", "lotus blossom", "jasmine", "jessamine", "larkspur", "lupine", "magnolia", "monkeyflower", "moonflower", "morning glory", "mournbloom", "nightshade", "orange blossom", "orchid", "pansy", "snow pansy", "passionflower", "peony", "petunia", "phlox", "plumeria", "poinsettia", "poppy", "posy", "rose", "rosebud", "dog rose", "primrose", "fairy primrose", "tea rose", "winter rose", "sirenflower", "snapdragon", "snow lily", "stargazer lily", "sunflower", "thistle", "tiger lily", "trillium", "tulip", "tuberose", "violet", "water lily", "wood violet", "wildflower", "wisteria", "zinnia"];
-		const designs_nature = ["apple", "autumnal", "berry", "cake", "celestial", "cherry", "heraldic", "moon phase", "paisley", "frost", "tropical", "star", "starburst", "sunburst", "moon", "moon and star", "crescent moon", "threefold moon", "nightscape", "eclipse", "solar eclipse", "lunar eclipse", "cloud", "storm cloud", "thundercloud", "rainbow", "lightning bolt", "raindrop", "snowflake", "snowman", "flame", "fire", "rising smoke", "paw print", "footprint", "handprint", "claw", "talon", "jack-o-lantern", "bramble", "branch", "cactus", "cookie", "fern", "forest", "frond", "fruit", "garlic clove", "honeycomb", "ivy", "leaf", "maple leaf", "mushroom", "palm frond", "pie", "pie slice", "pineapple", "pine needle", "potato", "pumpkin", "wreath", "holly", "marallis berry", "mistletoe", "muffin", "reed", "rosette", "shamrock", "tendril", "thorn", "toadstool", "tree", "vine", "grape vine", "willow", "coral", "seascape", "shell", "sovyn clove", "strawberry", "sweetfern", "tart", "volcano", "waffle", "watermelon", "wave"];
+		const designs_nature = ["---FOOD---", "cake", "cookie", "honeycomb", "muffin", "pie", "pie slice", "tart", "waffle", "---FRUIT---", "apple", "berry", "cherry", "fruit", "grape vine", "pineapple", "strawberry", "watermelon", "---PLANTS---", "bramble", "branch", "cactus", "fern", "forest", "frond", "garlic clove", "holly", "ivy", "jack-o-lantern", "leaf", "maple leaf", "marallis berry", "mistletoe", "mushroom", "paisley", "palm frond", "pine needle", "potato", "pumpkin", "reed", "rosette", "shamrock", "sovyn clove", "sweetfern", "tendril", "thorn", "toadstool", "tree", "vine", "willow", "wreath", "---SKY---", "celestial", "cloud", "crescent moon", "eclipse", "lightning bolt", "lunar eclipse", "moon", "moon and star", "moon phase", "nightscape", "rainbow", "raindrop", "solar eclipse", "star", "starburst", "storm cloud", "sunburst", "threefold moon", "thundercloud", "---OTHER---", "autumnal", "claw", "coral", "handprint", "heraldic", "fire", "flame", "footprint", "frost", "paw print", "rising smoke", "seascape", "shell", "snowflake", "snowman", "talon", "tropical", "volcano", "wave"];
 		const designs_pattern = ["anchor", "arrow", "bell", "chevron", "cityscape", "coffin", "diamond", "feather", "heart", "square", "triangle", "interlocked ring", "spiderweb", "spiral", "wisp"];
 		const designs_profession = ["---ARTIST---", "quill", "artist's brush", "brush stroke", "palette", "palette and brush", "lute", "flute", "harp", "music note", "---COOKING---", "bottle", "butter churn", "fork", "skillet", "spoon", "teapot", "teacup", "wine bottle", "---FIGHTING---", "bow", "claidhmore", "crossed sword", "scimitar", "shield", "shield and sword", "sickle", "sword", "---LOCKSMITH---", "coin", "key", "lock", "lockpick", "lock and key", "scarab", "---SAILING---", "airship", "boat", "brigantine", "carrack", "frigate", "galleon", "pirate", "pirate flag", "ship", "---SORCERERY---", "bone", "brain", "corpse", "fang", "finger", "fingernail", "fist", "gravestone", "guillotine", "headstone", "intestine", "incisor", "kidney", "liver", "spleen", "toe", "toenail", "tooth", "tombstone", "---WIZARDRY---", "book", "cauldron", "demon", "eye", "mortar and pestle", "rune", "runestaff", "runestone", "scroll", "shrunken head", "skull", "wand", "---OTHER---", "bride", "bridesmaid", "broomstick", "candelabra", "chalice", "cigar", "clasped hands", "giftbox", "gear", "groom", "lamp", "lantern", "maiden", "mitten", "mop", "open hand", "playing card", "praying hands", "present", "needle", "needle and thread", "sconce", "sleigh", "spindle", "sprocket", "wagon"];
 		const designs_religion = ["angel", "anvil", "artist's brush", "black widow", "broken skull", "cat's head", "chelioboros", "clenched fist", "conjoined circles", "crescent moon", "crown", "crystal ball", "dagger", "dagger-pierced heart", "doe", "dolphin", "eight-pointed star", "feather", "flame", "gate and key", "grain sheaf", "heart", "hourglass", "jackal's head", "key", "leaf", "lily", "lute", "musical note", "ouroboros", "pegasus", "rose", "tentacled star", "six-tentacled star", "slit-pupiled eye", "scimitar", "scroll", "serpent", "shield", "sickle", "skull", "star", "stone giant", "stone giantess", "sunburst", "sword", "trident", "two-headed serpent"];			
-		const materials_common = ["alpaca", "angora", "linen", "mohair", "paeline", "silk", "wool"];
+		const materials_common = ["alpaca", "angora", "cotton", "linen", "mohair", "paeline", "silk", "wool"];
 		const materials_rare = ["aneula", "Aldoran wool", "bamboo", "bresuna", "buckram", "cameline", "captiql", "cavelta", "chainsil", "chenille", "cotton", "dagswain", "fraelhan", "flannel", "flax", "fleece", "gossamer", "heather", "inytela", "jute", "krinklevelt", "lamb's wool", "lambilen", "maedatha", "malghavan wool", "merino wool", "moreen", "myssamere", "oiremere", "oxilen", "pashmina", "plumille", "qiviut", "ramie linen", "roltalen", "rolton wool", "ruhani wool", "rackhal", "sailcloth", "flyrsilk", "lotus silk", "ramie silk", "raw silk", "sea silk", "spidersilk", "starsilk", "stoutfoot wool", "tartan", "tweed", "vaslavilen", "vicuna", "wild silk", "woolen", "wylten", "wynelen", "yierkale", "yierka wool"];
 		const items_clothing = ["---CLOTHING---", "armband", "brooch", "dress", "earmuffs", "gloves", "gown", "hartie", "hat", "headband", "leggings", "mittens", "muffler", "oven mitt", "oven mitts", "overdress", "pants", "petticoat", "scarf", "shawl", "skirt", "snood", "socks", "stockings", "sundress", "sweater", "trukt", "tunic", "undershirt"];
 		const items_container = ["---CONTAINERS---", "apron", "basket", "backpack", "bag", "cape", "carryall", "cloak", "coat", "clutch", "jacket", "pouch", "purse", "robe", "satchel", "tote", "wrap", "vest"];
@@ -92,24 +103,22 @@
 			combo_selectors = ["pick_color1", "pick_color2", "pick_normal_custom_color1", "pick_normal_custom_color2", "pick_design_basic", "pick_design_animal", "pick_design_floral", "pick_design_nature", "pick_design_pattern", "pick_design_profession", "pick_design_religion", "pick_description", "pick_material_common", "pick_material_rare", "pick_item_type"];
 			combo_arrays = [colors_all, colors_all, colors_all, colors_all, designs_basic, designs_animal, designs_floral, designs_nature, designs_pattern, designs_profession, designs_religion, description_all, materials_common, materials_rare, items_all];
 
-			/*
-			A second for loop is needed here for large arrays that combine multiple lists with 
-			bolded "labels" that separate each section. These array also start at the second
-			choice to avoid having a label as a default choice.
-			*/
-			for(var i = 0; i < combo_selectors.length; i++) {
-				select = document.getElementById(combo_selectors[i]);
-				for(var j = 0; j < combo_arrays[i].length; j++) {
-					var opt = combo_arrays[i][j];
-					var el = document.createElement("option");
-					el.textContent = opt;
-					el.value = opt;
-					if(opt[0] == "-") {
-						el.style = "font-weight: bold";
-					}
-					select.appendChild(el);
-				}
-			}
+			//Populate all the menus that do not need many menues	
+			populateDropDown("pick_color1", colors_all);
+			populateDropDown("pick_color2", colors_all);
+			populateDropDown("pick_normal_custom_color1", colors_all);
+			populateDropDown("pick_normal_custom_color2", colors_all);
+			populateDropDown("pick_design_basic", designs_basic);
+			populateDropDown("pick_design_animal", designs_animal);
+			populateDropDown("pick_design_floral", designs_floral);
+			populateDropDown("pick_design_nature", designs_nature);
+			populateDropDown("pick_design_pattern", designs_pattern);
+			populateDropDown("pick_design_profession", designs_profession);
+			populateDropDown("pick_design_religion", designs_religion);
+			populateDropDown("pick_description", description_all);
+			populateDropDown("pick_material_common", materials_common);
+			populateDropDown("pick_material_rare", materials_rare);
+			populateDropDown("pick_item_type", items_all);
 			
 			//Set everything to their default values
 			document.getElementById("description_lock").checked = false;
@@ -119,6 +128,26 @@
 			document.getElementById("item_type_lock").checked = false;
 			resetAll();
 		}
+
+
+		/*
+			Using all the strings in values_array,
+			add each one to the dropdown menu, menu_id.			
+		*/
+		function populateDropDown(menu_id, values_array) {		
+			select = document.getElementById(menu_id);
+			for(var j = 0; j < values_array.length; j++) {
+				var opt = values_array[j];
+				var el = document.createElement("option");
+				el.textContent = opt;
+				el.value = opt;
+				if(opt[0] == "-") {
+					el.style = "font-weight: bold;";
+				}
+				select.appendChild(el);
+			}
+		}
+
 		
 		/*
 		Main function of the tool. Currently serves as a wrapper for the four sub-functions
@@ -133,31 +162,23 @@
 			}			
 			
 			new_value = "";
+			design_array = ["pick_design", "pick_design_extra", "pick_design_basic", "pick_design_animal", "pick_design_floral", "pick_design_nature", "pick_design_pattern", "pick_design_religion", "pick_design_profession"];
+			color_array = ["pick_color", "pick_color1", "pick_color2", "custom_color_input1", "custom_color_input2", "pick_normal_custom_color1", "pick_normal_custom_color2", "custom_color_normal_custom_input1", "custom_color_normal_custom_input2", "pick_color1"];
+			material_array = ["pick_material", "pick_material_common", "pick_material_rare", "custom_material_input"];
 			
 			if(caller_id == "pick_description") {
 			    new_value = changeValueDescription(set_value, caller_id);
 				text_field = "description";	
 			}			
-			else if(caller_id == "pick_design" || caller_id == "pick_design_extra" ||
-			        caller_id == "pick_design_basic" || caller_id == "pick_design_animal" ||
-					caller_id == "pick_design_floral" || caller_id == "pick_design_nature" ||
-					caller_id == "pick_design_pattern" || caller_id == "pick_design_religion" || 
-					caller_id == "pick_design_profession") {
+			else if(design_array.includes(caller_id)) {
 			    new_value = changeValueDesign(set_value, caller_id);
 				text_field = "design";					
 			}		
-			else if(caller_id == "pick_color1" || caller_id == "pick_color2" ||
-					caller_id == "custom_color_input1" || caller_id == "custom_color_input2" ||
-					caller_id == "pick_normal_custom_color1" ||
-					caller_id == "pick_normal_custom_color2" ||
-					caller_id == "custom_color_normal_custom_input1" ||
-					caller_id == "custom_color_normal_custom_input2" ||
-					caller_id == "pick_color") {
+			else if(color_array.includes(caller_id)) {
 			    new_value = changeValueColor(set_value, prev_value, caller_id);
 				text_field = "color";			
 			}
-			else if(caller_id == "pick_material" || caller_id == "pick_material_common" || 
-					caller_id == "pick_material_rare" || caller_id == "custom_material_input") {				
+			else if(material_array.includes(caller_id)) {				
 			    new_value = changeValueMaterial(set_value, caller_id);
 				text_field = "material";					
 			}
@@ -174,6 +195,7 @@
 			document.getElementById(text_field).innerHTML = new_value;
 			setArticle();			
 		}
+		
 
 		/*
 		Update the Description text field with a new value.
@@ -193,6 +215,7 @@
 			}		
 			return set_value;
 		}
+		
 
 		/*
 		Update the Material text field with a new value.
@@ -204,40 +227,36 @@
 			common_value = document.getElementById("pick_material_common").value;	
 			rare_value = document.getElementById("pick_material_rare").value;			
 			custom_value = document.getElementById("custom_material_input").value;
-						
+
+			switch(caller_id) {
+				case "pick_material":
+					common_div.style.display = 'none';
+					rare_div.style.display = 'none';
+					custom_div.style.display = 'none';
+					
+					switch(set_value) {
+						case "Common Yarn...":
+							common_div.style.display = 'block';	
+							return common_value;
+						case "Rare Yarn...":
+							rare_div.style.display = 'block';
+							return rare_value;
+						case "Custom Yarn...":
+							custom_div.style.display = 'block';
+							return "...";							
+					}
+					break;
+				case "custom_material_input":
+					if(set_value == "") {
+						return "...";
+					}					
+				case "pick_material_common":
+				case "pick_material_rare":
+					return set_value;
 			
-			if(caller_id == "pick_material") {
-				common_div.style.display = 'none';				
-				rare_div.style.display = 'none';				
-				custom_div.style.display = 'none';
-				
-				if(set_value == "Common Yarn...") {
-					common_div.style.display = 'block';	
-					return common_value;
-				}
-				else if(set_value == "Rare Yarn...") {
-					rare_div.style.display = 'block';
-					return rare_value;
-				}
-				else if(set_value == "Custom Yarn...") {
-					custom_div.style.display = 'block';
-					return "...";
-				}
-			}
-			else if(caller_id = "pick_material_common") {
-				return set_value;
-			}
-			else if(caller_id = "pick_material_rare") {
-				return set_value;
-			}
-			else if(caller_id = "custom_material_input") {
-				if(set_value == "") {
-					return "...";
-				}
-				
-				return set_value;
 			}
 		}
+		
 
 		/*
 		Update the Design Style text field with a new value.
@@ -262,90 +281,52 @@
 			pick_value = document.getElementById("pick_design").value;
 			base_value = "";
 			
+			//Relation dictionaries
+			div_dict = {"Basic Designs...": design_div_basic, "Animal Designs...": design_div_animal, "Floral Designs...": design_div_floral, "Nature Designs...": design_div_nature, "Pattern Designs...": design_div_pattern, "Profession Designs...": design_div_profession, "Religion Designs...": design_div_religion};
+			value_dict = {"Basic Designs...": basic_value, "Animal Designs...": animal_value, "Floral Designs...": floral_value, "Nature Designs...": nature_value, "Pattern Designs...": pattern_value, "Profession Designs...": profession_value, "Religion Designs...": religion_value};
+			div_extra_array = ["Animal Designs...", "Floral Designs...", "Nature Designs...", "Pattern Designs...", "Profession Designs...", "Religion Designs..."];
+			
+			
 			if(document.getElementById("pick_description").value == "crocheted") {
 				document.getElementById("pick_description").value = "knitted";		
 			    document.getElementById("description").innerHTML = "knitted";
 			}
 
-			
-			if(caller_id == "pick_design") {		
-				design_div_basic.style.display = 'none';				
-				design_div_animal.style.display = 'none';				
-				design_div_floral.style.display = 'none';				
-				design_div_nature.style.display = 'none';			
-				design_div_pattern.style.display = 'none';						
-				design_div_profession.style.display = 'none';				
-				design_div_religion.style.display = 'none';			
-				design_div_extra.style.display = 'none';		
+			switch(caller_id) {
+				case "pick_design":
+					design_div_basic.style.display = 'none';				
+					design_div_animal.style.display = 'none';				
+					design_div_floral.style.display = 'none';				
+					design_div_nature.style.display = 'none';			
+					design_div_pattern.style.display = 'none';						
+					design_div_profession.style.display = 'none';				
+					design_div_religion.style.display = 'none';			
+					design_div_extra.style.display = 'none';		
+					
+					if(set_value == "Nothing") {
+						return "";
+					}
 				
-				if(set_value == "Nothing") {
-					return "";
-				}
-				else if(set_value == "Basic Designs...") {
-					design_div_basic.style.display = 'block';	
-					return basic_value;
-				}
-				else if(set_value == "Animal Designs...") {
-					design_div_animal.style.display = 'block';					
-					design_div_extra.style.display = 'block';			
-					base_value = animal_value;
-				}
-				else if(set_value == "Floral Designs...") {
-					design_div_floral.style.display = 'block';					
-					design_div_extra.style.display = 'block';			
-					base_value = floral_value;
-				}
-				else if(set_value == "Nature Designs...") {				
-					design_div_nature.style.display = 'block';	
-					design_div_extra.style.display = 'block';			
-					base_value = nature_value;
-				}
-				else if(set_value == "Pattern Designs...") {				
-					design_div_pattern.style.display = 'block';	
-					design_div_extra.style.display = 'block';			
-					base_value = pattern_value;
-				}
-				else if(set_value == "Profession Designs...") {				
-					design_div_profession.style.display = 'block';	
-					design_div_extra.style.display = 'block';			
-					base_value = profession_value;
-				}
-				else if(set_value == "Religion Designs...") {				
-					design_div_religion.style.display = 'block';	
-					design_div_extra.style.display = 'block';			
-					base_value = religion_value;
-				}
-								
-				return base_value + "-" + extra_value;		
-			}
-			else if(caller_id == "pick_design_extra") {
-				if(pick_value == "Animal Designs...") {		
-					return animal_value + "-" + extra_value;
-				}
-				else if(pick_value == "Floral Designs...") {		
-					return floral_value + "-" + extra_value;
-				}
-				else if(pick_value == "Nature Designs...") {				
-					return nature_value + "-" + extra_value;
-				}
-				else if(pick_value == "Pattern Designs...") {				
-					return pattern_value + "-" + extra_value;
-				}
-				else if(pick_value == "Profession Designs...") {			
-					return profession_value + "-" + extra_value;
-				}
-				else if(pick_value == "Religion Designs...") {			
-					return religion_value + "-" + extra_value;
-				}			
-			}
-			else if(caller_id == "pick_design_basic") {
-				return set_value;			
-			}
-			else {
-				base_value = set_value;
-				return base_value + "-" + extra_value;	
-			}			
+					div_dict[set_value].style.display = 'block';
+					
+					if(!div_extra_array.includes(set_value)) {
+						return value_dict[set_value];
+					}
+						
+					design_div_extra.style.display = 'block';
+					return value_dict[set_value] + "-" + extra_value;
+				
+				case "pick_design_extra":
+					return value_dict[pick_value] + "-" + extra_value;
+				
+				case "pick_design_basic":
+					return set_value;			
+				
+				default:
+					return set_value + "-" + extra_value;
+			}		
 		}
+		
 
 		/*
 		Update the Color text field with a new value.
@@ -357,191 +338,190 @@
 			color1_custom_div = document.getElementById("color_custom_one_div");		
 			color2_custom_div = document.getElementById("color_custom_two_div");		
 			color1_normal_custom_div = document.getElementById("color_normal_custom_one_div");		
-			color2_normal_custom_div = document.getElementById("color_normal_custom_two_div");		
+			color2_normal_custom_div = document.getElementById("color_normal_custom_two_div");	
+			color_option = document.getElementById("pick_color").value;	
+			color1_value = document.getElementById("pick_color1").value			
+			color2_value = document.getElementById("pick_color2").value			
+			custom_color1_value = document.getElementById("custom_color_input1").value;
+			custom_color2_value = document.getElementById("custom_color_input2").value;
 
-				
-			if(caller_id == "pick_color") {			
-				color1_div.style.display = 'none';
-				color2_div.style.display = 'none';		
-				color1_custom_div.style.display = 'none';		
-				color2_custom_div.style.display = 'none';		
-				color1_normal_custom_div.style.display = 'none';		
-				color2_normal_custom_div.style.display = 'none';		
-				
-				if(set_value == 'Nothing') {
-					return "";
-				}
-				else if(set_value == 'Multicolored') {
-					return "multicolored";
-				}
-				else if(set_value == 'One Normal Color...') {
-					color1_div.style.display = 'block';
+			switch(caller_id) {
+				case "pick_color":
+					color1_div.style.display = 'none';
+					color2_div.style.display = 'none';		
+					color1_custom_div.style.display = 'none';		
+					color2_custom_div.style.display = 'none';		
+					color1_normal_custom_div.style.display = 'none';		
+					color2_normal_custom_div.style.display = 'none';
 					
-					return document.getElementById("pick_color1").value
-				}
-				else if(set_value == 'Two Normal Colors...') {
-					color1_div.style.display = 'block';
-					color2_div.style.display = 'block';
+					switch(set_value) {
+						case 'Nothing':
+							return "";
+							
+						case 'Multicolored':
+							return "multicolored";
+							
+						case 'One Normal Color...':
+							color1_div.style.display = 'block';
+							
+							return color1_value;
+							
+						case 'Two Normal Colors...':
+							color1_div.style.display = 'block';
+							color2_div.style.display = 'block';
+							
+							return color1_value + " and " + color2_value
+							
+						case 'One Custom Color...':
+							color1_custom_div.style.display = 'block';
+							if(custom_color1_value == "") {
+								return "...";
+							}
+							
+							return custom_color1_value;
+							
+						case 'Two Custom Colors...':
+							color1_custom_div.style.display = 'block';		
+							color2_custom_div.style.display = 'block';
+							
+							if(custom_color1_value == "") {
+								custom_color1_value = "...";
+							}
+							
+							if(custom_color2_value == "") {
+								custom_color2_value = "...";
+							}
+							
+							return custom_color1_value + " and " + custom_color2_value;
+							
+						case 'One Normal and One Custom Color...':
+							color1_normal_custom_div.style.display = 'block';			
+							color = document.getElementById("pick_normal_custom_color1").value;			
+							custom_color = document.getElementById("custom_color_normal_custom_input1").value;	
+							
+							if(custom_color == "") {
+								custom_color = "...";
+							}					
+							
+							return color + " and " + custom_color;
+							
+						case 'One Custom and One Normal Color...':
+							color2_normal_custom_div.style.display = 'block';	
+							custom_color = document.getElementById("custom_color_normal_custom_input2").value;	
+							color = document.getElementById("pick_normal_custom_color2").value;	
+												
+							if(custom_color == "") {
+								custom_color = "...";
+							}
+							
+							return custom_color + " and " + color;
+					}	
+					break;
+				
+				case "pick_color1":
+					extra_value = document.getElementById("pick_color2").value;	
 					
-					return document.getElementById("pick_color1").value + " and " + document.getElementById("pick_color2").value
-				}
-				else if(set_value == 'One Custom Color...') {
-					color1_custom_div.style.display = 'block'
-					;
-					if(document.getElementById("custom_color_input1").value == "") {
-						return "...";
+					switch(color_option) {
+						case "One Normal Color...":
+							if(extra_value == set_value) {
+								document.getElementById("pick_color2").value = prev_value;
+							}				
+							
+							return set_value;
+						
+						case "Two Normal Colors...":
+							if(extra_value == set_value) {
+								document.getElementById("pick_color2").value = prev_value;
+								
+								return set_value + " and " + prev_value;
+							}		
+							
+							return set_value + " and " + extra_value;
+					}
+					break;
+				
+				case "pick_color2":
+					base_value = document.getElementById("pick_color1").value;
+					
+					if(base_value == set_value) {
+						document.getElementById("pick_color1").value = prev_value;
+						
+						return prev_value + " and " + set_value;
 					}
 					
-					return document.getElementById("custom_color_input1").value;
-				}
-				else if(set_value == 'Two Custom Colors...') {
-					color1_custom_div.style.display = 'block';		
-					color2_custom_div.style.display = 'block';
-					custom_color1 = document.getElementById("custom_color_input1").value;
-					custom_color2 = document.getElementById("custom_color_input2").value;
-					
-					if(custom_color1 == "") {
-						custom_color1 = "...";
-					}
-					
-					if(custom_color2 == "") {
-						custom_color2 = "...";
-					}
-					
-					return custom_color1 + " and " + custom_color2;
-				}
-				else if(set_value == 'One Normal and One Custom Color...') {
-					color1_normal_custom_div.style.display = 'block';			
-					color = document.getElementById("pick_normal_custom_color1").value;			
-					custom_color = document.getElementById("custom_color_normal_custom_input1").value;	
-					
-					if(custom_color == "") {
-						custom_color = "...";
-					}					
-					
-					return color + " and " + custom_color;
-				}
-				else if(set_value == 'One Custom and One Normal Color...') {
-					color2_normal_custom_div.style.display = 'block';	
-					custom_color = document.getElementById("custom_color_normal_custom_input2").value;	
-					color = document.getElementById("pick_normal_custom_color2").value;	
-										
-					if(custom_color == "") {
-						custom_color = "...";
-					}
-					
-					return custom_color + " and " + color;					
-				}
-			}
-			else if(caller_id == "pick_color1") {
-				color_option = document.getElementById("pick_color").value;	
-				extra_value = document.getElementById("pick_color2").value;	
+					return base_value + " and " + set_value;	
 				
+				case "custom_color_input1":
+					custom_value2 = document.getElementById("custom_color_input2").value;	
+
+					if(set_value == "") {
+						set_value = "...";
+					}
+
+					if(color_option == "Two Custom Colors...") {
+						if(custom_value2 == "") {
+							custom_value2 =  "...";
+						}
+						
+						return set_value + " and " + custom_value2;				
+					}
+					
+					return set_value;
 				
-				if(color_option == "One Normal Color...") {		
-					if(extra_value == set_value) {
-						document.getElementById("pick_color2").value = prev_value;
+				case "custom_color_input2":					
+					if(set_value == "") {
+						set_value = "...";
+					}
+
+					if(custom_color1_value == "") {
+						custom_color1_value =  "...";
+					}
+					
+					return custom_color1_value + " and " + set_value;
+				
+				case "pick_normal_custom_color1":
+					custom_value1 = document.getElementById("custom_color_normal_custom_input1").value;				
+
+					if(custom_value1 == "") {
+						custom_value1 =  "...";
+					}
+					
+					return set_value + " and " + custom_value1;		
+				
+				case "pick_normal_custom_color2":
+					custom_value2 = document.getElementById("custom_color_normal_custom_input2").value;				
+
+					if(custom_value2 == "") {
+						custom_value2 =  "...";
+					}
+					
+					return custom_value2 + " and " + set_value;		
+				
+				case "custom_color_normal_custom_input1":
+					if(set_value == "") {
+						set_value =  "...";
 					}				
 					
-					return set_value;
-				}
-				else if(color_option == "Two Normal Colors..."){
-					if(extra_value == set_value) {
-						document.getElementById("pick_color2").value = prev_value;
-						
-						return set_value + " and " + prev_value;
-					}										
-					else {
-						return set_value + " and " + extra_value;
-					}
-				}
-			}
-			else if(caller_id == "pick_color2") {
-				base_value = document.getElementById("pick_color1").value;
+					return document.getElementById("pick_normal_custom_color1").value + " and " + set_value;	
 				
-				if(base_value == set_value) {
-					document.getElementById("pick_color1").value = prev_value;
+				case "custom_color_normal_custom_input2":
+					if(set_value == "") {
+						set_value =  "...";
+					}				
 					
-					return prev_value + " and " + set_value;
-				}
-				else {
-					return base_value + " and " + set_value;				
-				}
-			}		
-			else if(caller_id == "custom_color_input1") {
-				color_option = document.getElementById("pick_color").value;	
-				custom_value2 = document.getElementById("custom_color_input2").value;	
-
-				if(set_value == "") {
-					set_value = "...";
-				}
-
-				if(custom_value2 == "") {
-					custom_value2 =  "...";
-				}
-
-				if(color_option == "Two Custom Colors...") {
-					return set_value + " and " + custom_value2;				
-				}
-				else {
-					return set_value;
-				}
+					return set_value + " and " + document.getElementById("pick_normal_custom_color2").value;
 			}
-			else if(caller_id == "custom_color_input2") {
-				custom_value1 = document.getElementById("custom_color_input1").value;
-				
-				if(set_value == "") {
-					set_value = "...";
-				}
-
-				if(custom_value1 == "") {
-					custom_value1 =  "...";
-				}
-				
-				return custom_value1 + " and " + set_value;
-			}			
-			else if(caller_id == "pick_normal_custom_color1") {
-				custom_value1 = document.getElementById("custom_color_normal_custom_input1").value;				
-
-				if(custom_value1 == "") {
-					custom_value1 =  "...";
-				}
-				
-				return set_value + " and " + custom_value1;				
-			}			
-			else if(caller_id == "pick_normal_custom_color2") {
-				custom_value2 = document.getElementById("custom_color_normal_custom_input2").value;				
-
-				if(custom_value2 == "") {
-					custom_value2 =  "...";
-				}
-				
-				return custom_value2 + " and " + set_value;				
-			}
-			else if(caller_id == "custom_color_normal_custom_input1") {
-				if(set_value == "") {
-					set_value =  "...";
-				}				
-				
-				return document.getElementById("pick_normal_custom_color1").value + " and " + set_value;	
-			}
-			else if(caller_id == "custom_color_normal_custom_input2") {
-				if(set_value == "") {
-					set_value =  "...";
-				}				
-				
-				return set_value + " and " + document.getElementById("pick_normal_custom_color2").value;	
-			}			
 		}
+		
 
 		/*
 		Update the Design Style text field with a new value.
 		Not much to do, so this is placeholder if needed.
 		*/							
-		function changeValueItemType(set_value, caller_id) {			
-			new_value = set_value;
-			return new_value;
+		function changeValueItemType(set_value, caller_id) {
+			return set_value;
 		}		
+		
 		
 		/*
 		Simple function that prepends either 'a' or 'an' depending on the first letter of the
@@ -550,21 +530,34 @@
 		*/
 		function setArticle() {
 			field = document.getElementById("description").innerHTML;		
-			item = document.getElementById("item_type").innerHTML;		
+			item = document.getElementById("item_type").innerHTML;
+			item_type_array = ["earmuffs", "leggings", "mittens", "oven mitts", "pants", "socks", "stockings", "robes", "gloves", "foreleg wraps", "hind leg wraps", "beetle booties", "spider booties"];
+			vowels_array =["a", "e", "i", "o", "u"];
 			
-			if(item == "earmuffs" || item == "leggings" || item == "mittens" || item == "pants" || 
-			   item == "socks" || item == "stockings" || item == "robes" || item == "gloves" || 
-			   item == "foreleg wraps" || item == "hind leg wraps" || item == "beetle booties" ||
-			   item == "spider booties") {
+			if(item_type_array.includes(item)) {
 				document.getElementById("article").innerHTML = "some";
 			}
-			else if(field[0] == "a" || field[0] == "e" || field[0] == "i" || field[0] == "o" || field[0] == "u") {
+			else if(vowels_array.includes(field[0])) {
 				document.getElementById("article").innerHTML = "an";
 			}
 			else {
 				document.getElementById("article").innerHTML = "a";
 			}
 		}
+		
+		
+		//A small function that finds the first non-header option and set the value for the dropdown menu.		
+		function setInitialValue(menu) {
+			value = "";
+			for(i=0; i < menu.length; i++) {
+				menu.selectedIndex = i;
+				value = menu.value;
+				if(value[0] != "-") {
+					break;
+				}
+			}			
+		}
+
 		
 		/*
 		Resets all choices back to default. Allowing for a fresh start.
@@ -575,20 +568,22 @@
 		*/
 		function resetAll() {		
 			if(!document.getElementById("description_lock").checked) {
-				document.getElementById("pick_description").value = "knitted";
-				document.getElementById("description").innerHTML = "knitted";
+				setInitialValue(document.getElementById("pick_description"));	
+				
+				obj = document.getElementById("pick_description")
+				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
 				
 			if(!document.getElementById("design_lock").checked) {
-				document.getElementById("pick_design").value = "Nothing";
-				document.getElementById("pick_design_basic").value = "cable-knit";		
-				document.getElementById("pick_design_animal").value = "alligator";		
-				document.getElementById("pick_design_floral").value = "alpine violet";		
-				document.getElementById("pick_design_nature").value = "apple";		
-				document.getElementById("pick_design_pattern").value = "anchor";		
-				document.getElementById("pick_design_profession").value = "quil";		
-				document.getElementById("pick_design_religion").value = "angel";		
-				document.getElementById("pick_design_extra").value = "motif";		
+				setInitialValue(document.getElementById("pick_design"));
+				setInitialValue(document.getElementById("pick_design_basic"));
+				setInitialValue(document.getElementById("pick_design_animal"));
+				setInitialValue(document.getElementById("pick_design_floral"));
+				setInitialValue(document.getElementById("pick_design_nature"));
+				setInitialValue(document.getElementById("pick_design_pattern"));
+				setInitialValue(document.getElementById("pick_design_profession"));
+				setInitialValue(document.getElementById("pick_design_religion"));
+				setInitialValue(document.getElementById("pick_design_extra"));
 				document.getElementById("design_div_basic").style.display = 'none';				
 				document.getElementById("design_div_animal").style.display = 'none';				
 				document.getElementById("design_div_floral").style.display = 'none';				
@@ -596,19 +591,20 @@
 				document.getElementById("design_div_pattern").style.display = 'none';						
 				document.getElementById("design_div_profession").style.display = 'none';				
 				document.getElementById("design_div_religion").style.display = 'none';			
-				document.getElementById("design_div_extra").style.display = 'none';				
+				document.getElementById("design_div_extra").style.display = 'none';		
+				
 				obj = document.getElementById("pick_design")
 				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
 				
 			if(!document.getElementById("color_lock").checked) {
-				document.getElementById("pick_color").value = "Nothing";
-				document.getElementById("pick_color1").value = "black";
+				setInitialValue(document.getElementById("pick_color"));
+				setInitialValue(document.getElementById("pick_color1"));
 				document.getElementById("pick_color2").value = "coal black";
+				setInitialValue(document.getElementById("pick_normal_custom_color1"));
+				setInitialValue(document.getElementById("pick_normal_custom_color2"));
 				document.getElementById("custom_color_input1").value = "";
 				document.getElementById("custom_color_input2").value = "";
-				document.getElementById("pick_normal_custom_color1").value = "black";
-				document.getElementById("pick_normal_custom_color2").value = "black";
 				document.getElementById("custom_color_normal_custom_input1").value = "";
 				document.getElementById("custom_color_normal_custom_input2").value = "";
 				document.getElementById("color1_div").style.display = 'none';
@@ -621,19 +617,21 @@
 			}
 			
 			if(!document.getElementById("material_lock").checked) {
-				document.getElementById("pick_material").value = "Common Yarn...";
-				document.getElementById("pick_material_common").value = "alpaca";
-				document.getElementById("pick_material_rare").value = "aneula";
+				setInitialValue(document.getElementById("pick_material"));
+				setInitialValue(document.getElementById("pick_material_common"));
+				setInitialValue(document.getElementById("pick_material_rare"));
 				document.getElementById("custom_material_input").value = "";
 				document.getElementById("material_div_common").style.display = 'none';				
 				document.getElementById("material_div_rare").style.display = 'none';				
 				document.getElementById("material_div_custom").style.display = 'none';		
+				
 				obj = document.getElementById("pick_material")
 				changeValue("Common Yarn...", obj.oldvalue, obj.id);
 			}
 				
 			if(!document.getElementById("item_type_lock").checked) {
-				document.getElementById("pick_item_type").value = "armband";
+				setInitialValue(document.getElementById("pick_item_type"));
+				
 				obj = document.getElementById("pick_item_type")
 				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
@@ -647,8 +645,8 @@
 		Code is made to make sure that each field unhides the menues with the right choices selected.		
 		*/
 		function createRandomItem() {			
-			design_dict = {"Basic Designs...":"pick_design_basic", "Animal Designs...":"pick_design_animal", "Floral Designs...":"pick_design_floral", "Nature Designs...":"pick_design_nature", "Pattern Designs...":"pick_design_pattern", "Profession Designs...":"pick_design_profession", "Religion Designs...":"pick_design_religion"};
-			material_dict = {"Common Yarn...":"pick_material_common", "Rare Yarn...":"pick_material_rare"}
+			design_dict = {"Basic Designs...": "pick_design_basic", "Animal Designs...": "pick_design_animal", "Floral Designs...": "pick_design_floral", "Nature Designs...":"pick_design_nature", "Pattern Designs...": "pick_design_pattern", "Profession Designs...": "pick_design_profession", "Religion Designs...": "pick_design_religion"};
+			material_dict = {"Common Yarn...": "pick_material_common", "Rare Yarn...": "pick_material_rare"}
 		
 			//Reset all values before doing anything.
 			resetAll();		
@@ -710,7 +708,7 @@
 					select_color1.value = color1_value;		
 					changeValue(select_color1.value, select_color1.oldvalue, select_color1.id);						
 						
-					if(select_pick_color.value == "Two Colors...") {
+					if(select_pick_color.value == "Two Normal Colors...") {
 						do {				
 							select_color2  = document.getElementById("pick_color2");
 							options = select_color2.children;  
@@ -887,7 +885,7 @@
 		</td>
 		<td valign="top" width="20%">
 			<button value="" onclick="resetAll()">Clear All</button><br>
-			<button value="" onclick="createRandomItem()" >Random Item</button
+			<button value="" onclick="createRandomItem()" >Random Item</button>
 		</td>
 		 </tr>
 		</table>
