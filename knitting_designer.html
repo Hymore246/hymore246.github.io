@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Knitting Designer v1.5</TITLE>
+	<TITLE>Hymore's Knitting Designer v1.6</TITLE>
 	<STYLE>
 		div.knitted_text {
 			font-size: 30px;
@@ -53,6 +53,9 @@
 		- Added populateDropDown and setInitialValue functions.
 		- Fixed "oven mitts" not using "some" article.
 		
+		v1.6
+		- Added "cobbling trim" and "cobbling upper" item types with code to support the choices
+		
 		*/		
 		
 		
@@ -79,6 +82,7 @@
 		const colors_misc = ["---MISC COLORS---", "dark", "dusky", "garnet", "pearly", "rainbow-flecked", "roan", "sapphire", "topaz"];
 		const colors_all = colors_black.concat(colors_blue, colors_brown, colors_green, colors_grey, colors_metallic, colors_orange, colors_pink, colors_purple, colors_red, colors_white, colors_yellow, colors_misc);		
 		const description_all = ["---BASIC---", "knitted", "crocheted", "---DETAILED---", "aged knitted", "bloodstained knitted", "coarse knitted", "frayed knitted", "frosted knitted", "fuzzy knitted", "gradient knitted", "knotted knitted", "lightweight knitted", "lustrous knitted", "scorched knitted", "shiny knitted", "soft knitted", "thick knitted", "thin knitted", "waterlogged knitted", "weathered knitted", "winterweight knitted"];
+		const description_cobbling = ["aged", "bloodstained", "coarse", "frayed", "frosted", "fuzzy", "gradient", "knotted", "lightweight", "lustrous", "scorched", "shiny", "soft", "thick", "thin", "waterlogged", "weathered", "winterweight"];
 		const designs_basic = ["cable-knit", "cheveron-patterned", "diamond-patterned", "floral-patterned", "gartered-stitched", "ribbed", "striped", "zig zag-patterned"];
 		const designs_animal = ["alligator", "bat", "bear", "bird", "blood eagle", "bluebird", "bronco", "buck", "bug", "bumblebee", "bunny", "butterfly", "capybara", "cardinal", "caribou", "cat", "centaur", "chicken", "chinchilla", "cobra", "cow", "crab", "crow", "deer", "damselfly", "dog", "doe", "dolphin", "dove", "dragon", "duck", "fly", "dragonfly", "eagle", "eel", "egret", "elephant", "elk", "fairywren", "fawn", "finch", "fish", "firefly", "flamingo", "flycatcher", "fox", "frog", "gazelle", "goat", "griffin", "ghost", "ghostfly", "glimaerfly", "hart", "hawk", "hog", "hedgehog", "heron", "hind", "horse", "hummingbird", "ibis", "iguana", "jackal", "kitten", "koala", "kobold", "koi", "kraken", "ladybug", "lemur", "lion", "lizard", "lobster", "loris", "macaw", "mantis", "merlin", "minotaur", "monkey", "moose", "morduska", "moth", "mouse", "mustang", "narwhal", "octopus", "orc", "otter", "owl", "panda", "parrot", "peacock", "pegasus", "pelican", "penguin", "pheasant", "phoenix", "pig", "pixie", "polar bear", "pony", "puppy", "qahzumar", "rabbit", "raccoon", "raven", "reindeer", "roa'ter", "rolton", "rook", "rooster", "sea anemone", "seagull", "selshis", "serpent", "shark", "skeleton", "skull", "snake", "songbird", "spider", "sprite", "stag", "stallion", "starfish", "swan", "teadragon", "tentacle", "tiger", "toad", "tortoise", "troll", "turkey", "turtle", "unicorn", "weasel", "wendigo", "whale", "witch", "wolf", "wombat", "wraith", "wren", "wyvern", "yierka"];
 		const designs_floral = ["alpine violet", "alyssum", "amaranth", "anemone", "angelica", "aster", "begonia", "bleeding heart", "blood lily", "blossom", "bluebell", "bougainvillea", "buttercup", "butterfly weed", "campion", "cactus flower", "calla lily", "carnation", "cherry blossom", "chrysanthemum", "clematis", "clivia", "columbine", "cothinar flower", "crocus", "daffodil", "dahlia", "daisy", "dandelion", "datura", "daylily", "dragonstalk", "edelweiss", "feverfew", "flamestalk", "floral", "flower", "forget-me-not", "freesia", "frostflower", "gardenia", "geranium", "ginger blossom", "goldenrod", "heather", "heliotrope", "hellebore", "hibiscus", "honeysuckle", "honeywort", "hyacinth", "hydrangea", "iceblossom", "iris", "lavender", "lilac", "lily", "lotus blossom", "jasmine", "jessamine", "larkspur", "lupine", "magnolia", "monkeyflower", "moonflower", "morning glory", "mournbloom", "nightshade", "orange blossom", "orchid", "pansy", "snow pansy", "passionflower", "peony", "petunia", "phlox", "plumeria", "poinsettia", "poppy", "posy", "rose", "rosebud", "dog rose", "primrose", "fairy primrose", "tea rose", "winter rose", "sirenflower", "snapdragon", "snow lily", "stargazer lily", "sunflower", "thistle", "tiger lily", "trillium", "tulip", "tuberose", "violet", "water lily", "wood violet", "wildflower", "wisteria", "zinnia"];
@@ -86,23 +90,21 @@
 		const designs_pattern = ["anchor", "arrow", "bell", "chevron", "cityscape", "coffin", "diamond", "feather", "heart", "square", "triangle", "interlocked ring", "spiderweb", "spiral", "wisp"];
 		const designs_profession = ["---ARTIST---", "quill", "artist's brush", "brush stroke", "palette", "palette and brush", "lute", "flute", "harp", "music note", "---COOKING---", "bottle", "butter churn", "fork", "skillet", "spoon", "teapot", "teacup", "wine bottle", "---FIGHTING---", "bow", "claidhmore", "crossed sword", "scimitar", "shield", "shield and sword", "sickle", "sword", "---LOCKSMITH---", "coin", "key", "lock", "lockpick", "lock and key", "scarab", "---SAILING---", "airship", "boat", "brigantine", "carrack", "frigate", "galleon", "pirate", "pirate flag", "ship", "---SORCERERY---", "bone", "brain", "corpse", "fang", "finger", "fingernail", "fist", "gravestone", "guillotine", "headstone", "intestine", "incisor", "kidney", "liver", "spleen", "toe", "toenail", "tooth", "tombstone", "---WIZARDRY---", "book", "cauldron", "demon", "eye", "mortar and pestle", "rune", "runestaff", "runestone", "scroll", "shrunken head", "skull", "wand", "---OTHER---", "bride", "bridesmaid", "broomstick", "candelabra", "chalice", "cigar", "clasped hands", "giftbox", "gear", "groom", "lamp", "lantern", "maiden", "mitten", "mop", "open hand", "playing card", "praying hands", "present", "needle", "needle and thread", "sconce", "sleigh", "spindle", "sprocket", "wagon"];
 		const designs_religion = ["angel", "anvil", "artist's brush", "black widow", "broken skull", "cat's head", "chelioboros", "clenched fist", "conjoined circles", "crescent moon", "crown", "crystal ball", "dagger", "dagger-pierced heart", "doe", "dolphin", "eight-pointed star", "feather", "flame", "gate and key", "grain sheaf", "heart", "hourglass", "jackal's head", "key", "leaf", "lily", "lute", "musical note", "ouroboros", "pegasus", "rose", "tentacled star", "six-tentacled star", "slit-pupiled eye", "scimitar", "scroll", "serpent", "shield", "sickle", "skull", "star", "stone giant", "stone giantess", "sunburst", "sword", "trident", "two-headed serpent"];			
-		const materials_common = ["alpaca", "angora", "cotton", "linen", "mohair", "paeline", "silk", "wool"];
+		const materials_common = ["alpaca wool", "angora", "cotton", "linen", "mohair", "paeline", "silk", "wool"];
 		const materials_rare = ["aneula", "Aldoran wool", "bamboo", "bresuna", "buckram", "cameline", "captiql", "cavelta", "chainsil", "chenille", "cotton", "dagswain", "fraelhan", "flannel", "flax", "fleece", "gossamer", "heather", "inytela", "jute", "krinklevelt", "lamb's wool", "lambilen", "maedatha", "malghavan wool", "merino wool", "moreen", "myssamere", "oiremere", "oxilen", "pashmina", "plumille", "qiviut", "ramie linen", "roltalen", "rolton wool", "ruhani wool", "rackhal", "sailcloth", "flyrsilk", "lotus silk", "ramie silk", "raw silk", "sea silk", "spidersilk", "starsilk", "stoutfoot wool", "tartan", "tweed", "vaslavilen", "vicuna", "wild silk", "woolen", "wylten", "wynelen", "yierkale", "yierka wool"];
 		const items_clothing = ["---CLOTHING---", "armband", "brooch", "dress", "earmuffs", "gloves", "gown", "hartie", "hat", "headband", "leggings", "mittens", "muffler", "oven mitt", "oven mitts", "overdress", "pants", "petticoat", "scarf", "shawl", "skirt", "snood", "socks", "stockings", "sundress", "sweater", "trukt", "tunic", "undershirt"];
 		const items_container = ["---CONTAINERS---", "apron", "basket", "backpack", "bag", "cape", "carryall", "cloak", "coat", "clutch", "jacket", "pouch", "purse", "robe", "satchel", "tote", "wrap", "vest"];
 		const items_mount = ["---FOR MOUNTS---", "headband", "foreleg wraps", "hind leg wraps", "scarf", "neck wrap", "blanket", "capelet", "hat", "spider booties", "beetle booties"];
+		const items_cobbling = ["---COBBLING---", "cobbling trim", "cobbling upper"];
 		const items_other = ["---OTHER---", "carpet",  "picnic napkin", "puppy bandana", "puppy bow", "rug", "weapon wrap"];
-		const items_all = items_clothing.concat(items_container, items_mount, items_other);
+		const items_all = items_clothing.concat(items_container, items_mount, items_cobbling, items_other);
 	
 	
 		/*
 		Run when the page loads and populates all the dropdown menues before calling resetAll() to
 		assign everything to their default values.
 		*/
-		function init() {		
-			combo_selectors = ["pick_color1", "pick_color2", "pick_normal_custom_color1", "pick_normal_custom_color2", "pick_design_basic", "pick_design_animal", "pick_design_floral", "pick_design_nature", "pick_design_pattern", "pick_design_profession", "pick_design_religion", "pick_description", "pick_material_common", "pick_material_rare", "pick_item_type"];
-			combo_arrays = [colors_all, colors_all, colors_all, colors_all, designs_basic, designs_animal, designs_floral, designs_nature, designs_pattern, designs_profession, designs_religion, description_all, materials_common, materials_rare, items_all];
-
+		function init() {
 			//Populate all the menus that do not need many menues	
 			populateDropDown("pick_color1", colors_all);
 			populateDropDown("pick_color2", colors_all);
@@ -116,6 +118,7 @@
 			populateDropDown("pick_design_profession", designs_profession);
 			populateDropDown("pick_design_religion", designs_religion);
 			populateDropDown("pick_description", description_all);
+			populateDropDown("pick_description_cobbling", description_cobbling);
 			populateDropDown("pick_material_common", materials_common);
 			populateDropDown("pick_material_rare", materials_rare);
 			populateDropDown("pick_item_type", items_all);
@@ -166,7 +169,7 @@
 			color_array = ["pick_color", "pick_color1", "pick_color2", "custom_color_input1", "custom_color_input2", "pick_normal_custom_color1", "pick_normal_custom_color2", "custom_color_normal_custom_input1", "custom_color_normal_custom_input2", "pick_color1"];
 			material_array = ["pick_material", "pick_material_common", "pick_material_rare", "custom_material_input"];
 			
-			if(caller_id == "pick_description") {
+			if(caller_id == "pick_description" || caller_id == "pick_description_cobbling") {
 			    new_value = changeValueDescription(set_value, caller_id);
 				text_field = "description";	
 			}			
@@ -201,6 +204,10 @@
 		Update the Description text field with a new value.
 		*/		
 		function changeValueDescription(set_value, caller_id) {
+			if(set_value == "Nothing") {
+				return "";				
+			}		
+		
 			if(set_value == "crocheted") {
 				document.getElementById("pick_design").value = "Nothing"				
 				document.getElementById("design_div_basic").style.display = 'none';				
@@ -516,9 +523,34 @@
 
 		/*
 		Update the Design Style text field with a new value.
-		Not much to do, so this is placeholder if needed.
+		The entire Design section needs to be hidden if cobbling designs are being used.		
 		*/							
 		function changeValueItemType(set_value, caller_id) {
+			document.getElementById("description_div_normal").style.display = 'none';
+			document.getElementById("description_div_cobbling").style.display = 'none';			
+			document.getElementById("design_div_normal").style.display = 'none';						
+			document.getElementById("design_div_cobbling").style.display = 'none';						
+		
+			if(set_value == "cobbling trim" || set_value == "cobbling upper") {
+				document.getElementById("description_div_cobbling").style.display = 'block';	
+				document.getElementById("design_div_cobbling").style.display = 'block';	
+				document.getElementById("design").innerHTML = '';
+				
+				obj = document.getElementById("pick_description_cobbling")
+				changeValue(obj.value, obj.oldvalue, obj.id);
+				
+				return "";
+			}
+		
+			document.getElementById("description_div_normal").style.display = 'block';
+			document.getElementById("design_div_normal").style.display = 'block';
+			
+			obj = document.getElementById("pick_design")
+			changeValue(obj.value, obj.oldvalue, obj.id);
+			
+			obj = document.getElementById("pick_description")
+			changeValue(obj.value, obj.oldvalue, obj.id);
+				
 			return set_value;
 		}		
 		
@@ -527,14 +559,19 @@
 		Simple function that prepends either 'a' or 'an' depending on the first letter of the
 		description field. If decocation1 is empty, the material field is used instead.
 		In some cases, the item type will determine if the article will be set to 'some'.
+		For cobbling item, the article is always "a bolt of"
 		*/
 		function setArticle() {
 			field = document.getElementById("description").innerHTML;		
 			item = document.getElementById("item_type").innerHTML;
-			item_type_array = ["earmuffs", "leggings", "mittens", "oven mitts", "pants", "socks", "stockings", "robes", "gloves", "foreleg wraps", "hind leg wraps", "beetle booties", "spider booties"];
+			some_array = ["earmuffs", "leggings", "mittens", "oven mitts", "pants", "socks", "stockings", "robes", "gloves", "foreleg wraps", "hind leg wraps", "beetle booties", "spider booties"];
+			cobbling_array = ["cobbling upper", "cobbling trim"];
 			vowels_array =["a", "e", "i", "o", "u"];
-			
-			if(item_type_array.includes(item)) {
+
+			if(!item) {
+				document.getElementById("article").innerHTML = "a bolt of";
+			}			
+			else if(some_array.includes(item)) {
 				document.getElementById("article").innerHTML = "some";
 			}
 			else if(vowels_array.includes(field[0])) {
@@ -566,16 +603,36 @@
 		Resets the visiblity of all secondary drop down fields.
 		Changes the displayed sheath text to "a leather sheath"
 		*/
-		function resetAll() {		
+		function resetAll() {						
+			if(!document.getElementById("item_type_lock").checked) {
+				setInitialValue(document.getElementById("pick_item_type"));
+				
+				obj = document.getElementById("pick_item_type");
+				changeValue(obj.value, obj.oldvalue, obj.id);
+			}
+			
 			if(!document.getElementById("description_lock").checked) {
 				setInitialValue(document.getElementById("pick_description"));	
+				setInitialValue(document.getElementById("pick_description_cobbling"));	
+				document.getElementById("description_div_normal").style.display = 'none';
+				document.getElementById("description_div_cobbling").style.display = 'none';				
+				item_type = document.getElementById("pick_item_type").value;
 				
-				obj = document.getElementById("pick_description")
+				if(item_type == "cobbling trim" || item_type == "cobbling upper") {
+					document.getElementById("description_div_cobbling").style.display = 'block';
+					obj = document.getElementById("pick_description_cobbling");
+				}
+				else {
+					document.getElementById("description_div_normal").style.display = 'block';
+					obj = document.getElementById("pick_description");
+				}
+				
 				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
 				
 			if(!document.getElementById("design_lock").checked) {
 				setInitialValue(document.getElementById("pick_design"));
+				setInitialValue(document.getElementById("pick_design_cobbling"));
 				setInitialValue(document.getElementById("pick_design_basic"));
 				setInitialValue(document.getElementById("pick_design_animal"));
 				setInitialValue(document.getElementById("pick_design_floral"));
@@ -584,6 +641,8 @@
 				setInitialValue(document.getElementById("pick_design_profession"));
 				setInitialValue(document.getElementById("pick_design_religion"));
 				setInitialValue(document.getElementById("pick_design_extra"));
+				document.getElementById("design_div_normal").style.display = 'none';			
+				document.getElementById("design_div_cobbling").style.display = 'none';			
 				document.getElementById("design_div_basic").style.display = 'none';				
 				document.getElementById("design_div_animal").style.display = 'none';				
 				document.getElementById("design_div_floral").style.display = 'none';				
@@ -591,9 +650,18 @@
 				document.getElementById("design_div_pattern").style.display = 'none';						
 				document.getElementById("design_div_profession").style.display = 'none';				
 				document.getElementById("design_div_religion").style.display = 'none';			
-				document.getElementById("design_div_extra").style.display = 'none';		
+				document.getElementById("design_div_extra").style.display = 'none';
+				item_type = document.getElementById("pick_item_type").value;
 				
-				obj = document.getElementById("pick_design")
+				if(item_type == "cobbling trim" || item_type == "cobbling upper") {
+					document.getElementById("design_div_cobbling").style.display = 'block';
+					obj = document.getElementById("pick_design_cobbling");
+				}
+				else {
+					document.getElementById("design_div_normal").style.display = 'block';
+					obj = document.getElementById("pick_design");					
+				}				
+				
 				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
 				
@@ -625,15 +693,8 @@
 				document.getElementById("material_div_rare").style.display = 'none';				
 				document.getElementById("material_div_custom").style.display = 'none';		
 				
-				obj = document.getElementById("pick_material")
+				obj = document.getElementById("pick_material");
 				changeValue("Common Yarn...", obj.oldvalue, obj.id);
-			}
-				
-			if(!document.getElementById("item_type_lock").checked) {
-				setInitialValue(document.getElementById("pick_item_type"));
-				
-				obj = document.getElementById("pick_item_type")
-				changeValue(obj.value, obj.oldvalue, obj.id);
 			}
 			
 			setArticle();			
@@ -653,8 +714,15 @@
 			
 			//Select a random option for section: design
 			if(!document.getElementById("design_lock").checked) {
+				picker = document.getElementById("pick_design");
+				item_type = document.getElementById("pick_item_type").value;
+			
+				if(item_type == "cobbling trim" || item_type == "cobbling trim") {
+					picker = document.getElementById("pick_design_cobbling")
+				}
+					
 				do {
-					select_design  = document.getElementById("pick_design");
+					select_design  = picker;
 					options = select_design.children;  
 					random  = Math.floor(Math.random() * options.length);
 				} while (options[random].value[1] == "-");
@@ -749,7 +817,8 @@
 					select  = document.getElementById("pick_item_type");
 					options = select.children;  
 					random  = Math.floor(Math.random() * options.length);
-				} while (options[random].value[1] == "-");
+				} while (options[random].value[1] == "-" ||
+						options[random].value == "cobbling trim" || options[random].value == "cobbling upper");
 				
 				select.value = options[random].value;
 				changeValue(select.value, select.oldvalue, select.id);			
@@ -757,8 +826,15 @@
 			
 			//Select a random option for section: description
 			if(!document.getElementById("description_lock").checked) {
+				picker = document.getElementById("pick_description");
+				item_type = document.getElementById("pick_item_type").value;
+			
+				if(item_type == "cobbling trim" || item_type == "cobbling trim") {
+					picker = document.getElementById("pick_description_cobbling")
+				}
+			
 				do {
-					select  = document.getElementById("pick_description");
+					select  = picker;
 					options = select.children;  
 					random  = Math.floor(Math.random() * options.length);
 				} while (options[random].value[1] == "-");
@@ -782,21 +858,34 @@
 		 <tr>
 		  <td valign="top" width="20%">		    
 			Description: (Lock:<input type="checkbox" id="description_lock">)<br>
-			<select id="pick_description" onchange="changeValue(this.value, this.oldvalue, this.id)">
-			</select>
+			<div id="description_div_normal">
+				<select id="pick_description" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+			</div>
+			<div id="description_div_cobbling">
+				<select id="pick_description_cobbling" onchange="changeValue(this.value, this.oldvalue, this.id)">
+					<option selected>Nothing</option>
+				</select>
+			</div>
 		  </td>
 		  <td valign="top" width="20%">
 			Design: (Lock:<input type="checkbox" id="design_lock">)<br>
-			<select id="pick_design" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
-				<option selected>Nothing</option>
-				<option>Basic Designs...</option>
-				<option>Animal Designs...</option>
-				<option>Floral Designs...</option>
-				<option>Nature Designs...</option>
-				<option>Pattern Designs...</option>
-				<option>Profession Designs...</option>
-				<option>Religion Designs...</option>
-			</select>
+		    <div id="design_div_normal">
+				<select id="pick_design" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+					<option selected>Nothing</option>
+					<option>Basic Designs...</option>
+					<option>Animal Designs...</option>
+					<option>Floral Designs...</option>
+					<option>Nature Designs...</option>
+					<option>Pattern Designs...</option>
+					<option>Profession Designs...</option>
+					<option>Religion Designs...</option>
+				</select>
+			</div>
+			<div id="design_div_cobbling">
+				<select id="pick_design_cobbling" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;">
+					<option selected>Nothing</option>
+				</select>
+			</div>
 			<div id="design_div_basic">
 				<select id="pick_design_basic" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
 			</div>
