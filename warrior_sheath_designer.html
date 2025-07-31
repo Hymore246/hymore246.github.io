@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Warrior Sheath Designer v1.8</TITLE>
+	<TITLE>Hymore's Warrior Sheath Designer v1.9</TITLE>
 	<STYLE>
 		div.sheath_text {
 			font-size: 30px;
@@ -61,6 +61,10 @@
 		- Reduced code bloat in changeValueDecoration2 function.
 		- Added bird familiar feather fringings.
 		- Added several missing gem types.
+		
+		v1.9
+		- Removed the extra descriptions from materials. Only night hound hide and cave gnome scalp remain.
+		
 		*/
 		
 		
@@ -273,13 +277,13 @@
 		const gems_zoisite = ["---ZOISITES---", "green and pink zoisite", "plum-flecked ruby zoisite"];
 		const gems_all = gems_aetherstone.concat(gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_baystone, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fishscale, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_shard, gems_shell, gems_smoldereye, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
 		const materials_fur = ["---FURS---", "fenghai fur", "waern fur"];
-		const materials_hide = ["---HIDES---", "bear hide", "boar hide", "brindlecat hide", "centaur hide", "centaur ranger hide", "gak hide", "grizzly bear hide", "jungle toad hide","leaper hide", "minotaur hide", "night hound hide", "orc hide", "puma hide", "pyrothag hide", "thrak hide", "trali hide", "triton hide", "troll hide", "urgh hide", "velnalin hide"];
-		const materials_pelt = ["---PELTS---", "forest ape pelt", "gak pelt", "griffin pelt", "lynx pelt", "marmot pelt", "panther pelt", "rat pelt", "rolton pelt", "rotting rolton pelt", "snowcat pelt", "spotted leaper pelt", "spotted leopard pelt", "warg pelt", "water hound pelt", "weasel pelt", "wolverine pelt"];		
+		const materials_hide = ["---HIDES---", "bear hide", "boar hide", "brindlecat hide", "centaur hide", "gak hide", "leaper hide", "minotaur hide", "night hound hide", "orc hide", "puma hide", "pyrothag hide", "thrak hide", "toad hide", "trali hide", "triton hide", "troll hide", "urgh hide", "velnalin hide"];
+		const materials_pelt = ["---PELTS---", "ape pelt", "gak pelt", "griffin pelt", "leaper pelt", "leopard pelt", "lynx pelt", "marmot pelt", "panther pelt", "rat pelt", "rolton pelt", "snowcat pelt", "warg pelt", "water hound pelt", "weasel pelt", "wolverine pelt"];		
 		const materials_scale = ["---SCALES---", "myklian scale", "shelfae scale", "sidewinder scale", "undansormr scale"];
-		const materials_scalp = ["---SCALPS---", "frozen scalp", "giant scalp", "cave gnome scalp", "hobgoblin scalp", "ice troll scalp", "kobold scalp", "orc scalp", "swamp troll scalp", "trali scalp", "troll scalp", "wight scalp", "zombie scalp"];
+		const materials_scalp = ["---SCALPS---", "frozen scalp", "giant scalp", "cave gnome scalp", "hobgoblin scalp", "ice troll scalp", "kobold scalp", "orc scalp", "trali scalp", "troll scalp", "wight scalp", "zombie scalp"];
 		const materials_sheepskin = ["---SHEEPSKINS---", "bighorn sheepskin"];
 		const materials_shroud = ["---SHROUDS---", "mummy's shroud"];
-		const materials_skin = ["---SKINS---", "bear skin", "boar skin", "caedera skin", "cobra skin", "cave nipper skin", "dirge skin", "giant skin", "glowing worm skin", "goblin skin", "hisskra skin", "kobold skin", "leopard skin", "madrinol skin", "mountain lion skin", "plains lion skin", "polar bear skin", "roa'ter skin", "salamander skin", "siren lizard skin", "snake skin", "spectre skin", "tsark skin", "troll skin", "viper skin", "vruul skin", "water moccasin skin", "wight skin"];
+		const materials_skin = ["---SKINS---", "bear skin", "boar skin", "caedera skin", "cobra skin", "dirge skin", "giant skin", "goblin skin", "hisskra skin", "kobold skin", "leopard skin", "lion skin", "lizard skin",  "madrinol skin", "nipper skin", "roa'ter skin", "salamander skin", "snake skin", "spectre skin", "tsark skin", "troll skin", "viper skin", "vruul skin", "water moccasin skin", "wight skin", "worm skin"];
 		const materials_wrap = [];
 		const materials_all = materials_fur.concat(materials_hide, materials_pelt, materials_scale, materials_scalp, materials_sheepskin, materials_shroud, materials_skin, materials_wrap);
 		const metals = ["alum", "brass", "bronze", "copper", "glaes", "gold", "imflass", "invar", "iron", "laje", "mithglin", "mithril", "ora", "platinum", "rhimar", "silver", "steel", "vaalin", "vaalorn", "veniom", "vultite"];
