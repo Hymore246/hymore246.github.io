@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Cobbling Designer v1.2</TITLE>
+	<TITLE>Hymore's Cobbling Designer v1.3</TITLE>
 	<STYLE>
 		div.cobbling_text {
 			color: black;
@@ -48,6 +48,11 @@
 		v1.2
 		- Added bird familiar feather fringings.
 		- Added new gem types warrior sheathes designer couldn't use.
+		
+		v1.3
+		- Added a few new material types.
+		- Updated several material names to be more accurate.
+		- Fixed calculateTextLength not including extra_spaces when checking max length limit.
 		*/
 		
 		/*
@@ -280,21 +285,21 @@
 		const gems_zircon = ["---ZIRCONS---", "brown zircon", "clear zircon", "green zircon", "snowflake zircon", "uncut zircon", "yellow zircon"];
 		const gems_zoisite = ["---ZOISITES---", "green and pink zoisite", "plum-flecked ruby zoisite"];
 		const gems_all = gems_aetherstone.concat(gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_baystone, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_cube, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_egg, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fishscale, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_orb, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_seaglass, gems_shard, gems_shell, gems_smoldereye, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_spur, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
-		const materials_buyable_cloth = ["---SILK---", "aneula", "byssine", "dupioni silk", "flyrsilk", "fringed silk", "raw silk", "silk", "lace", "lavender silk", "looped silk", "maedatha", "moire silk",  "mykal", "pale-marbled starsilk", "ridgeweaver silk", "sea silk", "Vornavian silk", "watered silk", "---WOOL---", "brushed wool", "rolton wool", "combed wool", "soft lambswool", "---OTHER---", "bourde", "canvas", "crisp taffeta", "embroidered velvet", "faviform brocade", "floral jacquard", "leather-bound tartan", "oilcloth", "plush velvet", "quilted satin","sailcloth", "satin", "scallop-weave brocatelle", "soft velvet", "spun cotton", "striped chambray", "striped damask", "suede-bound tweed"];
-		const materials_buyable_fur = ["---BUYABLE FUR---", "puma fur", "matted bear fur", "mottled warcat fur", "rabbit fur", "coyote fur"];
-		const materials_buyable_hide = ["---BUYABLE HIDES---", "boar hide", "brindlecat hide", "crocodile hide", "morduska hide", "panther hide", "puma hide", "pyrothag hide", "rolton hide", "thrak hide", "triton magus hide", "troll hide", "warthog hide"];
-		const materials_buyable_pelt = ["---BUYABLE PELTS---", "panther pelt", "panther pelt", "rat pelt", "spotted leaper pelt"];
-		const materials_buyable_skin = ["---BUYABLE SKINS---", "albino viper skin ", "eel skin", "gnoll hide", "goblin skin", "halibut skin", "iguana skin", "goat skin", "leopard skin", "salmon skin", "shark skin", "smooth shark skin", "manta ray skin", "minotaur hide", "kidskin", "kobold skin", "porpoise skin", "python skin", "rat skin", "rattlesnake skin", "sheep skin", "soft buckskin", "smooth doeskin", "stitched zombie skin", "troll chieftain skin", "troll hide", "tsark skin", "velnalin hide", "whale skin", "worm skin", "yeti hide"];	
+		const materials_buyable_cloth = ["---SILK---", "aneula", "byssine", "dupioni silk", "flyrsilk", "fringed silk", "raw silk", "silk", "lace", "lavender silk", "looped silk", "maedatha", "moire silk",  "mykal", "pale-marbled starsilk", "ridgeweaver silk", "sea silk", "Vornavian silk", "watered silk", "---WOOL---", "brushed wool", "rolton wool", "combed wool", "soft lambswool", "---OTHER---", "bourde", "canvas", "crisp taffeta", "cross-checkered linen", "embroidered velvet", "faviform brocade", "floral jacquard", "leather-bound tartan", "leaf-patterned damask", "oilcloth", "plush velvet", "quilted satin", "sailcloth", "satin", "scallop-weave brocatelle", "soft velvet", "spun cotton", "striped chambray", "striped damask", "suede-bound tweed"];
+		const materials_buyable_fur = ["---BUYABLE FUR---", "puma fur", "matted bear fur", "mottled warcat fur", "rabbit fur", "smoky-hued coyote fur"];
+		const materials_buyable_hide = ["---BUYABLE HIDES---", "boar hide", "brindlecat hide", "crocodile hide", "morduska hide", "panther hide", "puma hide", "pyrothag hide", "rolton hide", "sea thrak hide", "triton magus hide", "troll hide", "velnalin hide", "warthog hide", "yeti hide"];
+		const materials_buyable_pelt = ["---BUYABLE PELTS---", "panther pelt", "rat pelt", "spotted leaper pelt"];
+		const materials_buyable_skin = ["---BUYABLE SKINS---", "albino viper skin", "eel skin", "gnoll hide", "goblin skin", "halibut skin", "iguana skin", "goat skin", "leopard skin", "salmon skin", "shark skin", "smooth shark skin", "manta ray skin", "minotaur hide", "kidskin", "kobold skin", "porpoise skin", "python skin", "rainbow snake skin", "rat skin", "rattlesnake skin", "sheep skin", "soft buckskin", "smooth doeskin", "stitched zombie skin", "troll chieftain skin", "troll hide", "tsark skin", "undertaker bat skin", "whale skin", "worm skin"];	
 		const materials_hair = ["---HAIR---", "goat hair", "lion hair"];		
 		const materials_critter_fur = ["---CRITTER FUR---", "fenghai fur", "waern fur"];		
 		const materials_buyable_natural = ["---BUYABLE NATURAL---", "balsa", "driftwood", "ebonwood", "lacewood", "mistwood", "rosewood", "sea glass", "teak", "willow"];	
-		const materials_buyable_leather = ["---BUYABLE LEATHER---", "leather", "calfskin", "doeskin", "suede", "distressed leather", "laceworked leather", "marbled leather", "tanned leather", "walrus leather", "oiled leather", "brushed suede", "latticed suede", "sleek calfskin", "soft calfskin", "soft doeskin", "suede shearling"];
+		const materials_buyable_leather = ["---BUYABLE LEATHER---", "leather", "calfskin", "doeskin", "suede", "distressed leather", "laceworked leather", "marbled leather", "oiled leather", "punched leather", "scaled leather", "tanned leather", "walrus leather", "brushed suede", "latticed suede", "sleek calfskin", "soft calfskin", "soft doeskin", "soft sheepskin", "suede shearling"];
 		const materials_buyable_metal = ["---BUYABLE METAL---", "interlocked ringmail", "silver mesh", "woven chain mesh"];
 		const materials_natural = ["---NATURAL---", "birch bark", "papyrus", "linden bark", "waxed paper", "willow bark", "woven grass"];
 		const materials_all_natural = [].concat(materials_buyable_natural, materials_natural);
-		const materials_hide = ["---CRITTER HIDES---", "bear hide", "boar hide", "brindlecat hide", "centaur hide", "centaur ranger hide", "gak hide", "grizzly bear hide", "jungle toad hide", "leaper hide", "minotaur hide", "night hound hide", "orc hide", "puma hide", "pyrothag hide", "thrak hide", "trali hide", "triton hide", "troll hide", "urgh hide", "velnalin hide"];
-		const materials_pelt = ["---CRITTER PELTS---", "forest ape pelt", "gak pelt", "griffin pelt", "lynx pelt", "marmot pelt", "panther pelt", "rat pelt", "rolton pelt", "rotting rolton pelt", "snowcat pelt", "spotted leaper pelt", "spotted leopard pelt", "warg pelt", "water hound pelt", "weasel pelt", "wolverine pelt"];	
-		const materials_skin = ["---CRITTER SKINS---", "bear skin", "boar skin", "caedera skin", "cobra skin", "cave nipper skin", "dirge skin", "giant skin", "glowing worm skin", "goblin skin", "hisskra skin", "kobold skin", "leopard skin", "madrinol skin", "mountain lion skin", "plains lion skin", "polar bear skin", "roa'ter skin", "salamander skin", "siren lizard skin", "snake skin", "spectre skin", "tsark skin", "troll skin", "viper skin", "vruul skin", "water moccasin skin", "wight skin"];
+		const materials_hide = ["---CRITTER HIDES---", "bear hide", "boar hide", "brindlecat hide", "centaur hide", "gak hide", "leaper hide", "minotaur hide", "night hound hide", "orc hide", "puma hide", "pyrothag hide", "thrak hide", "toad hide", "trali hide", "triton hide", "troll hide", "urgh hide", "velnalin hide"];
+		const materials_pelt = ["---CRITTER PELTS---", "ape pelt", "gak pelt", "griffin pelt", "leaper pelt", "leopard pelt", "lynx pelt", "marmot pelt", "panther pelt", "rat pelt", "rolton pelt", "snowcat pelt", "warg pelt", "water hound pelt", "weasel pelt", "wolverine pelt"];		
+		const materials_skin = ["---CRITTER SKINS---", "bear skin", "boar skin", "caedera skin", "cobra skin", "dirge skin", "giant skin", "goblin skin", "hisskra skin", "kobold skin", "leopard skin", "lion skin", "lizard skin",  "madrinol skin", "nipper skin", "roa'ter skin", "salamander skin", "snake skin", "spectre skin", "tsark skin", "troll skin", "viper skin", "vruul skin", "water moccasin skin", "wight skin", "worm skin"];
 		const materials_buyable_skins = materials_buyable_hide.concat(materials_buyable_pelt, materials_buyable_skin);
 		const materials_critter_skins = materials_hide.concat(materials_pelt, materials_skin);
 		const materials_skins_generic = ["---GENERIC---", "hide", "pelt", "skin"];
@@ -982,7 +987,7 @@
 			document.getElementById("field_spaces").innerHTML = "Spaces between fields: " + field_spaces;
 			document.getElementById("total_length").innerHTML = "Total Character Length: " + (total_length + field_spaces);
 			
-			if(total_length > 75) {
+			if((total_length + field_spaces) > 75) {
 				document.getElementById("cobblingitem").className = "cobbling_text_toohigh";
 				document.getElementById("total_length").className = "character_length_toohigh";
 			}
