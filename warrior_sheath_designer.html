@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Warrior Sheath Designer v1.9</TITLE>
+	<TITLE>Hymore's Warrior Sheath Designer v1.10</TITLE>
 	<STYLE>
 		div.sheath_text {
 			font-size: 30px;
@@ -64,6 +64,10 @@
 		
 		v1.9
 		- Removed the extra descriptions from materials. Only night hound hide and cave gnome scalp remain.
+				
+		v1.10
+		- Fixed a bug that prevented createRandomSheath() from using decoration1 field.
+		- Added new familiar feathers.		
 		
 		*/
 		
@@ -101,7 +105,7 @@
 		const fringe_ear = ["---EARS---", "hawk-owl ear", "hobgoblin ear", "hound ear", "kobold ear", "orc ear", "rolton ear", "troll ear"];
 		const fringe_eye = ["---EYES---", "cyclops eye", "eye", "rolton eye", "seeker eye", "spider eye", "troll eye", "wraith eye"];
 		const fringe_fang = ["---FANGS---", "direbear fang", "faeroth fang", "goblin fang", "rodent fang", "snake fang", "troll fang", "viper fang"];
-		const fringe_feather = ["---FEATHERS---", "cockatrice feather", "eagle feather", "falcon feather", "firebird feather", "griffin feather", "harpy feather", "hawk feather", "owl feather", "parakeet feather", "parrot feather", "penguin feather", "raptor feather", "raven feather", "vulture feather"];
+		const fringe_feather = ["---FEATHERS---", "cockatrice feather", "eagle feather", "falcon feather", "firebird feather", "griffin feather", "gyrfalcon feather", "harpy feather", "hawk feather", "hummingbird feather", "merlin feather", "owl feather", "parakeet feather", "parrot feather", "penguin feather", "pelican feather", "pithohui feather", "ptarmigan feather", "puffin feather", "raptor feather", "raven feather", "toucan feather", "vulture feather"];
 		const fringe_foreclaw = ["---FORECLAWS---", "kresh foreclaw"];
 		const fringe_horn = ["---HORNS---", "gnarp horn", "minotaur horn", "rolton horn", "velnalin horn", "vor'taz horn"];
 		const fringe_incisor = ["---INCISORS---", "tiger incisor"];
@@ -835,12 +839,12 @@
 		*/
 		function createRandomSheath() {			
 			//For decoration1 section
-			deco_dict = {"Colors...":'pick_color', "Fringing...":'pick_fringing_deco', "Inlaid Gem...":'pick_inlaid_deco', "Bound in Metal...":'pick_binding_deco', "Trimmed with Metal...":'pick_trim_deco'};
-			choice_dict = {"Colors...":'Color', "Fringing...":'Fringing', "Inlaid Gem...":'Inlaid', "Bound in Metal...":'Metal', "Trimmed with Metal...":'Metal'};			
+			deco1_dict = {"Colors...":"pick_color", "Fringing...":"pick_fringing_deco", "Inlaid Gem...":"pick_inlaid_deco", "Bound in Metal...":"pick_binding_deco", "Trimmed with Metal...":"pick_trim_deco"};
+			choice_dict = {"Colors...":"Color", "Fringing...":"Fringing", "Inlaid Gem...":"Inlaid", "Bound in Metal...":"Metal", "Trimmed with Metal...":"Metal"};			
 			
 			//For decoration2 section
-			deco2_dict = {"One Fringing...":'pick_fringing_specific_deco2', "Two Fringings...":'pick_fringing_deco2', "One Inlaid Gem...":'pick_inlaid_specific_deco2', "Two Inlaid Gems...": "pick_inlaid_deco2", "Bound in Metal...":'pick_binding_deco2', "Trimmed with Metal...":'pick_trim_deco2'};
-			combo_dict = {"One Fringing...":null, "Two Fringings...":'pick_fringing2_deco2', "One Inlaid Gem...":null, "Two Inlaid Gems...": "pick_inlaid2_deco2", "Bound in Metal...":"pick_binding2_deco2", "Trimmed with Metal...":"pick_trim2_deco2"};
+			deco2_dict = {"One Fringing...":"pick_fringing_specific_deco2", "Two Fringings...":"pick_fringing_deco2", "One Inlaid Gem...":"pick_inlaid_specific_deco2", "Two Inlaid Gems...": "pick_inlaid_deco2", "Bound in Metal...":"pick_binding_deco2", "Trimmed with Metal...":"pick_trim_deco2"};
+			combo_dict = {"One Fringing...":null, "Two Fringings...":"pick_fringing2_deco2", "One Inlaid Gem...":null, "Two Inlaid Gems...": "pick_inlaid2_deco2", "Bound in Metal...":"pick_binding2_deco2", "Trimmed with Metal...":"pick_trim2_deco2"};
 			
 			//Reset all values before doing anything.
 			resetAll();			
@@ -859,7 +863,7 @@
 					
 				if(select_deco.value != "Nothing") {
 					do {
-						select  = document.getElementById(deco_dict[select_deco.value]);
+						select  = document.getElementById(deco1_dict[select_deco.value]);
 						options = select.children;  
 						random  = Math.floor(Math.random() * options.length);
 					} while (options[random].value[1] == "-");				
