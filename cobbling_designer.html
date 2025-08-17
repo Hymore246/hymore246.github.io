@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Cobbling Designer v1.3</TITLE>
+	<TITLE>Hymore's Cobbling Designer v1.4</TITLE>
 	<STYLE>
 		div.cobbling_text {
 			color: black;
@@ -23,6 +23,9 @@
 		.invalid_option {
 			font-style: italic;
 			color: red;
+		}
+		.hidden-elem {
+			display: none;
 		}
 	</STYLE>
 	<SCRIPT>
@@ -53,6 +56,13 @@
 		- Added a few new material types.
 		- Updated several material names to be more accurate.
 		- Fixed calculateTextLength not including extra_spaces when checking max length limit.
+		
+		v1.4
+		- Added "cobbling trim" and "cobbling upper" item types with code to support the choices.
+		- Added new familiar feathers.
+		- Fix a bug that caused "Nothing" choice to not work with Adornment fields.
+		- Refactored changeValueItemType to reduce code bloat and fix several bugs.
+		
 		*/
 		
 		/*
@@ -92,13 +102,13 @@
 		const fringe_appendage = ["---APPENDAGES---", "thorn-ridden appendage"];
 		const fringe_beard = ["---BEARD---", "mossy beard", "orc beard", "troll beard"];
 		const fringe_bone = ["---BONES---", "finger bone", "giant bone", "golem bone", "skeleton bone"];
-		const fringe_branch = ["---BRANCHES---", "frosted branche"];
+		const fringe_branch = ["---BRANCHES---", "frosted branch"];
 		const fringe_canine = ["---CANINES---", "pra'eda canine", "rotted canine", "yellowed canine"];
 		const fringe_claw = ["---CLAWS---", "bear claw", "bobcat claw", "cat claw", "claw", "ghoul claw", "orc claw", "tegursh claw", "veaba claw", "vesperti claw", "wight claw"];
 		const fringe_ear = ["---EARS---", "hawk-owl ear", "hobgoblin ear", "hound ear", "kobold ear", "orc ear", "rolton ear", "troll ear"];
 		const fringe_eye = ["---EYES---", "cyclops eye", "eye", "rolton eye", "seeker eye", "spider eye", "troll eye", "wraith eye"];
 		const fringe_fang = ["---FANGS---", "direbear fang", "faeroth fang", "goblin fang", "rodent fang", "snake fang", "troll fang", "viper fang"];
-		const fringe_feather = ["---FEATHERS---", "cockatrice feather", "eagle feather", "falcon feather", "firebird feather", "griffin feather", "harpy feather", "hawk feather", "owl feather", "parakeet feather", "parrot feather", "penguin feather", "raptor feather", "raven feather", "vulture feather"];
+		const fringe_feather = ["---FEATHERS---", "cockatrice feather", "eagle feather", "falcon feather", "firebird feather", "griffin feather", "gyrfalcon feather", "harpy feather", "hawk feather", "hummingbird feather", "merlin feather", "owl feather", "parakeet feather", "parrot feather", "penguin feather", "pelican feather", "pithohui feather", "ptarmigan feather", "puffin feather", "raptor feather", "raven feather", "toucan feather", "vulture feather"];
 		const fringe_foreclaw = ["---FORECLAWS---", "kresh foreclaw"];
 		const fringe_horn = ["---HORNS---", "gnarp horn", "minotaur horn", "rolton horn", "velnalin horn", "vor'taz horn"];
 		const fringe_incisor = ["---INCISORS---", "tiger incisor"];
@@ -334,8 +344,8 @@
 	
 	
 		/*
-		Run when the page loads and populates all the dropdown menues before calling resetAll() to
-		assign everything to their default values.
+			Run when the page loads and populates all the dropdown menues before calling resetAll() to
+			assign everything to their default values.
 		*/
 		function init() {
 			//Populate all the menus that do not need many menues	
@@ -392,8 +402,7 @@
 		
 		/*
 			Using all the strings in values_array,
-			add each one to the dropdown menu, menu_id.
-			
+			add each one to the dropdown menu, menu_id.			
 		*/
 		function populateDropDown(menu_id, values_array) {		
 			select = document.getElementById(menu_id);
@@ -499,8 +508,8 @@
 		
 
 		/*
-		Update the Article text field with a new value.
-		No work needs to be done beyond assigning the value.
+			Update the Article text field with a new value.
+			No work needs to be done beyond assigning the value.
 		*/		
 		function changeValueArticle(set_value, caller_id) {
 			return set_value;
@@ -576,14 +585,14 @@
 				All the divs from the other adornment section are hidden as well.
 				This is skipped if the choice was from one of the sub menus.
 			*/	
-			if(div_keys.includes(set_value)) {	
+			if(div_keys.includes(set_value) || set_value == "Nothing") {	
 				for(i=0; i < div_keys.length; i++) {
 					if(set_value == div_keys[i]) {
-						div_dict[div_keys[i]].style.display = 'block';
+						div_dict[div_keys[i]].classList.remove("hidden-elem");
 						second_choice = primary_choice_dict[set_value];
 					}
 					else {
-						div_dict[div_keys[i]].style.display = 'none';				
+						div_dict[div_keys[i]].classList.add("hidden-elem");				
 					}
 				}
 				
@@ -613,20 +622,20 @@
 		}
 
 		/*
-		Update the Color text field with a new value.
-		Unless a custom color is used, color will be changed to set_value's value.
+			Update the Color text field with a new value.
+			Unless a custom color is used, color will be changed to set_value's value.
 		*/		
 		function changeValueColor(set_value, prev_value, caller_id) {
 			color_custom_div = document.getElementById("color_div_custom");
 				
 			if(caller_id == "pick_color") {			
-				color_custom_div.style.display = 'none';	
+				color_custom_div.classList.add("hidden-elem");	
 				
 				if(set_value == 'Nothing') {
 					return "";
 				}
 				else if(set_value == 'Custom Color...') {
-					color_custom_div.style.display = 'block';
+					color_custom_div.classList.remove("hidden-elem");
 					
 					if(document.getElementById("custom_color_input").value == "") {
 						return "...";
@@ -670,18 +679,18 @@
 			custom_value = document.getElementById("custom_material_input").value;						
 			
 			if(caller_id == "pick_material") {
-				cloth_div.style.display = 'none';				
-				leather_div.style.display = 'none';
-				metal_div.style.display = 'none';
-				natural_div.style.display = 'none';
-				skins_div.style.display = 'none';
-				custom_div.style.display = 'none';
+				cloth_div.classList.add("hidden-elem");				
+				leather_div.classList.add("hidden-elem");
+				metal_div.classList.add("hidden-elem");
+				natural_div.classList.add("hidden-elem");
+				skins_div.classList.add("hidden-elem");
+				custom_div.classList.add("hidden-elem");
 								
 				if(set_value == "Nothing") {
 					return "";
 				}
 				else if(set_value == "Custom Material...") {
-					custom_div.style.display = 'block';	
+					custom_div.classList.remove("hidden-elem");	
 					
 					if(custom_value == "") {
 						return "...";
@@ -690,23 +699,23 @@
 					return custom_value;
 				}
 				else if(set_value == "Cloth...") {
-					cloth_div.style.display = 'block';
+					cloth_div.classList.remove("hidden-elem");
 					return cloth_value;
 				}
 				else if(set_value == "Leather...") {
-					leather_div.style.display = 'block';
+					leather_div.classList.remove("hidden-elem");
 					return leather_value;
 				}
 				else if(set_value == "Metal...") {
-					metal_div.style.display = 'block';
+					metal_div.classList.remove("hidden-elem");
 					return metal_value;
 				}
 				else if(set_value == "Natural...") {
-					natural_div.style.display = 'block';
+					natural_div.classList.remove("hidden-elem");
 					return natural_value;
 				}
 				else if(set_value == "Hide/Pelt/Skin...") {
-					skins_div.style.display = 'block';
+					skins_div.classList.remove("hidden-elem");
 					return skins_value;
 				}
 			}
@@ -754,96 +763,56 @@
 			adornment1_select = document.getElementById("pick_adornment1");
 			adornment2_select = document.getElementById("pick_adornment2");
 			
-			//Reset all the options to be valid.
-			beaded_adornment1.className = "";
-			buckled_adornment1.className = "";
-			buttoned_adornment1.className = "";
-			capped_adornment1.className = "";
-			fringed_adornment1.className = "";
-			inset_adornment1.className = "";
-			laced_adornment1.className = "";
-			lined_adornment1.className = "";
-			strapped_adornment1.className = "";
-			studded_adornment1.className = "";
-			toed_adornment1.className = "";
-			trimmed_adornment1.className = "";
 			
-			beaded_adornment2.className = "";
-			buckled_adornment2.className = "";
-			buttoned_adornment2.className = "";
-			capped_adornment2.className = "";
-			fringed_adornment2.className = "";
-			inset_adornment2.className = "";
-			laced_adornment2.className = "";
-			lined_adornment2.className = "";
-			strapped_adornment2.className = "";
-			studded_adornment2.className = "";
-			toed_adornment2.className = "";
-			trimmed_adornment2.className = "";
+			adornment_array_all = [beaded_adornment1, buckled_adornment1, buttoned_adornment1, capped_adornment1, fringed_adornment1, inset_adornment1, laced_adornment1, lined_adornment1, strapped_adornment1, studded_adornment1, toed_adornment1, trimmed_adornment1, beaded_adornment2, buckled_adornment2, buttoned_adornment2, capped_adornment2, fringed_adornment2, inset_adornment2, laced_adornment2, lined_adornment2, strapped_adornment2, studded_adornment2, toed_adornment2, trimmed_adornment2];
 			
+			adornment_array_shoes1 = [capped_adornment1, lined_adornment1, studded_adornment1, capped_adornment2, lined_adornment2, studded_adornment2];
+			adornment_array_shoes2 = [capped_adornment1, toed_adornment1, capped_adornment2, capped_adornment2, toed_adornment2];
+			adornment_array_shoes3 = [strapped_adornment1, strapped_adornment2];
+			adornment_array_boots = [capped_adornment1, lined_adornment1, studded_adornment1, capped_adornment2, lined_adornment2, studded_adornment2];
+			adornment_array_slippers = [buckled_adornment1, buttoned_adornment1, capped_adornment1, capped_adornment1, lined_adornment1, strapped_adornment1, toed_adornment1, buckled_adornment2, buttoned_adornment2, capped_adornment2, laced_adornment2, lined_adornment2, strapped_adornment2, toed_adornment2];
+			adornment_array_sandals = [buckled_adornment1, capped_adornment1, lined_adornment1, toed_adornment1, buckled_adornment2, capped_adornment2, lined_adornment2, toed_adornment2];
+			adornment_array_invalid = [];
+						
 			//Not all foot wear allow all options. Set options as
 			//"invalid_option" as appropriate to the footwear.
-			if(set_value == "brogues" || set_value == "divit-toed" || 
+			if(set_value == "brogues" || set_value == "divit-toed shoes" || 
 			   set_value == "open-toed shoes") {
-				capped_adornment1.className = "invalid_option";
-				lined_adornment1.className = "invalid_option";
-				studded_adornment1.className = "invalid_option";
-				capped_adornment2.className = "invalid_option";
-				lined_adornment2.className = "invalid_option";
-				studded_adornment2.className = "invalid_option";
+			   adornment_array_invalid = adornment_array_shoes1;
 			}
 			else if(set_value == "dancing shoes" || set_value == "low-heeled shoes" || 
 			   set_value == "moccasins") {
-				capped_adornment1.className = "invalid_option";
-				toed_adornment1.className = "invalid_option";
-				capped_adornment2.className = "invalid_option";
-				toed_adornment2.className = "invalid_option";
+			   adornment_array_invalid = adornment_array_shoes2;
 			}
-			else if(set_value == "poulaines" || set_value == "squared-toed shoes") {
-				strapped_adornment1.className = "invalid_option";
-				strapped_adornment2.className = "invalid_option";
+			else if(set_value == "poulaines" || set_value == "square-toed shoes") {
+			   adornment_array_invalid = adornment_array_shoes3;
 			}
 			else if(set_value == "workboots") {
-				capped_adornment1.className = "invalid_option";
-				lined_adornment1.className = "invalid_option";
-				studded_adornment1.className = "invalid_option";
-				capped_adornment2.className = "invalid_option";
-				lined_adornment2.className = "invalid_option";
-				studded_adornment2.className = "invalid_option";
+			   adornment_array_invalid = adornment_array_boots;
 			}
 			else if(types_slippers.includes(set_value)) {	
-				buckled_adornment1.className = "invalid_option";			
-				buttoned_adornment1.className = "invalid_option";
-				capped_adornment1.className = "invalid_option";
-				laced_adornment1.className = "invalid_option";
-				lined_adornment1.className = "invalid_option";
-				strapped_adornment1.className = "invalid_option";
-				toed_adornment1.className = "invalid_option";
-				buckled_adornment2.className = "invalid_option";			
-				buttoned_adornment2.className = "invalid_option";
-				capped_adornment2.className = "invalid_option";
-				laced_adornment2.className = "invalid_option";
-				lined_adornment2.className = "invalid_option";
-				strapped_adornment2.className = "invalid_option";
-				toed_adornment2.className = "invalid_option";
+			   adornment_array_invalid = adornment_array_slippers;
 			}
 			else if(types_sandals.includes(set_value)) {		
-				buckled_adornment1.className = "invalid_option";					
-				capped_adornment1.className = "invalid_option";
-				lined_adornment1.className = "invalid_option";
-				toed_adornment1.className = "invalid_option";
-				buckled_adornment2.className = "invalid_option";					
-				capped_adornment2.className = "invalid_option";
-				lined_adornment2.className = "invalid_option";
-				toed_adornment2.className = "invalid_option";
+			   adornment_array_invalid = adornment_array_sandals;
 			}
 			
-			//If the currently choice for an adornment is now invalid, change it to none.
+			//Go through all adornment types. If the invalid array contains the adornment type, 
+			//mark it invalid. Otherwise remove the invalid mark.
+			for(var i = 0; i < adornment_array_all.length; i++) {
+				if(adornment_array_invalid.includes(adornment_array_all[i])) {
+					adornment_array_all[i].classList.add("invalid_option");
+				}
+				else {
+					adornment_array_all[i].classList.remove("invalid_option");				
+				}
+			}
+						
+			//If the currently choice for an adornment is now invalid, change it to Nothing.
 			if(adornment1_select.options[adornment1_select.selectedIndex].className == "invalid_option") {
 				adornment1_select.value = "Nothing";
 				obj = document.getElementById("pick_adornment1")
-				changeValue(obj.value, obj.oldvalue, obj.id);
-			
+				changeValue(obj.value, obj.oldvalue, obj.id);			
 			}
 			else if(adornment2_select.options[adornment2_select.selectedIndex].className == "invalid_option") {
 				adornment2_select.value = "Nothing";
@@ -903,7 +872,7 @@
 			
 			//Clear the other adornment option
 			document.getElementById("pick_adornment1").value = "Nothing";
-			document.getElementById("adornment1").innerHTML = "";			
+			document.getElementById("adornment1").innerHTML = "";	
 			
 			/*
 				If set_value is an option from the highest(primary) drop down, 
@@ -911,14 +880,14 @@
 				All the divs from the other adornment section are hidden as well.
 				This is skipped if the choice was from one of the sub menus.
 			*/
-			if(div_keys.includes(set_value)) {	
+			if(div_keys.includes(set_value) || set_value == "Nothing") {	
 				for(i=0; i < div_keys.length; i++) {
 					if(set_value == div_keys[i]) {
-						div_dict[div_keys[i]].style.display = 'block';
+						div_dict[div_keys[i]].classList.remove("hidden-elem");
 						second_choice = primary_choice_dict[set_value];
 					}
 					else {
-						div_dict[div_keys[i]].style.display = 'none';				
+						div_dict[div_keys[i]].classList.add("hidden-elem");				
 					}
 				}
 				
@@ -1035,7 +1004,7 @@
 				setInitialValue(document.getElementById("pick_color"));
 				document.getElementById("color").innerHTML = "";
 				document.getElementById("custom_color_input").value = "";
-				document.getElementById("color_div_custom").style.display = 'none';	
+				document.getElementById("color_div_custom").classList.add("hidden-elem");	
 			}
 			
 			if(!document.getElementById("adornment1_lock").checked) {
@@ -1069,19 +1038,19 @@
 				document.getElementById("option_adornment1_toed").className = "";
 				document.getElementById("option_adornment1_trimmed").className = "";												
 				
-				document.getElementById("adornment1_div_beaded").style.display = 'none';
-				document.getElementById("adornment1_div_buckled").style.display = 'none';
-				document.getElementById("adornment1_div_buttoned").style.display = 'none';
-				document.getElementById("adornment1_div_capped").style.display = 'none';
-				document.getElementById("adornment1_div_fringed").style.display = 'none';
-				document.getElementById("adornment1_div_inset").style.display = 'none';
-				document.getElementById("adornment1_div_laced").style.display = 'none';
-				document.getElementById("adornment1_div_lining").style.display = 'none';
-				document.getElementById("adornment1_div_strapped").style.display = 'none';
-				document.getElementById("adornment1_div_studded").style.display = 'none';
-				document.getElementById("adornment1_div_toed").style.display = 'none';
-				document.getElementById("adornment1_div_trimmed").style.display = 'none';
-				document.getElementById("adornment1_div_custom").style.display = 'none';
+				document.getElementById("adornment1_div_beaded").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_buckled").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_buttoned").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_capped").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_fringed").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_inset").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_laced").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_lining").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_strapped").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_studded").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_toed").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_trimmed").classList.add("hidden-elem");
+				document.getElementById("adornment1_div_custom").classList.add("hidden-elem");
 			}
 				
 			if(!document.getElementById("material_lock").checked) {
@@ -1093,12 +1062,12 @@
 				setInitialValue(document.getElementById("pick_material_skins"));
 				document.getElementById("material").innerHTML = "";
 				document.getElementById("custom_material_input").value = "";	
-				document.getElementById("material_div_cloth").style.display = 'none';
-				document.getElementById("material_div_leather").style.display = 'none';
-				document.getElementById("material_div_metal").style.display = 'none';
-				document.getElementById("material_div_natural").style.display = 'none';
-				document.getElementById("material_div_skins").style.display = 'none';
-				document.getElementById("material_div_custom").style.display = 'none';
+				document.getElementById("material_div_cloth").classList.add("hidden-elem");
+				document.getElementById("material_div_leather").classList.add("hidden-elem");
+				document.getElementById("material_div_metal").classList.add("hidden-elem");
+				document.getElementById("material_div_natural").classList.add("hidden-elem");
+				document.getElementById("material_div_skins").classList.add("hidden-elem");
+				document.getElementById("material_div_custom").classList.add("hidden-elem");
 				
 			}
 				
@@ -1140,19 +1109,19 @@
 				document.getElementById("option_adornment2_toed").className = "";
 				document.getElementById("option_adornment2_trimmed").className = "";				
 				
-				document.getElementById("adornment2_div_beaded").style.display = 'none';
-				document.getElementById("adornment2_div_buckled").style.display = 'none';
-				document.getElementById("adornment2_div_buttoned").style.display = 'none';
-				document.getElementById("adornment2_div_capped").style.display = 'none';
-				document.getElementById("adornment2_div_fringed").style.display = 'none';
-				document.getElementById("adornment2_div_inset").style.display = 'none';
-				document.getElementById("adornment2_div_laced").style.display = 'none';
-				document.getElementById("adornment2_div_lining").style.display = 'none';
-				document.getElementById("adornment2_div_strapped").style.display = 'none';
-				document.getElementById("adornment2_div_studded").style.display = 'none';
-				document.getElementById("adornment2_div_toed").style.display = 'none';
-				document.getElementById("adornment2_div_trimmed").style.display = 'none';
-				document.getElementById("adornment2_div_custom").style.display = 'none';				
+				document.getElementById("adornment2_div_beaded").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_buckled").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_buttoned").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_capped").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_fringed").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_inset").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_laced").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_lining").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_strapped").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_studded").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_toed").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_trimmed").classList.add("hidden-elem");
+				document.getElementById("adornment2_div_custom").classList.add("hidden-elem");				
 			}						
 		}
 		
