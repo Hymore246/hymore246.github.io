@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Warrior Sheath Designer v1.10</TITLE>
+	<TITLE>Hymore's Warrior Sheath Designer v1.11</TITLE>
 	<STYLE>
 		div.sheath_text {
 			font-size: 30px;
@@ -8,6 +8,9 @@
 			position: fixed;
 			bottom: 15px;
 			left: 15px;
+		}
+		.hidden-elem {
+			display: none;
 		}
 	</STYLE>
 	<SCRIPT>
@@ -69,8 +72,11 @@
 		- Fixed a bug that prevented createRandomSheath() from using decoration1 field.
 		- Added new familiar feathers.		
 		
-		*/
+		v1.11
+		- Updated hide/show HTML element functionality.
+		- Refactored changeValueSheathStyle to fix several errors.
 		
+		*/		
 		
 		
 		/*
@@ -99,7 +105,7 @@
 		const fringe_appendage = ["---APPENDAGES---", "thorn-ridden appendage"];
 		const fringe_beard = ["---BEARD---", "mossy beard", "orc beard", "troll beard"];
 		const fringe_bone = ["---BONES---", "finger bone", "giant bone", "golem bone", "skeleton bone"];
-		const fringe_branch = ["---BRANCHES---", "frosted branche"];
+		const fringe_branch = ["---BRANCHES---", "frosted branch"];
 		const fringe_canine = ["---CANINES---", "pra'eda canine", "rotted canine", "yellowed canine"];
 		const fringe_claw = ["---CLAWS---", "bear claw", "bobcat claw", "cat claw", "claw", "ghoul claw", "orc claw", "tegursh claw", "veaba claw", "vesperti claw", "wight claw"];
 		const fringe_ear = ["---EARS---", "hawk-owl ear", "hobgoblin ear", "hound ear", "kobold ear", "orc ear", "rolton ear", "troll ear"];
@@ -317,11 +323,11 @@
 			populateDropDown("pick_fringing_specific_deco2", fringe_all);
 			populateDropDown("pick_inlaid_specific_deco2", gems_all);			
 
-			//resetAll() sets everything to their default values
 			document.getElementById("decoration1_lock").checked = false;
 			document.getElementById("material_lock").checked = false;
 			document.getElementById("sheath_type_lock").checked = false;
 			document.getElementById("decoration2_lock").checked = false;
+			//resetAll() sets everything to their default values
 			resetAll();
 		}
 		
@@ -370,8 +376,8 @@
 		
 		
 		/*
-		Main function of the tool. Currently serves as a wrapper for the four sub-functions
-		that will update a section of the sheath description.
+			Main function of the tool. Currently serves as a wrapper for the four sub-functions
+			that will update a section of the sheath description.
 		*/
 		function changeValue(set_value, prev_value, caller_id) {
 			//Any option that starts with '-' is a non-option that shouldn't be picked.
@@ -431,8 +437,8 @@
 		}
 
 		/*
-		Update the Decoration1 text field with a new value.
-		All Decoration1 option will call this function.
+			Update the Decoration1 text field with a new value.
+			All Decoration1 option will call this function.
 		*/
 		function changeValueDecoration1(set_value, caller_id) {		
 			deco_dict = {"pick_color":"", "pick_fringing_deco": " fringed", "pick_inlaid_deco": " inlaid", "pick_binding_deco": " bound", "pick_trim_deco": " trimmed"};
@@ -456,70 +462,69 @@
 			fringing_custom = document.getElementById("deco2_div_fringing_custom");
 			inlaid_custom = document.getElementById("deco2_div_inlaid_custom");
 			
-			colors.style.display = 'none';
-			fringing.style.display = 'none';
-			gems.style.display = 'none';
-			binding.style.display = 'none';
-			trim.style.display = 'none';
-			
+			colors.classList.add("hidden-elem");
+			fringing.classList.add("hidden-elem");
+			gems.classList.add("hidden-elem");
+			binding.classList.add("hidden-elem");
+			trim.classList.add("hidden-elem");			
 			
 			switch(set_value) {
 				case "Nothing":
 					return "";
 					
 				case "Colors...":
-					colors.style.display = 'block';
+					colors.classList.remove("hidden-elem");
 					
 					return document.getElementById("pick_color").value;		
 					
 				case "Fringing...":
-					fringing.style.display = 'block';	
+					fringing.classList.remove("hidden-elem");	
 					
 					if(deco2.value == "One Fringing..." || deco2.value == "Two Fringings..." || 
 					   deco2.value == "Custom Fringing...") {
 						deco2.value = "Nothing";
 						document.getElementById("decoration2").innerHTML = "";
-						fringing_specific.style.display = 'none';
-						fringing2.style.display = 'none';
-						fringing_custom.style.display = 'none';
+						fringing_specific.classList.add("hidden-elem");
+						fringing2.classList.add("hidden-elem");
+						fringing_custom.classList.add("hidden-elem");
 					}		
 					
 					return document.getElementById("pick_fringing_deco").value + " fringed";	
 					
 				case "Inlaid Gem...":
-					gems.style.display = 'block';
+					gems.classList.remove("hidden-elem");
 					
 					if(deco2.value == "One Inlaid Gem..." || deco2.value == "Two Inlaid Gems..." || 
 					   deco2.value == "Custom Inlaid Gem...") {
 						deco2.value = "Nothing";
 						document.getElementById("decoration2").innerHTML = "";
-						gem_specific.style.display = 'none';
-						gems2.style.display = 'none';
-						inlaid_custom.style.display = 'none';
+						gem_specific.classList.add("hidden-elem");
+						gems2.classList.add("hidden-elem");
+						inlaid_custom.classList.add("hidden-elem");
 					}
 					
 					return document.getElementById("pick_inlaid_deco").value + " inlaid";
 					
 				case "Bound in Metal...":
-					binding.style.display = 'block';
+					binding.classList.remove("hidden-elem");
 					
 					if(deco2.value == "Bound in Metal..." || deco2.value == "Trimmed with Metal...") {
 						deco2.value = "Nothing";
 						document.getElementById("decoration2").innerHTML = "";
-						binding2.style.display = 'none';
-						trim2.style.display = 'none';
+						binding2.classList.add("hidden-elem");
+						trim2.classList.add("hidden-elem");
 					}
 					
 					return document.getElementById("pick_binding_deco").value + " bound";
 				
 				case "Trimmed with Metal...":
-					trim.style.display = 'block';
+					trim.classList.remove("hidden-elem");
 					
 					if(deco2.value == "Bound in Metal..." || deco2.value == "Trimmed with Metal...") {
 						deco2.value = "Nothing";
 						document.getElementById("decoration2").innerHTML = "";
-						binding2.style.display = 'none';
-						trim2.style.display = 'none';
+						binding2.classList.add("hidden-elem");
+						trim2.classList.add("hidden-elem");
 					}
 					
 					return document.getElementById("pick_trim_deco").value + " trimmed";
@@ -531,8 +536,8 @@
 
 
 		/*
-		Update the Material text field with a new value.
-		This is mostly a placeholder since no extra logic is needed at this time
+			Update the Material text field with a new value.
+			This is mostly a placeholder since no extra logic is needed at this time
 		*/		
 		function changeValueMaterial(set_value, caller_id) {
 			return set_value;
@@ -540,57 +545,53 @@
 
 
 		/*
-		Update the Sheath Style text field with a new value.
-		Both Sheath Style and Worn Location change will call this function.
+			Update the Sheath Style text field with a new value.
+			Both Sheath Style and Worn Location change will call this function.
 		*/				
-		function changeValueSheathStyle(set_value, caller_id) {			
+		function changeValueSheathStyle(set_value, caller_id) {
+			sheath_style = document.getElementById("pick_sheath_style").value;
+			sheath_detail = "";
+			
 			if(caller_id == "pick_sheath_style") {
-				document.getElementById("pick_sheath_location1").style.display = 'none';
-				document.getElementById("pick_sheath_location2").style.display = 'none';
-				document.getElementById("pick_sheath_location3").style.display = 'none';
-				document.getElementById("pick_sheath_location4").style.display = 'none';
-				document.getElementById("pick_sheath_location5").style.display = 'none';
+				document.getElementById("pick_sheath_location1").classList.add("hidden-elem");
+				document.getElementById("pick_sheath_location2").classList.add("hidden-elem");
+				document.getElementById("pick_sheath_location3").classList.add("hidden-elem");
+				document.getElementById("pick_sheath_location4").classList.add("hidden-elem");
+				document.getElementById("pick_sheath_location5").classList.add("hidden-elem");
 				
 				if(set_value == "sheath" || set_value == "scabbard" || set_value == "quiver") {
-					document.getElementById("pick_sheath_location1").style.display = 'block';
-					document.getElementById("pick_sheath_location1").value = "belt-worn";					
+					document.getElementById("pick_sheath_location1").classList.remove("hidden-elem");					
+					value = document.getElementById("pick_sheath_location1").value;					
+					
+					if(value != "belt-worn" && value != "waist-worn"){
+						sheath_detail = value.split("-")[0] + " ";
+					}
 				}
 				else if(set_value == "dagger sheath" || set_value == "dagger scabbard") {
-					document.getElementById("pick_sheath_location2").style.display = 'block';
-					document.getElementById("pick_sheath_location2").value = "belt-worn";
+					document.getElementById("pick_sheath_location2").classList.remove("hidden-elem");
 				}
 				else if(set_value == "axe frog") {
-					document.getElementById("pick_sheath_location5").style.display = 'block';		
-					document.getElementById("pick_sheath_location5").value = "belt-worn";		
+					document.getElementById("pick_sheath_location5").classList.remove("hidden-elem");		
 				}
 				else if(set_value == "swordbelt") {
-					document.getElementById("pick_sheath_location4").style.display = 'block';		
-					document.getElementById("pick_sheath_location4").value = "waist-worn";
+					document.getElementById("pick_sheath_location4").classList.remove("hidden-elem");	
 				}
 				else {
-					document.getElementById("pick_sheath_location3").style.display = 'block';		
-					document.getElementById("pick_sheath_location3").value = "shoulder-worn";		
+					document.getElementById("pick_sheath_location3").classList.remove("hidden-elem");	
 				}				
 				
-				return set_value;				
+				sheath_style = set_value;				
 			}
-			else if(caller_id == "pick_sheath_location1") {
-				if(set_value != "belt-worn" && set_value != "waist-worn") {					
-					return set_value.split("-")[0] + " " + document.getElementById("pick_sheath_style").value;
-				}
-				
-				return document.getElementById("pick_sheath_style").value;
-			}	
-			else if(caller_id == "pick_sheath_location2") {
-				return document.getElementById("pick_sheath_style").value;
+			else if(set_value != "belt-worn" && set_value != "waist-worn"){
+				sheath_detail = set_value.split("-")[0] + " ";
 			}
 			
-			return set_value;		
+			return sheath_detail + sheath_style;
 		}
 
 		/*
-		Update the Decoration2 text field with a new value.
-		All Decoration2 option will call this function.
+			Update the Decoration2 text field with a new value.
+			All Decoration2 option will call this function.
 		*/	
 		function changeValueDecoration2(set_value, prev_value, caller_id) {
 		
@@ -617,19 +618,17 @@
 			primary_choice_dict = {"One Fringing...": "pick_fringing_specific_deco2", "Two Fringings...": "pick_fringing_deco2", "One Inlaid Gem...": "pick_inlaid_specific_deco2", "Two Inlaid Gems...": "pick_inlaid_deco2", "Bound in Metal...": "pick_binding_deco2", "Trimmed with Metal...": "pick_trim_deco2", "Custom Fringing...": "custom_fringing_input", "Custom Inlaid Gem...": "custom_inlaid_input"};	
 						
 			
-
-			
 			//Checks for any of the primary choice options for decoration2
 			//which will unhide the correct div and reset decoration1 if needed.
 			if(caller_id == "pick_deco2") {					
-				fringing_specific.style.display = 'none';
-				fringing2.style.display = 'none';
-				gem_specific.style.display = 'none';
-				gem2.style.display = 'none';
-				binding2.style.display = 'none';
-				trim2.style.display = 'none';
-				fringing_custom.style.display = 'none';
-				inlaid_custom.style.display = 'none';
+				fringing_specific.classList.add("hidden-elem");
+				fringing2.classList.add("hidden-elem");
+				gem_specific.classList.add("hidden-elem");
+				gem2.classList.add("hidden-elem");
+				binding2.classList.add("hidden-elem");
+				trim2.classList.add("hidden-elem");
+				fringing_custom.classList.add("hidden-elem");
+				inlaid_custom.classList.add("hidden-elem");
 				
 				//End here if the user set the decoration2 to Nothing.
 				if(caller_id == "pick_deco2" && set_value == "Nothing") {
@@ -644,7 +643,7 @@
 				}
 				obj = document.getElementById(obj_array[set_value]);
 				changeValue(obj.value, obj.oldvalue, obj.id)
-				deco2_div_dict[set_value].style.display = 'block';
+				deco2_div_dict[set_value].classList.remove("hidden-elem");
 				
 				//The changeValue caller will recursively set the correct value so just return what is already there.
 				return document.getElementById("decoration2").innerHTML;
@@ -760,11 +759,11 @@
 		
 		
 		/*
-		Resets all choices back to default. Allowing for a fresh start.
-		Includes:
-		Sets all drop down fields to their starting value.
-		Resets the visiblity of all secondary drop down fields.
-		Changes the displayed sheath text to "a leather sheath".
+			Resets all choices back to default. Allowing for a fresh start.
+			Includes:
+			Sets all drop down fields to their starting value.
+			Resets the visiblity of all secondary drop down fields.
+			Changes the displayed sheath text to "a leather sheath".
 		*/
 		function resetAll() {		
 			if(!document.getElementById("decoration1_lock").checked) {
@@ -775,11 +774,11 @@
 				setInitialValue(document.getElementById("pick_binding_deco"));
 				setInitialValue(document.getElementById("pick_trim_deco"));
 				document.getElementById("decoration1").innerHTML = "";
-				document.getElementById("deco_div_color").style.display = 'none';
-				document.getElementById("deco_div_fringing").style.display = 'none';
-				document.getElementById("deco_div_inlaid").style.display = 'none';
-				document.getElementById("deco_div_binding").style.display = 'none';
-				document.getElementById("deco_div_trim").style.display = 'none';	
+				document.getElementById("deco_div_color").classList.add("hidden-elem");
+				document.getElementById("deco_div_fringing").classList.add("hidden-elem");
+				document.getElementById("deco_div_inlaid").classList.add("hidden-elem");
+				document.getElementById("deco_div_binding").classList.add("hidden-elem");
+				document.getElementById("deco_div_trim").classList.add("hidden-elem");
 			}
 			
 			if(!document.getElementById("material_lock").checked) {
@@ -794,11 +793,11 @@
 				document.getElementById("pick_sheath_style").value = "sheath";
 				setInitialValue(document.getElementById("pick_sheath_location1"));
 				setInitialValue(document.getElementById("pick_sheath_location2"));
-				document.getElementById("pick_sheath_location1").style.display = 'block';
-				document.getElementById("pick_sheath_location2").style.display = 'none';
-				document.getElementById("pick_sheath_location3").style.display = 'none';
-				document.getElementById("pick_sheath_location4").style.display = 'none';
-				document.getElementById("pick_sheath_location5").style.display = 'none';
+				document.getElementById("pick_sheath_location1").classList.remove("hidden-elem");
+				document.getElementById("pick_sheath_location2").classList.add("hidden-elem");
+				document.getElementById("pick_sheath_location3").classList.add("hidden-elem");
+				document.getElementById("pick_sheath_location4").classList.add("hidden-elem");
+				document.getElementById("pick_sheath_location5").classList.add("hidden-elem");
 				
 				obj = document.getElementById("pick_sheath_location1")
 				changeValue(obj.value, obj.oldvalue, obj.id, 'sheath_type');
@@ -821,21 +820,21 @@
 				document.getElementById("custom_inlaid_input").value = "";
 				document.getElementById("decoration2").innerHTML = "";		
 				
-				document.getElementById("deco2_div_fringing_specific").style.display = 'none';
-				document.getElementById("deco2_div_fringing").style.display = 'none';
-				document.getElementById("deco2_div_gem_specific").style.display = 'none';
-				document.getElementById("deco2_div_gem").style.display = 'none';
-				document.getElementById("deco2_div_binding").style.display = 'none';
-				document.getElementById("deco2_div_trim").style.display = 'none';		
-				document.getElementById("deco2_div_fringing_custom").style.display = 'none';		
-				document.getElementById("deco2_div_inlaid_custom").style.display = 'none';	
+				document.getElementById("deco2_div_fringing_specific").classList.add("hidden-elem");
+				document.getElementById("deco2_div_fringing").classList.add("hidden-elem");
+				document.getElementById("deco2_div_gem_specific").classList.add("hidden-elem");
+				document.getElementById("deco2_div_gem").classList.add("hidden-elem");
+				document.getElementById("deco2_div_binding").classList.add("hidden-elem");
+				document.getElementById("deco2_div_trim").classList.add("hidden-elem");		
+				document.getElementById("deco2_div_fringing_custom").classList.add("hidden-elem");		
+				document.getElementById("deco2_div_inlaid_custom").classList.add("hidden-elem");	
 			}
 		}
 		
 		/*
-		Generates a completely random sheath. Good for boredom and inspiration.
-		First, all options are reset and then random choices are made for each field.
-		Code is made to make sure that each field unhides the menues with the right choices selected.		
+			Generates a completely random sheath. Good for boredom and inspiration.
+			First, all options are reset and then random choices are made for each field.
+			Code is made to make sure that each field unhides the menues with the right choices selected.
 		*/
 		function createRandomSheath() {			
 			//For decoration1 section
