@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Warrior Sheath Designer v1.11</TITLE>
+	<TITLE>Hymore's Warrior Sheath Designer v1.12</TITLE>
 	<STYLE>
 		div.sheath_text {
 			font-size: 30px;
@@ -75,7 +75,12 @@
 			v1.11
 			- Updated hide/show HTML element functionality.
 			- Refactored changeValueSheathStyle to fix several errors.
-		
+			
+			v1.12
+			- Binding and Trimming can be used together as long as Decoration 2 is a single metal.
+			- Fixed Random button ignoring locked Decoration 2 choice.
+			- Reclassified fishscale decoration from gem to fringing.
+			- Added fishscale to plural dictionary.
 		*/		
 		
 		
@@ -100,7 +105,7 @@
 		const colors_yellow = ["---YELLOW COLORS---", "almond", "amber", "banana yellow", "bright golden", "champagne", "chartreuse", "flaxen", "golden", "honey gold", "honey-colored", "lemon yellow", "light yellow", "ocher", "ochre", "pale golden", "rich cream", "sallow", "sand-colored", "tawny yellow", "yellow"];
 		const colors_misc = ["---MISC COLORS---", "bright golden", "caramel-hued", "chrome", "coppery gold", "deep chrome", "golden", "iridescent", "moonlight silver", "multicolored", "opalescent", "opaline", "pale golden", "peach-colored", "pearlescent", "rainbow", "sand-colored", "silvery", "silvery white"];
 		const colors_all = [].concat(colors_black, colors_blue, colors_brown, colors_green, colors_grey, colors_orange, colors_pink, colors_purple, colors_red, colors_white, colors_yellow, colors_misc);
-		const fringe_generic = ["antler", "appendage", "beard", "bone", "branch", "canine", "claw", "ear", "eye", "fang", "feather", "foreclaw", "horn", "incisor", "jawbone", "jaw", "mane", "mandible", "paw", "pincer", "plume", "rattle", "scale", "stinger", "tail", "tailfeather", "tail", "talon", "teeth", "tendril", "tentacle", "thorn", "tusk", "whisker"];
+		const fringe_generic = ["antler", "appendage", "beard", "bone", "branch", "canine", "claw", "ear", "eye", "fang", "feather", "fishscale", "foreclaw", "horn", "incisor", "jawbone", "jaw", "mane", "mandible", "paw", "pincer", "plume", "rattle", "scale", "stinger", "tail", "tailfeather", "tail", "talon", "teeth", "tendril", "tentacle", "thorn", "tusk", "whisker"];
 		const fringe_antler = ["---ANTLERS---", "antler", "caribou antler"];
 		const fringe_appendage = ["---APPENDAGES---", "thorn-ridden appendage"];
 		const fringe_beard = ["---BEARD---", "mossy beard", "orc beard", "troll beard"];
@@ -112,6 +117,7 @@
 		const fringe_eye = ["---EYES---", "cyclops eye", "eye", "rolton eye", "seeker eye", "spider eye", "troll eye", "wraith eye"];
 		const fringe_fang = ["---FANGS---", "direbear fang", "faeroth fang", "goblin fang", "rodent fang", "snake fang", "troll fang", "viper fang"];
 		const fringe_feather = ["---FEATHERS---", "cockatrice feather", "eagle feather", "falcon feather", "firebird feather", "griffin feather", "gyrfalcon feather", "harpy feather", "hawk feather", "hummingbird feather", "merlin feather", "owl feather", "parakeet feather", "parrot feather", "penguin feather", "pelican feather", "pithohui feather", "ptarmigan feather", "puffin feather", "raptor feather", "raven feather", "toucan feather", "vulture feather"];
+		const fringe_fishscale = ["---FISHSCALES---", "scintillating fishscale"];
 		const fringe_foreclaw = ["---FORECLAWS---", "kresh foreclaw"];
 		const fringe_horn = ["---HORNS---", "gnarp horn", "minotaur horn", "rolton horn", "velnalin horn", "vor'taz horn"];
 		const fringe_incisor = ["---INCISORS---", "tiger incisor"];
@@ -134,8 +140,8 @@
 		const fringe_thorn = ["---THORNS---", "bleached thorn"];
 		const fringe_tusk = ["---TUSKS---", "boar tusk", "mammoth tusk", "ogre tusk", "tusk", "troll tusk", "ursian tusk"];
 		const fringe_whisker = ["---WHISKERS---", "warcat whisker"];
-		const fringe_all = [].concat(fringe_antler, fringe_appendage, fringe_beard, fringe_bone, fringe_branch, fringe_canine, fringe_claw, fringe_ear, fringe_eye, fringe_fang, fringe_feather, fringe_foreclaw, fringe_horn, fringe_incisor, fringe_jaw, fringe_jawbone, fringe_mandible, fringe_mane, fringe_paw, fringe_pincer, fringe_plume, fringe_rattle, fringe_scale, fringe_stinger, fringe_tail, fringe_tailfeather, fringe_talon, fringe_tooth, fringe_tendril, fringe_tentacle, fringe_thorn, fringe_tusk, fringe_whisker);
-		const gems_generic = ["aetherstone", "agate", "alexandrite", "amber", "ambergris", "ametrine", "amethyst", "aquamarine", "aranthium-bloom", "auboraline", "auroraline", "azurite", "bauxite", "beryl", "bismuth", "blazestar", "bloodjewel", "bloodstone", "bluerock", "caederine", "carbuncle", "carnelian",  "chalcedony", "chrysoberyl", "cinderstone", "citrine", "coral", "cordierite", "corestone", "crescent", "crowstone", "crystal", "deathstone", "despanal", "diamond", "diopside", "disk", "dreamstone", "duskjewel", "emerald", "eostone", "everine", "eye", "faenor-bloom", "fang", "feldspar", "feystone", "firedrop", "firestone", "fishscale", "fluorite", "galena", "garnet", "gem", "glacialite", "glimaerstone", "goldstone", "gypsum", "haon", "hoarstone", "heliodor", "heliotrope", "hematite", "hyacinth", "idocrase", "iolite", "ivory", "jacinth", "jade", "jasper", "labradorite", "lapis lazuli", "lichstone", "malachite", "maoral", "marble", "marcasite", "melanite", "mica", "mithril-bloom", "mekret", "modwir", "moonstone", "mournstone", "nephrite", "nightstone", "nugget", "obsidian", "onyx", "ora-bloom", "opal", "pearl", "peridot", "petalite", "prehnite", "pumice", "pyrite", "quartz", "razern-bloom", "rhimar-bloom", "riftshard", "riftstone", "rivertear", "rock", "roestone", "rosespar", "ruby", "saewehna", "sandsilver", "sapphire", "sandruby", "sard", "sardonyx", "scarab", "scolecite", "serpentine", "shard", "shale", "shell", "smoldereye", "snowdrop", "snowstone", "soulstone", "spectrolite", "sphene", "spherine", "spinel", "spiral", "sponge", "starstone", "stone", "sunstone", "talon", "tanzanite", "thanot", "thunderstone", "tooth", "titanite", "toadstool", "topaz", "tourmaline", "turquoise", "viridine", "vultite-bloom", "waterweb", "wispstone", "wraithaline", "wulfenite", "wyrdshard", "wyrmwood", "zircon", "zoisite"];
+		const fringe_all = [].concat(fringe_antler, fringe_appendage, fringe_beard, fringe_bone, fringe_branch, fringe_canine, fringe_claw, fringe_ear, fringe_eye, fringe_fang, fringe_feather, fringe_fishscale, fringe_foreclaw, fringe_horn, fringe_incisor, fringe_jaw, fringe_jawbone, fringe_mandible, fringe_mane, fringe_paw, fringe_pincer, fringe_plume, fringe_rattle, fringe_scale, fringe_stinger, fringe_tail, fringe_tailfeather, fringe_talon, fringe_tooth, fringe_tendril, fringe_tentacle, fringe_thorn, fringe_tusk, fringe_whisker);
+		const gems_generic = ["aetherstone", "agate", "alexandrite", "amber", "ambergris", "ametrine", "amethyst", "aquamarine", "aranthium-bloom", "auboraline", "auroraline", "azurite", "bauxite", "beryl", "bismuth", "blazestar", "bloodjewel", "bloodstone", "bluerock", "caederine", "carbuncle", "carnelian",  "chalcedony", "chrysoberyl", "cinderstone", "citrine", "coral", "cordierite", "corestone", "crescent", "crowstone", "crystal", "deathstone", "despanal", "diamond", "diopside", "disk", "dreamstone", "duskjewel", "emerald", "eostone", "everine", "eye", "faenor-bloom", "fang", "feldspar", "feystone", "firedrop", "firestone", "fluorite", "galena", "garnet", "gem", "glacialite", "glimaerstone", "goldstone", "gypsum", "haon", "hoarstone", "heliodor", "heliotrope", "hematite", "hyacinth", "idocrase", "iolite", "ivory", "jacinth", "jade", "jasper", "labradorite", "lapis lazuli", "lichstone", "malachite", "maoral", "marble", "marcasite", "melanite", "mica", "mithril-bloom", "mekret", "modwir", "moonstone", "mournstone", "nephrite", "nightstone", "nugget", "obsidian", "onyx", "ora-bloom", "opal", "pearl", "peridot", "petalite", "prehnite", "pumice", "pyrite", "quartz", "razern-bloom", "rhimar-bloom", "riftshard", "riftstone", "rivertear", "rock", "roestone", "rosespar", "ruby", "saewehna", "sandsilver", "sapphire", "sandruby", "sard", "sardonyx", "scarab", "scolecite", "serpentine", "shard", "shale", "shell", "smoldereye", "snowdrop", "snowstone", "soulstone", "spectrolite", "sphene", "spherine", "spinel", "spiral", "sponge", "starstone", "stone", "sunstone", "talon", "tanzanite", "thanot", "thunderstone", "tooth", "titanite", "toadstool", "topaz", "tourmaline", "turquoise", "viridine", "vultite-bloom", "waterweb", "wispstone", "wraithaline", "wulfenite", "wyrdshard", "wyrmwood", "zircon", "zoisite"];
 		const gems_aetherstone = ["---AETHERSTONES---", "swirling aetherstone"];
 		const gems_agate = ["---AGATES---", "banded agate", "blue lace agate", "chameleon agate", "cloud agate", "fire agate", "frost agate", "moss agate", "mottled agate", "tigereye agate"];
 		const gems_alexandrite = ["---ALEXANDRITE---", "dusky grey storm alexandrite"];
@@ -186,7 +192,6 @@
 		const gems_feystone = ["---FEYSTONES---", "bright violet feystone", "periwinkle feystone"];
 		const gems_firedrop = ["---FIREDROPS---", "lustrous vermilion firedrop"];
 		const gems_firestone = ["---FIRESTONES---", "firestone"];
-		const gems_fishscale = [];
 		const gems_fluorite = ["---FLUORITES---", "striated fluorite"];
 		const gems_galena = ["---GALENAS---", "metallic chunk of galena", "silvery galena"];
 		const gems_garnet = ["---GARNETS---", "almandine garnet", "blood red garnet", "dark purple sunset garnet", "deep red-violet garnet", "green garnet", "lustrous black garnet", "nearly black pomegranate red garnet", "orange spessartine garnet", "sanguine wyrm's-eye garnet", "blood-hued garnet", "uncut garnet"];
@@ -285,7 +290,7 @@
 		const gems_wyrdshard = ["---WYRDSHARDS---", "multi-colored wyrdshard"];
 		const gems_zircon = ["---ZIRCONS---", "brown zircon", "clear zircon", "green zircon", "snowflake zircon", "uncut zircon", "yellow zircon"];
 		const gems_zoisite = ["---ZOISITES---", "green and pink zoisite", "plum-flecked ruby zoisite"];
-		const gems_all = [].concat(gems_aetherstone, gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_baystone, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fishscale, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_shard, gems_shell, gems_smoldereye, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
+		const gems_all = [].concat(gems_aetherstone, gems_agate, gems_alexandrite, gems_amber, gems_ambergris, gems_ametrine, gems_amethyst, gems_aquamarine, gems_aranthiumbloom, gems_auboraline, gems_auroraline, gems_azurite, gems_bauxite, gems_baystone, gems_beryl, gems_bismuth, gems_blazestar, gems_bloodjewel, gems_bloodstone, gems_bluerock, gems_caederine, gems_carbuncle, gems_chalcedony, gems_chrysoberyl, gems_cinderstone, gems_citrine, gems_coral, gems_cordierite, gems_corestone, gems_crescent, gems_crowstone, gems_crystal, gems_deathstone, gems_demantoid, gems_despanal, gems_diamond, gems_diopside, gems_disk, gems_dreamstone, gems_duskjewel, gems_emerald, gems_eostone, gems_everine, gems_eye, gems_faenorbloom, gems_fang, gems_feldspar, gems_feystone, gems_firedrop, gems_firestone, gems_fluorite, gems_galena, gems_garnet, gems_gem, gems_glacialite, gems_glimaerstone, gems_goldstone, gems_gypsum, gems_haon, gems_heliodor, gems_heliotrope, gems_hematite, gems_hoarstone, gems_hyacinth, gems_idocrase, gems_iolite, gems_ivory, gems_jacinth, gems_jade, gems_jasper, gems_lapislazuli, gems_labradorite, gems_lichstone, gems_maoral, gems_marble, gems_malachite, gems_marcasite, gems_melanite, gems_mica, gems_mithrilbloom, gems_mekret, gems_modwir, gems_moonstone, gems_mournstone, gems_nephrite, gems_nightstone, gems_nugget, gems_obsidian, gems_onyx, gems_orabloom, gems_opal, gems_pearl, gems_peridot, gems_petalite, gems_prehnite, gems_pumice, gems_pyrite, gems_quartz, gems_razernbloom, gems_rhimarbloom, gems_riftshard, gems_riftstone, gems_rivertear, gems_rock, gems_roestone, gems_rosespar, gems_ruby, gems_saewehna, gems_sandsilver, gems_sapphire, gems_sandruby, gems_sard, gems_sardonyx, gems_scarab, gems_scolecite, gems_shard, gems_shell, gems_smoldereye, gems_snowstone, gems_soulstone, gems_spectrolite, gems_sphene, gems_spherine, gems_spinel, gems_spiral, gems_sponge, gems_starstone, gems_stone, gems_sunstone, gems_talon, gems_tanzanite, gems_thanot, gems_thunderstone, gems_tooth, gems_titanite, gems_toadstool, gems_topaz, gems_tourmaline, gems_turquoise, gems_viridine, gems_vultitebloom, gems_waterweb, gems_wispstone, gems_wraithaline, gems_wyrdshard, gems_zircon, gems_zoisite);
 		const materials_fur = ["---FURS---", "fenghai fur", "waern fur"];
 		const materials_hide = ["---HIDES---", "bear hide", "boar hide", "brindlecat hide", "centaur hide", "gak hide", "leaper hide", "minotaur hide", "night hound hide", "orc hide", "puma hide", "pyrothag hide", "thrak hide", "toad hide", "trali hide", "triton hide", "troll hide", "urgh hide", "velnalin hide"];
 		const materials_pelt = ["---PELTS---", "ape pelt", "gak pelt", "leaper pelt", "leopard pelt", "lynx pelt", "marmot pelt", "panther pelt", "rat pelt", "rolton pelt", "snowcat pelt", "warg pelt", "water hound pelt", "weasel pelt", "wolverine pelt"];		
@@ -298,7 +303,7 @@
 		const materials_all = [].concat(materials_fur, materials_hide, materials_pelt, materials_scale, materials_scalp, materials_sheepskin, materials_shroud, materials_skin, materials_wrap);
 		const metals = ["alum", "brass", "bronze", "copper", "glaes", "gold", "imflass", "invar", "iron", "laje", "mithglin", "mithril", "ora", "platinum", "rhimar", "silver", "steel", "vaalin", "vaalorn", "veniom", "vultite"];
 
-		pluralize_dict = {"hide": "hides", "skin": "skins", "pelt": "pelts", "antler": "antlers", "appendage": "appendages", "beard": "beards", "bone": "bones", "branch": "branches", "canine": "canines", "claw": "claws", "ear": "ears", "fang": "fangs", "feather": "feathers", "foreclaw": "foreclaws", "horn": "horns", "incisor": "incisors", "jawbone": "jawbones", "jaw": "jaws", "mandible": "mandibles", "mane": "manes", "paw": "paws", "pincer": "pincers", "plume": "plumes", "rattle": "rattles", "scale": "scales", "stinger": "stingers", "tail": "tails", "tailfeather": "tailfeathers", "tendril": "tendrils", "tentacle": "tentacles", "thorn": "thorns", "tusk": "tusks", "whisker": "whiskers", "aetherstone": "aetherstones", "agate": "agates", "ametrine": "ametrines", "amethyst": "amethysts", "aquamarine": "aquamarines", "auboraline": "auboralines", "azurite": "azurites", "bauxite": "bauxites", "baystone": "baystones", "beryl": "beryls", "blazestar": "blazestars", "bloodjewel": "bloodjewels", "bloodstone": "bloodstones", "bluerock": "bluerocks", "carnelian": "carnelians", "carbuncle": "carbuncles", "cinderstone": "cinderstones", "citrine": "citrines", "cordierite": "cordierites", "corestone": "corestones", "crescent": "crescents", "crystal": "crystals", "deathstone": "deathstones", "despanal": "despanals", "diamond": "diamonds", "diopside": "diopsides", "disk": "disks", "dreamstone": "dreamstones", "duskjewel": "duskjewels", "emerald": "emeralds", "eostone": "eostones", "fang": "fangs", "feystone": "feystones", "firedrop": "firedrops", "firestone": "firestones", "garnet": "garnets", "gem": "gems", "glimaerstone": "glimaerstones", "goldstone": "goldstones", "heliodor": "heliodors", "heliotrope": "heliotropes", "hoarstone": "hoarstones", "hyacinthe": "hyacinthes", "idocrase": "idocrases", "iolite": "iolites", "jacinthe": "jacinthes", "lichstone": "lichstones", "mekret": "mekrets", "moonstone": "moonstones", "mournstone": "mournstones", "nightstone": "nightstones", "nugget": "nuggets", "opal": "opals", "pearl": "pearls", "peridot": "peridots", "petalite": "petalites", "prehnite": "prehnites", "quartz": "quartzes", "riftstone": "riftstones", "rivertear": "rivertears", "roestone": "roestones", "rosespar": "rosespars", "ruby": "rubies", "saewehna": "saewehnas", "sandsilver": "sandsilvers", "sapphire": "sapphires", "sandruby": "sandrubies", "sard": "sards", "sardonyx": "sardonyxes", "scarab": "scarabs", "shard": "shards", "rock": "rocks", "shell": "shells", "smoldereye": "smoldereyes", "snowstone": "snowstones", "soulstone": "soulstones", "spectrolite": "spectrolites", "sphene": "sphenes", "spherine": "spherines", "spinel": "spinels", "spiral": "spirals", "sponge": "sponges", "starstone": "starstones", "stone": "stones", "sunstone": "sunstones", "talon": "talons", "tanzanite": "tanzanites", "thunderstone": "thunderstones", "titanite": "titanites", "tooth": "teeth", "primaryaz": "primaryazes", "tourmaline": "tourmalines", "turquoise": "turquoises", "viridine": "viridines", "waterweb": "waterwebs", "wyrdshard": "wyrdshards", "zircon": "zircons"};	
+		pluralize_dict = {"hide": "hides", "skin": "skins", "pelt": "pelts", "antler": "antlers", "appendage": "appendages", "beard": "beards", "bone": "bones", "branch": "branches", "canine": "canines", "claw": "claws", "ear": "ears", "fang": "fangs", "feather": "feathers", "foreclaw": "foreclaws", "horn": "horns", "incisor": "incisors", "jawbone": "jawbones", "jaw": "jaws", "mandible": "mandibles", "mane": "manes", "paw": "paws", "pincer": "pincers", "plume": "plumes", "rattle": "rattles", "scale": "scales", "stinger": "stingers", "tail": "tails", "tailfeather": "tailfeathers", "tendril": "tendrils", "tentacle": "tentacles", "thorn": "thorns", "tusk": "tusks", "whisker": "whiskers", "aetherstone": "aetherstones", "agate": "agates", "ametrine": "ametrines", "amethyst": "amethysts", "aquamarine": "aquamarines", "auboraline": "auboralines", "azurite": "azurites", "bauxite": "bauxites", "baystone": "baystones", "beryl": "beryls", "blazestar": "blazestars", "bloodjewel": "bloodjewels", "bloodstone": "bloodstones", "bluerock": "bluerocks", "carnelian": "carnelians", "carbuncle": "carbuncles", "cinderstone": "cinderstones", "citrine": "citrines", "cordierite": "cordierites", "corestone": "corestones", "crescent": "crescents", "crystal": "crystals", "deathstone": "deathstones", "despanal": "despanals", "diamond": "diamonds", "diopside": "diopsides", "disk": "disks", "dreamstone": "dreamstones", "duskjewel": "duskjewels", "emerald": "emeralds", "eostone": "eostones", "fang": "fangs", "feystone": "feystones", "firedrop": "firedrops", "firestone": "firestones", "fishscale": "fishscales", "garnet": "garnets", "gem": "gems", "glimaerstone": "glimaerstones", "goldstone": "goldstones", "heliodor": "heliodors", "heliotrope": "heliotropes", "hoarstone": "hoarstones", "hyacinthe": "hyacinthes", "idocrase": "idocrases", "iolite": "iolites", "jacinthe": "jacinthes", "lichstone": "lichstones", "mekret": "mekrets", "moonstone": "moonstones", "mournstone": "mournstones", "nightstone": "nightstones", "nugget": "nuggets", "opal": "opals", "pearl": "pearls", "peridot": "peridots", "petalite": "petalites", "prehnite": "prehnites", "quartz": "quartzes", "riftstone": "riftstones", "rivertear": "rivertears", "roestone": "roestones", "rosespar": "rosespars", "ruby": "rubies", "saewehna": "saewehnas", "sandsilver": "sandsilvers", "sapphire": "sapphires", "sandruby": "sandrubies", "sard": "sards", "sardonyx": "sardonyxes", "scarab": "scarabs", "shard": "shards", "rock": "rocks", "shell": "shells", "smoldereye": "smoldereyes", "snowstone": "snowstones", "soulstone": "soulstones", "spectrolite": "spectrolites", "sphene": "sphenes", "spherine": "spherines", "spinel": "spinels", "spiral": "spirals", "sponge": "sponges", "starstone": "starstones", "stone": "stones", "sunstone": "sunstones", "talon": "talons", "tanzanite": "tanzanites", "thunderstone": "thunderstones", "titanite": "titanites", "tooth": "teeth", "primaryaz": "primaryazes", "tourmaline": "tourmalines", "turquoise": "turquoises", "viridine": "viridines", "waterweb": "waterwebs", "wyrdshard": "wyrdshards", "zircon": "zircons"};	
 	
 		/*
 			Run when the page loads and populates all the dropdown menus before
@@ -391,7 +396,7 @@
 			decoration2_array = ["pick_fringing_specific_deco2", "pick_inlaid_specific_deco2", "pick_fringing_deco2", "pick_inlaid_deco2", "pick_fringing2_deco2", "pick_inlaid2_deco2", "pick_binding_deco2", "pick_binding2_deco2", "pick_trim_deco2", "pick_trim2_deco2", "pick_deco2"];
 			
 			if(decoration1_array.includes(caller_id)) {
-			    new_value = changeValueDecoration1(set_value, caller_id);
+			    new_value = changeValueDecoration1(set_value, prev_value, caller_id);
 				text_field = "decoration1";			
 			}
 			else if(caller_id == "pick_material") {				
@@ -439,10 +444,46 @@
 			Update the Decoration1 text field with a new value.
 			All Decoration1 option will call this function.
 		*/
-		function changeValueDecoration1(set_value, caller_id) {		
-			deco_dict = {"pick_color":"", "pick_fringing_deco": " fringed", "pick_inlaid_deco": " inlaid", "pick_binding_deco": " bound", "pick_trim_deco": " trimmed"};
+		function changeValueDecoration1(set_value, prev_value, caller_id) {		
+			deco_dict = {"pick_color": "", "pick_fringing_deco": " fringed", "pick_inlaid_deco": " inlaid", "pick_binding_deco": " bound", "pick_trim_deco": " trimmed"};
 			
 			if(Object.keys(deco_dict).includes(caller_id)) {
+				deco1_value = document.getElementById("pick_deco").value;
+				deco2_value = document.getElementById("pick_deco2").value;
+				deco2_choice1 = ""
+				deco2_choice2 = ""
+					
+				if(deco1_value == "Trimmed with Metal..." && deco2_value == "Bound in Metal...") {
+					deco2_choice1 = document.getElementById("pick_binding_deco2");
+					deco2_choice2 = document.getElementById("pick_binding2_deco2");
+					
+				}
+				else if(deco1_value == "Bound in Metal..." && deco2_value == "Trimmed with Metal...") {
+					deco2_choice1 = document.getElementById("pick_trim_deco2");
+					deco2_choice2 = document.getElementById("pick_trim2_deco2");
+				}
+				
+				if(deco2_choice1 != "" && deco2_choice2 != "") {
+					deco1_choice = document.getElementById(caller_id);
+					
+					if(set_value == deco2_choice2.value) {
+						setInitialValue(deco2_choice2);
+						obj = deco2_choice2;
+						changeValue(obj.value, obj.oldvalue, obj.id);
+					}
+					
+					if(set_value == deco2_choice1.value) {				
+						deco2_choice1.value = prev_value
+						
+						if(set_value == deco2_choice1.value) {
+							deco2_choice1.value = "brass"							
+						}
+						
+						obj = deco2_choice1;
+						changeValue(obj.value, obj.oldvalue, obj.id);	
+					}				
+				}
+				
 				return set_value + deco_dict[caller_id];
 			}
 
@@ -507,11 +548,28 @@
 				case "Bound in Metal...":
 					binding.classList.remove("hidden-elem");
 					
-					if(deco2.value == "Bound in Metal..." || deco2.value == "Trimmed with Metal...") {
+					if(deco2.value == "Bound in Metal...") {
 						deco2.value = "Nothing";
 						document.getElementById("decoration2").innerHTML = "";
 						binding2.classList.add("hidden-elem");
 						trim2.classList.add("hidden-elem");
+					}
+					else if(deco2.value == "Trimmed with Metal...") {
+						metal1 = document.getElementById("pick_binding_deco");
+						metal2a = document.getElementById("pick_trim_deco2");
+						metal2b = document.getElementById("pick_trim2_deco2");
+						
+						setInitialValue(metal2b);
+							
+						if(metal1.value == metal2a.value) {
+							setInitialValue(metal2a);
+							
+							if(metal1.value == metal2a.value) {
+								metal2a.value = "brass"
+							}
+						}
+						
+						document.getElementById("decoration2").innerHTML = "trimmed with " + metal2a.value;			
 					}
 					
 					return document.getElementById("pick_binding_deco").value + " bound";
@@ -519,11 +577,28 @@
 				case "Trimmed with Metal...":
 					trim.classList.remove("hidden-elem");
 					
-					if(deco2.value == "Bound in Metal..." || deco2.value == "Trimmed with Metal...") {
+					if(deco2.value == "Trimmed with Metal...") {
 						deco2.value = "Nothing";
 						document.getElementById("decoration2").innerHTML = "";
 						binding2.classList.add("hidden-elem");
 						trim2.classList.add("hidden-elem");
+					}
+					else if(deco2.value == "Bound in Metal...") {
+						metal1 = document.getElementById("pick_trim_deco");
+						metal2a = document.getElementById("pick_binding_deco2");
+						metal2b = document.getElementById("pick_binding2_deco2");
+						
+						setInitialValue(metal2b);
+						
+						if(metal1.value == metal2a.value) {
+							setInitialValue(metal2a);
+							
+							if(metal1.value == metal2a.value) {
+								metal2a.value = "brass"							
+							}
+						}
+						
+						document.getElementById("decoration2").innerHTML = "bound in " + metal2a.value;			
 					}
 					
 					return document.getElementById("pick_trim_deco").value + " trimmed";
@@ -592,8 +667,7 @@
 			Update the Decoration2 text field with a new value.
 			All Decoration2 option will call this function.
 		*/	
-		function changeValueDecoration2(set_value, prev_value, caller_id) {
-		
+		function changeValueDecoration2(set_value, prev_value, caller_id) {		
 			obj_array = {"One Fringing...": "pick_fringing_specific_deco2", "Two Fringings...": "pick_fringing_deco2", "One Inlaid Gem...": "pick_inlaid_specific_deco2", "Two Inlaid Gems...": "pick_inlaid_deco2", "Bound in Metal...": "pick_binding_deco2", "Trimmed with Metal...": "pick_trim_deco2", "Custom Fringing...": "custom_fringing_input", "Custom Inlaid Gem...": "custom_inlaid_input"};		
 		
 			deco = document.getElementById("pick_deco");
@@ -610,9 +684,10 @@
 			
 			fringe_invalid_array = ["Fringing..."];
 			inlaid_invalid_array = ["Inlaid Gem..."];
-			metal_invalid_array = ["Bound in Metal...", "Trimmed with Metal..."];
+			binding_invalid_array = ["Bound in Metal..."];
+			trimming_invalid_array = ["Trimmed with Metal..."];
 			
-			valid_dict = {"One Fringing...": fringe_invalid_array, "Two Fringings...": fringe_invalid_array, "One Inlaid Gem...": inlaid_invalid_array, "Two Inlaid Gems...": inlaid_invalid_array, "Bound in Metal...": metal_invalid_array, "Trimmed with Metal...": metal_invalid_array, "Custom Fringing...": fringe_invalid_array, "Custom Inlaid Gem...": inlaid_invalid_array};			
+			valid_dict = {"One Fringing...": fringe_invalid_array, "Two Fringings...": fringe_invalid_array, "One Inlaid Gem...": inlaid_invalid_array, "Two Inlaid Gems...": inlaid_invalid_array, "Bound in Metal...": binding_invalid_array, "Trimmed with Metal...": trimming_invalid_array, "Custom Fringing...": fringe_invalid_array, "Custom Inlaid Gem...": inlaid_invalid_array};			
 			
 			primary_choice_dict = {"One Fringing...": "pick_fringing_specific_deco2", "Two Fringings...": "pick_fringing_deco2", "One Inlaid Gem...": "pick_inlaid_specific_deco2", "Two Inlaid Gems...": "pick_inlaid_deco2", "Bound in Metal...": "pick_binding_deco2", "Trimmed with Metal...": "pick_trim_deco2", "Custom Fringing...": "custom_fringing_input", "Custom Inlaid Gem...": "custom_inlaid_input"};	
 						
@@ -639,6 +714,26 @@
 					obj = document.getElementById("pick_deco");
 					changeValue(obj.value, obj.oldvalue, obj.id);					
 				}
+				else if(set_value == "Bound in Metal..." && deco.value == "Trimmed with Metal...") {
+					choice1 = document.getElementById("pick_binding_deco2");
+					choice2 = document.getElementById("pick_binding2_deco2");
+					
+					if(choice1.value == document.getElementById("pick_trim_deco").value) {
+						choice1.value = "brass"
+					}				
+				}
+				else if(set_value == "Trimmed with Metal..." && deco.value == "Bound in Metal...") {
+					choice1 = document.getElementById("pick_trim_deco2");
+					choice2 = document.getElementById("pick_trim2_deco2");
+					
+					setInitialValue(choice1);
+					setInitialValue(choice2);
+					
+					if(choice1.value == document.getElementById("pick_binding_deco").value) {
+						choice1.value = "brass"
+					}
+				}
+				
 				obj = document.getElementById(obj_array[set_value]);
 				changeValue(obj.value, obj.oldvalue, obj.id)
 				deco2_div_dict[set_value].classList.remove("hidden-elem");
@@ -652,7 +747,7 @@
 				several relational dictionaries are used to reduce code bloat while making sure everything functions correctly.
 			*/
 			// Arrays and dictionaries used by the submenus
-			main_deco2_array = ["pick_fringing_deco2", "pick_inlaid_deco2", "pick_binding_deco2", "pick_trim_deco2"];
+			primary_deco2_array = ["pick_fringing_deco2", "pick_inlaid_deco2", "pick_binding_deco2", "pick_trim_deco2"];
 			secondary_deco2_array = ["pick_fringing2_deco2", "pick_inlaid2_deco2", "pick_binding2_deco2", "pick_trim2_deco2"];
 			compare_deco2_dict = {"pick_fringing_deco2": "pick_fringing2_deco2", "pick_fringing2_deco2": "pick_fringing_deco2", "pick_inlaid_deco2": "pick_inlaid2_deco2", "pick_inlaid2_deco2": "pick_inlaid_deco2", "pick_binding_deco2": "pick_binding2_deco2", "pick_binding2_deco2": "pick_binding_deco2", "pick_trim_deco2": "pick_trim2_deco2", "pick_trim2_deco2": "pick_trim_deco2"};
 			text_deco2_dict = {"pick_fringing_deco2": "fringed with ", "pick_fringing2_deco2": "fringed with ", "pick_inlaid_deco2": "inlaid with ", "pick_inlaid2_deco2": "inlaid with ", "pick_binding_deco2": "bound in ", "pick_binding2_deco2": "bound in ", "pick_trim_deco2": "trimmed with ", "pick_trim2_deco2": "trimmed with "};
@@ -669,54 +764,99 @@
 				This covers the first option of Fringing/Inlaid/Binding/Trim.
 				It will retrun the correct option(s) and prepend text depending on what select element called changeValue().
 			*/
-			else if(main_deco2_array.includes(caller_id)) {
-				primary_deco = document.getElementById(caller_id);
-				secondary_deco = document.getElementById(compare_deco2_dict[caller_id]);
+			else {
+				deco1_value = document.getElementById("pick_deco").value				
 				prepend_text = text_deco2_dict[caller_id];
+				deco1_choice = "";
 				
-				if(secondary_deco.value == 'Nothing') {		
-					return prepend_text + pluralizeNoun(set_value);
-				}
-				//Swap secondary value to its old value to avoid duplicates.
-				else if(set_value == secondary_deco.value) {
-					secondary_deco.value = prev_value;
+				// Set the primary and seconday depending on which submenu called the function
+				if(primary_deco2_array.includes(caller_id)) {
+					primary_deco2 = document.getElementById(caller_id);
+					secondary_deco2 = document.getElementById(compare_deco2_dict[caller_id]);
+					opposite_deco2 = secondary_deco2;
 					
-					return prepend_text + pluralizeNoun(set_value) + " and " + pluralizeNoun(prev_value);
+					// Get the deco1 element depending if it is also a bind/trim element
+					if(deco1_value == "Bound in Metal...") {
+						deco1_choice = document.getElementById("pick_binding_deco");
+					}
+					else if(deco1_value == "Trimmed with Metal...") {
+						deco1_choice = document.getElementById("pick_trim_deco");		
+					}					
 				}
-				
-				return prepend_text + pluralizeNoun(set_value) + " and " + pluralizeNoun(secondary_deco.value);				
-			
-			}
-			/*
-				This covers the second option of Fringing/Inlaid/Binding/Trim.
-				It will retrun the correct option(s) and prepend text depending on what select element called changeValue().
-			*/
-			else if(secondary_deco2_array.includes(caller_id)) {
-				primary_deco = document.getElementById(compare_deco2_dict[caller_id]);
-				secondary_deco = document.getElementById(caller_id);
-				prepend_text = text_deco2_dict[caller_id];
-				
-				if(set_value == "Nothing") {
-					return prepend_text + pluralizeNoun(primary_deco.value);
+				else if(secondary_deco2_array.includes(caller_id)) {
+					primary_deco2 = document.getElementById(compare_deco2_dict[caller_id]);
+					secondary_deco2 = document.getElementById(caller_id);
+					opposite_deco2 = primary_deco2;
+					
+					// Reset deco1 so there can only be two metals in the sheath
+					if(set_value != "Nothing" && (deco1_value == "Bound in Metal..." || deco1_value == "Trimmed with Metal...")) {
+						setInitialValue(document.getElementById("pick_deco"));
+						obj = document.getElementById("pick_deco")
+						changeValue(obj.value, obj.oldvalue, obj.id, 'material');
+					}
 				}
-				// Swap primary value to its old value to avoid duplicates. If it was 'Nothing', the only return the primary value
-				else if(primary_deco.value == set_value) {
-					if(prev_value == 'Nothing') {
-						primary_deco.value = set_value;
-						secondary_deco.value = 'Nothing';
+				else {
+					return "Error, shouldn't happen"
+				}				
+								
+				// Swap the opposite value to the old value to avoid duplicates.
+				if(set_value == opposite_deco2.value) {
+					opposite_deco2.value = prev_value;
+					
+					if(primary_deco2_array.includes(caller_id)) {
+						return prepend_text + pluralizeNoun(set_value) + " and " + pluralizeNoun(prev_value);					
+					}
+					else if(prev_value == 'Nothing') {
+						primary_deco2.value = set_value;
+						secondary_deco2.value = 'Nothing';
 						
-						return prepend_text + pluralizeNoun(primary_deco.value);
+						return prepend_text + pluralizeNoun(primary_deco2.value);
 					}
 					else {
-						primary_deco.value = prev_value;
-						
-						return prepend_text + pluralizeNoun(prev_value) + " and " + pluralizeNoun(set_value);							
+						return prepend_text + pluralizeNoun(prev_value) + " and " + pluralizeNoun(set_value);					
 					}
-				}				
+				}
+				// Swap deco1 value to the old value to avoid duplicates.
+				else if(deco1_choice != "" && set_value == deco1_choice.value) {
+					if(opposite_deco2.value == 'Nothing') {					
+						deco1_choice.value = prev_value;
+						changeValue(deco1_choice.value, deco1_choice.oldvalue, deco1_choice.id);
+						
+						//setInitialValue(deco1_choice)
+						
+						//if(set_value == deco1_choice.value) {
+						//	deco1_choice.value = "brass"
+						//}						
+						
+						obj = deco1_choice
+						changeValue(obj.value, obj.oldvalue, obj.id, 'material');
+						
+						return prepend_text + pluralizeNoun(set_value);						
+					}
 					
-				return prepend_text + pluralizeNoun(primary_deco.value) + " and " + pluralizeNoun(set_value);
-			}		
-
+					if(primary_deco2_array.includes(caller_id)) {
+						return prepend_text + pluralizeNoun(primary_deco2.value) + " and " + pluralizeNoun(set_value);					
+					}
+					else {
+						return prepend_text + pluralizeNoun(set_value) + " and " + pluralizeNoun(secondary_deco2.value);
+					}
+				}
+				else if(set_value == "Nothing") {
+					return prepend_text + pluralizeNoun(primary_deco2.value);
+				}
+				else if(primary_deco2_array.includes(caller_id)) {
+					if(secondary_deco2.value == "Nothing") {
+						return prepend_text + pluralizeNoun(primary_deco2.value);					
+					}
+					else {
+						return prepend_text + pluralizeNoun(set_value) + " and " + pluralizeNoun(secondary_deco2.value);			
+					}
+				}
+				else {
+					return prepend_text + pluralizeNoun(primary_deco2.value) + " and " + pluralizeNoun(set_value);	
+				}			
+			}
+			
 			// Failsafe
 			return set_value;		
 		}		
@@ -836,18 +976,46 @@
 		*/
 		function createRandomSheath() {			
 			// For decoration1 section
-			deco1_dict = {"Colors...":"pick_color", "Fringing...":"pick_fringing_deco", "Inlaid Gem...":"pick_inlaid_deco", "Bound in Metal...":"pick_binding_deco", "Trimmed with Metal...":"pick_trim_deco"};
-			choice_dict = {"Colors...":"Color", "Fringing...":"Fringing", "Inlaid Gem...":"Inlaid", "Bound in Metal...":"Metal", "Trimmed with Metal...":"Metal"};			
+			deco1_dict = {"Colors...": "pick_color", "Fringing...": "pick_fringing_deco", "Inlaid Gem...": "pick_inlaid_deco", "Bound in Metal...": "pick_binding_deco", "Trimmed with Metal...": "pick_trim_deco"};
+			choice_dict = {"Colors...": "Color", "Fringing...": "Fringing", "Inlaid Gem...": "Inlaid", "Bound in Metal...": "Metal", "Trimmed with Metal...": "Metal"};			
 			
 			// For decoration2 section
-			deco2_dict = {"One Fringing...":"pick_fringing_specific_deco2", "Two Fringings...":"pick_fringing_deco2", "One Inlaid Gem...":"pick_inlaid_specific_deco2", "Two Inlaid Gems...": "pick_inlaid_deco2", "Bound in Metal...":"pick_binding_deco2", "Trimmed with Metal...":"pick_trim_deco2"};
-			combo_dict = {"One Fringing...":null, "Two Fringings...":"pick_fringing2_deco2", "One Inlaid Gem...":null, "Two Inlaid Gems...": "pick_inlaid2_deco2", "Bound in Metal...":"pick_binding2_deco2", "Trimmed with Metal...":"pick_trim2_deco2"};
+			deco2_dict = {"One Fringing...": "pick_fringing_specific_deco2", "Two Fringings...": "pick_fringing_deco2", "One Inlaid Gem...": "pick_inlaid_specific_deco2", "Two Inlaid Gems...": "pick_inlaid_deco2", "Bound in Metal...": "pick_binding_deco2", "Trimmed with Metal...": "pick_trim_deco2"};
+			combo_dict = {"One Fringing...": null, "Two Fringings...": "pick_fringing2_deco2", "One Inlaid Gem...": null, "Two Inlaid Gems...": "pick_inlaid2_deco2", "Bound in Metal...": "pick_binding2_deco2", "Trimmed with Metal...": "pick_trim2_deco2"};
 			
 			// Reset all values before doing anything.
 			resetAll();			
 			
 			// Select a random option for section: decoration1
-			if(!document.getElementById("decoration1_lock").checked) {
+			if(!document.getElementById("decoration1_lock").checked) {			
+				deco1_forbidden = [];
+			
+				// If decoration2 is locked, make sure decoration1 can't select an exclusive option
+				if(document.getElementById("decoration2_lock").checked) {
+					deco2_choice = document.getElementById("pick_deco2");
+					
+					if(deco2_choice == "One Fringing..." || deco2_choice == "Two Fringings...") {
+						deco1_forbidden.push("Fringing...");
+					}
+					else if(deco2_choice == "One Inlaid Gem..." || deco2_choice == "Two Inlaid Gems...") {
+						deco1_forbidden.push("Inlaid Gem...");			
+					}
+					else if(deco2_choice == "Bound in Metal...") {
+						deco1_forbidden.push("Bound in Metal...");
+						
+						if(document.getElementById("pick_binding2_deco2") != "Nothing") {
+							deco1_forbidden.push("Trimmed with Metal...");
+						}
+					}
+					else if(deco2_choice == "Trimmed with Metal...") {
+						deco1_forbidden.push("Trimmed with Metal...");
+						
+						if(document.getElementById("pick_trim2_deco2") != "Nothing") {
+							deco1_forbidden.push("Bound in Metal...");
+						}				
+					}
+				}
+				
 				select_deco  = document.getElementById("pick_deco");
 				options = select_deco.children;  
 				random  = Math.floor(Math.random() * options.length);
@@ -911,13 +1079,34 @@
 				
 			// Select a random option for section: decoration2
 			if(!document.getElementById("decoration2_lock").checked) {
+				deco2_forbidden = [];
+			
+				// If decoration1 is locked, make sure decoration2 can't select an exclusive option
+				if(document.getElementById("decoration1_lock").checked) {
+					deco1_choice = document.getElementById("pick_deco1");
+					
+					if(deco1_choice == "Fringing...") {
+						deco2_forbidden.push("One Fringing...", "Two Fringings...");
+					}
+					else if(deco1_choice == "Inlaid Gem...") {
+						deco2_forbidden.push("One Inlaid Gem...", "Two Inlaid Gems...");
+					}
+					else if(deco1_choice == "Bound in Metal...") {
+						deco2_forbidden.push("Bound in Metal...");
+						deco2_forbidden.push(document.getElementById("pick_binding_deco").value);
+					}
+					else if(deco1_choice == "Trimmed with Metal...") {
+						deco2_forbidden.push("Trimmed with Metal...");
+						deco2_forbidden.push(document.getElementById("pick_trim_deco").value);
+					}
+				}
+			
 				do {
 					select_deco2  = document.getElementById("pick_deco2");
 					options = select_deco2.children;
 					random  = Math.floor(Math.random() * (options.length - 2));	
 					deco2_value = options[random].value;
-				} while(deco2_value.includes(deco_choice));
-					
+				} while(deco2_value.includes(deco_choice) || deco2_forbidden.includes(deco2_value));					
 					
 				if(deco2_value != "Nothing") {
 					do {				
@@ -928,14 +1117,21 @@
 					} while (options[random].value[1] == "-");
 					
 					// For decoration2 options that have two sub dropdown menus
-					if(combo_dict[deco2_value] != null) {
-						do {
-							select2  = document.getElementById(combo_dict[deco2_value]);
-							options = select2.children;  
-							random  = Math.floor(Math.random() * options.length);				
-							select2.value = options[random].value;
-						} while (select.value == select2.value);	
-					
+					if(combo_dict[deco2_value] != null) {		
+						deco1_choice = document.getElementById("pick_deco1");
+						
+						if((deco1_choice == "Bound in Metal..." && select.value == "Trimmed in Metal...") ||
+							(deco1_choice == "Trimmed in Metal..." && select.value == "Bound in Metal...")) {
+							document.getElementById(combo_dict[deco2_value]).value == "Nothing";
+						}
+						else {		
+							do {
+								select2  = document.getElementById(combo_dict[deco2_value]);
+								options = select2.children;  
+								random  = Math.floor(Math.random() * options.length);				
+								select2.value = options[random].value;
+							} while (select.value == select2.value);
+						}
 					}
 				}
 				
@@ -969,16 +1165,16 @@
 				<select id="pick_color" style="display:'none'" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
 			</div>
 			<div id="deco_div_fringing">
-				<select id="pick_fringing_deco" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+				<select id="pick_fringing_deco" class="default_hidden" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
 			</div>
 			<div id="deco_div_inlaid">
-				<select id="pick_inlaid_deco" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+				<select id="pick_inlaid_deco" class="default_hidden" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
 			</div>
 			<div id="deco_div_binding">
-				<select id="pick_binding_deco" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+				<select id="pick_binding_deco" class="default_hidden" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
 			</div>
 			<div id="deco_div_trim">
-				<select id="pick_trim_deco" class="default_hidden" onchange="changeValue(this.value, this.oldvalue, this.id)"></select>
+				<select id="pick_trim_deco" class="default_hidden" onfocus="this.oldvalue = this.value;" onchange="changeValue(this.value, this.oldvalue, this.id);this.oldvalue = this.value;"></select>
 			</div>
 		  </td>
 		  <td valign="top" width="20%">
