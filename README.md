@@ -13,3 +13,7 @@ Knitting Designer
 Cobbling Designer
 - Assists users in designing footwear that can be created from the Cobbling artisan system.
 - This tool is larger in scale due to the huge amount of options available for footwear.
+
+Redux Calculator
+- Assists users by determining their redux bonus and spell penalty based on skill ranks.
+- Will also take into consideration special modifiers such as Faith's Clarity (1612) and Kroderine Soul.
