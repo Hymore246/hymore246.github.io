@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-	<TITLE>Hymore's Redux Calculator</TITLE>
+	<TITLE>Hymore's Redux Calculator v1.2</TITLE>
 	<STYLE>
 		td {
 			padding: 3px;
@@ -32,6 +32,9 @@
 		v1.1
 		- Removed cap for skill ranks. Forgot about skill enhancives.
 		- Fixed calculateSpellPenaltyReduction() formula not taking level into consideration during calculation.
+		
+		v1.2
+		- Fixed an "off by one" error in formatTwoDecimalPlaces() function.
 		
 		*/	
 	
@@ -399,16 +402,16 @@
 			var result_physical_redux_kr = document.getElementById("result_physical_redux_kr");
 			var result_magical_redux_kr = document.getElementById("result_magical_redux_kr");
 						
-			result_raw_redux.innerHTML = formatTwoDecimalPlaces(redux * 100) + "%"
-			result_spell_penalty.innerHTML = formatTwoDecimalPlaces(spell_penalty * 100) + "%"
-			result_effective_redux.innerHTML = formatTwoDecimalPlaces(redux * (1 - spell_penalty) * 100) + "%"
+			result_raw_redux.innerHTML = formatTwoDecimalPlaces(redux * 100) + "%";
+			result_spell_penalty.innerHTML = formatTwoDecimalPlaces(spell_penalty * 100) + "%";
+			result_effective_redux.innerHTML = formatTwoDecimalPlaces(redux * (1 - spell_penalty) * 100) + "%";
 			
-			result_spell_penalty_reduction.innerHTML = spell_penalty_reduction * 100 + "%"
-			result_spell_penalty_1612.innerHTML = formatTwoDecimalPlaces(spell_penalty_1612 * 100) + "%"
-			result_effective_redux_1612.innerHTML = formatTwoDecimalPlaces(redux * (1 - spell_penalty_1612) * 100) + "%"
+			result_spell_penalty_reduction.innerHTML = spell_penalty_reduction * 100 + "%";
+			result_spell_penalty_1612.innerHTML = formatTwoDecimalPlaces(spell_penalty_1612 * 100) + "%";
+			result_effective_redux_1612.innerHTML = formatTwoDecimalPlaces(redux * (1 - spell_penalty_1612) * 100) + "%";
 			
-			result_physical_redux_kr.innerHTML = (formatTwoDecimalPlaces(redux * 0.9 * 100) + 10) + "%"
-			result_magical_redux_kr.innerHTML = formatTwoDecimalPlaces(redux * 100) + "%"
+			result_physical_redux_kr.innerHTML = (formatTwoDecimalPlaces(redux * 0.9 * 100) + 10) + "%";
+			result_magical_redux_kr.innerHTML = formatTwoDecimalPlaces(redux * 100) + "%";
 		}		
 		
 
@@ -421,10 +424,18 @@
 			var num_string = number.toString();
 		
 			if(num_string.length <= 5) {
-				return number
+				return number;
 			}
 			
-			return Number.parseFloat(num_string.slice(0,5))
+			remainder = Math.round(Number.parseFloat("0."+num_string.slice(5,num_string.length)));
+			
+			if(remainder == 0) {
+				return Number.parseFloat(num_string.slice(0,5));
+			}			
+			
+			rounded_num = (Number.parseFloat(num_string.slice(0,5)) + 0.01) + "";
+		
+			return Number.parseFloat(rounded_num.slice(0,5));
 		}
 	</SCRIPT>
 	<BODY>
