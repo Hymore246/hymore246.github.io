@@ -14,6 +14,11 @@ Cobbling Designer
 - Assists users in designing footwear that can be created from the Cobbling artisan system.
 - This tool is larger in scale due to the huge amount of options available for footwear.
 
+Statistics Growth Calculator
+- Allows users to calculate the growth of their statistics from level 0 to level 100.
+- PTP and MTP are also calculated and displayed.
+- Users can switch between displaying raw statistics or statistic bonuses.
+  
 Redux Calculator
 - Assists users by determining their redux bonus and spell penalty based on skill ranks.
 - Will also take into consideration special modifiers such as Faith's Clarity (1612) and Kroderine Soul.
