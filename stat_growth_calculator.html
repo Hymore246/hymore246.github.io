@@ -1,0 +1,1102 @@
+<!DOCTYPE HTML>
+	<TITLE>Hymore's Statistic Growth Calculator v1.0</TITLE>
+	<STYLE>		
+		div.link_text {
+			position: fixed;
+			bottom: 15px;
+			left: 15px;
+		}	
+		
+		table {
+			border: solid;
+			height: auto;
+			width: 100%;
+		}
+		
+		tr {
+			height: 30px;
+		}
+		
+		td {
+			padding: 3px;
+		}
+		
+		.stats_header th {
+			border-bottom: 4px solid;
+			width: 25%;
+		}
+		
+		.stats_header td.stat_name {
+			text-align: left;
+		}
+				
+		.level_table th {
+			color: #FFFFFF;
+			background-color: #000000;
+			text-align: center;
+			width: 10%;
+		}
+				
+		.level_table td {
+			text-align: center;
+			border: solid;
+			border-width: thin;
+		}				
+		
+		tr.total_footer_top td {
+			border-top: 4px solid;		
+		}
+		
+		tr.total_footer_bottom td {
+			border-bottom: 4px solid;		
+		}
+		
+		input.stat_box {
+			width: 2rem;
+			text-align: center;
+		}
+		
+		.cell_bg_white {
+			background-color: #FFFFFF;
+		}
+		
+		.cell_bg_green {
+			background-color: #00FF00;
+		}
+		
+		.cell_bg_red {
+			background-color: red;
+		}
+		
+	</STYLE>
+	<SCRIPT>
+		/*		
+		ABOUT
+		The Statistic Growth Calculator was created by Hymore. 
+		It was adapted from the Hymore Character Planner with a small number of features removed.
+		This is a tool that allows the user to calcualte the growth of all their stats from level 0 to 100.
+		In addition, it includes calculations stat bonuses, PTP, and MTP.		
+		The tool can be used offline by downloading	the HTML page and opening it in a web browser.
+		
+		VERSION HISTORY:
+		v1.0  
+		- Initial release.
+		
+		*/
+		const statistics_list = ["Strength", "Constitution", "Dexterity", "Agility", "Discipline", "Aura", "Logic", "Intuition", "Wisdom", "Influence"];
+		const race_stat_bonuses = {
+			"Aelotoi":{
+				"Strength": -5,
+				"Constitution": 0,
+				"Dexterity": 5,
+				"Agility": 10,
+				"Discipline": 5,
+				"Aura": 0,
+				"Logic": 5,
+				"Intuition": 5,
+				"Wisdom": 0,
+				"Influence": -5
+			},
+			"Burghal Gnome":{
+				"Strength": -15,
+				"Constitution": 10,
+				"Dexterity": 10,
+				"Agility": 10,
+				"Discipline": -5,
+				"Aura": 5,
+				"Logic": 10,
+				"Intuition": 5,
+				"Wisdom": 0,
+				"Influence": -5
+			},
+			"Dark Elf":{
+				"Strength": 0,
+				"Constitution": -5,
+				"Dexterity": 10,
+				"Agility": 5,
+				"Discipline": -10,
+				"Aura": 10,
+				"Logic": 0,
+				"Intuition": 5,
+				"Wisdom": 5,
+				"Influence": -5
+			},
+			"Dwarf":{
+				"Strength": 10,
+				"Constitution": 15,
+				"Dexterity": 0,
+				"Agility": -5,
+				"Discipline": 10,
+				"Aura": -10,
+				"Logic": 5,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": -10
+			},
+			"Elf":{
+				"Strength": 0,
+				"Constitution": 0,
+				"Dexterity": 5,
+				"Agility": 15,
+				"Discipline": -15,
+				"Aura": 5,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 10
+			},
+			"Erithian":{
+				"Strength": -5,
+				"Constitution": 10,
+				"Dexterity": 0,
+				"Agility": 0,
+				"Discipline": 5,
+				"Aura": 0,
+				"Logic": 5,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 10
+			},
+			"Forest Gnome":{
+				"Strength": -10,
+				"Constitution": 10,
+				"Dexterity": 5,
+				"Agility": 10,
+				"Discipline": 5,
+				"Aura": 0,
+				"Logic": 5,
+				"Intuition": 0,
+				"Wisdom": 5,
+				"Influence": -5
+			},
+			"Giantman":{
+				"Strength": 15,
+				"Constitution": 10,
+				"Dexterity": -5,
+				"Agility": -5,
+				"Discipline": 0,
+				"Aura": -5,
+				"Logic": -5,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 5
+			},
+			"Half-Elf":{
+				"Strength": 0,
+				"Constitution": 0,
+				"Dexterity": 5,
+				"Agility": 10,
+				"Discipline": -5,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 5
+			},
+			"Half-Krolvin":{
+				"Strength": 10,
+				"Constitution": 10,
+				"Dexterity": 0,
+				"Agility": 5,
+				"Discipline": 0,
+				"Aura": 0,
+				"Logic": -10,
+				"Intuition": 0,
+				"Wisdom": -5,
+				"Influence": -5
+			},
+			"Halfling":{
+				"Strength": -15,
+				"Constitution": 10,
+				"Dexterity": 15,
+				"Agility": 10,
+				"Discipline": -5,
+				"Aura": -5,
+				"Logic": 5,
+				"Intuition": 10,
+				"Wisdom": 0,
+				"Influence": -5
+			},
+			"Human":{
+				"Strength": 5,
+				"Constitution": 0,
+				"Dexterity": 0,
+				"Agility": 0,
+				"Discipline": 0,
+				"Aura": 0,
+				"Logic": 5,
+				"Intuition": 5,
+				"Wisdom": 0,
+				"Influence": 0
+			},
+			"Sylvankind":{
+				"Strength": 0,
+				"Constitution": 0,
+				"Dexterity": 10,
+				"Agility": 5,
+				"Discipline": -5,
+				"Aura": 5,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 0
+			}
+		};
+		const race_stat_growth = {
+			"Aelotoi":{
+				"Strength": 0,
+				"Constitution": -2,
+				"Dexterity": 3,
+				"Agility": 3,
+				"Discipline": 2,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 2,
+				"Wisdom": 0,
+				"Influence": -2
+			},
+			"Burghal Gnome":{
+				"Strength": -5,
+				"Constitution": 0,
+				"Dexterity": 3,
+				"Agility": 3,
+				"Discipline": -3,
+				"Aura": -2,
+				"Logic": 5,
+				"Intuition": 5,
+				"Wisdom": 0,
+				"Influence": 0
+			},
+			"Dark Elf":{
+				"Strength": 0,
+				"Constitution": -2,
+				"Dexterity": 5,
+				"Agility": 5,
+				"Discipline": -2,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 0
+			},
+			"Dwarf":{
+				"Strength": 5,
+				"Constitution": 5,
+				"Dexterity": -3,
+				"Agility": -5,
+				"Discipline": 3,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 3,
+				"Influence": -2
+			},
+			"Elf":{
+				"Strength": 0,
+				"Constitution": -5,
+				"Dexterity": 5,
+				"Agility": 3,
+				"Discipline": -5,
+				"Aura": 5,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 3
+			},
+			"Erithian":{
+				"Strength": -2,
+				"Constitution": 0,
+				"Dexterity": 0,
+				"Agility": 0,
+				"Discipline": 3,
+				"Aura": 0,
+				"Logic": 2,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 3
+			},
+			"Forest Gnome":{
+				"Strength": -3,
+				"Constitution": 2,
+				"Dexterity": 2,
+				"Agility": 3,
+				"Discipline": 2,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 0
+			},
+			"Giantman":{
+				"Strength": 5,
+				"Constitution": 3,
+				"Dexterity": -2,
+				"Agility": -2,
+				"Discipline": 0,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 2,
+				"Wisdom": 0,
+				"Influence": 0
+			},
+			"Half-Elf":{
+				"Strength": 2,
+				"Constitution": 0,
+				"Dexterity": 2,
+				"Agility": 2,
+				"Discipline": -2,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 2
+			},
+			"Half-Krolvin":{
+				"Strength": 3,
+				"Constitution": 5,
+				"Dexterity": 2,
+				"Agility": 2,
+				"Discipline": 0,
+				"Aura": -2,
+				"Logic": -2,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": -2
+			},
+			"Halfling":{
+				"Strength": -5,
+				"Constitution": 5,
+				"Dexterity": 5,
+				"Agility": 5,
+				"Discipline": -2,
+				"Aura": 0,
+				"Logic": -2,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 0
+			},
+			"Human":{
+				"Strength": 2,
+				"Constitution": 2,
+				"Dexterity": 0,
+				"Agility": 0,
+				"Discipline": 0,
+				"Aura": 0,
+				"Logic": 0,
+				"Intuition": 2,
+				"Wisdom": 0,
+				"Influence": 0
+			},
+			"Sylvankind":{
+				"Strength": -3,
+				"Constitution": -2,
+				"Dexterity": 5,
+				"Agility": 5,
+				"Discipline": -5,
+				"Aura": 3,
+				"Logic": 0,
+				"Intuition": 0,
+				"Wisdom": 0,
+				"Influence": 3
+			}
+		};
+		const prof_stat_growth = {
+			"Bard":{
+				"Strength": 25,
+				"Constitution": 20,
+				"Dexterity": 25,
+				"Agility": 20,
+				"Discipline": 15,
+				"Aura": 25,
+				"Logic": 10,
+				"Intuition": 15,
+				"Wisdom": 20,
+				"Influence": 30
+			},
+			"Cleric":{
+				"Strength": 20,
+				"Constitution": 20,
+				"Dexterity": 10,
+				"Agility": 15,
+				"Discipline": 25,
+				"Aura": 15,
+				"Logic": 25,
+				"Intuition": 25,
+				"Wisdom": 30,
+				"Influence": 20
+			},
+			"Empath":{
+				"Strength": 10,
+				"Constitution": 20,
+				"Dexterity": 15,
+				"Agility": 15,
+				"Discipline": 25,
+				"Aura": 20,
+				"Logic": 25,
+				"Intuition": 20,
+				"Wisdom": 30,
+				"Influence": 25
+			},
+			"Monk":{
+				"Strength": 25,
+				"Constitution": 25,
+				"Dexterity": 20,
+				"Agility": 30,
+				"Discipline": 25,
+				"Aura": 15,
+				"Logic": 20,
+				"Intuition": 20,
+				"Wisdom": 15,
+				"Influence": 10
+			},
+			"Paladin":{
+				"Strength": 30,
+				"Constitution": 25,
+				"Dexterity": 20,
+				"Agility": 20,
+				"Discipline": 25,
+				"Aura": 15,
+				"Logic": 10,
+				"Intuition": 15,
+				"Wisdom": 25,
+				"Influence": 20
+			},
+			"Ranger":{
+				"Strength": 25,
+				"Constitution": 20,
+				"Dexterity": 30,
+				"Agility": 20,
+				"Discipline": 20,
+				"Aura": 15,
+				"Logic": 15,
+				"Intuition": 25,
+				"Wisdom": 25,
+				"Influence": 10
+			},
+			"Rogue":{
+				"Strength": 25,
+				"Constitution": 20,
+				"Dexterity": 25,
+				"Agility": 30,
+				"Discipline": 20,
+				"Aura": 15,
+				"Logic": 20,
+				"Intuition": 25,
+				"Wisdom": 10,
+				"Influence": 15
+			},
+			"Sorcerer":{
+				"Strength": 10,
+				"Constitution": 15,
+				"Dexterity": 20,
+				"Agility": 15,
+				"Discipline": 25,
+				"Aura": 30,
+				"Logic": 25,
+				"Intuition": 20,
+				"Wisdom": 25,
+				"Influence": 20
+			},
+			"Warrior":{
+				"Strength": 30,
+				"Constitution": 25,
+				"Dexterity": 25,
+				"Agility": 25,
+				"Discipline": 20,
+				"Aura": 15,
+				"Logic": 10,
+				"Intuition": 20,
+				"Wisdom": 15,
+				"Influence": 20
+			},
+			"Wizard":{
+				"Strength": 10,
+				"Constitution": 15,
+				"Dexterity": 25,
+				"Agility": 15,
+				"Discipline": 20,
+				"Aura": 30,
+				"Logic": 25,
+				"Intuition": 25,
+				"Wisdom": 20,
+				"Influence": 20
+			}
+		};
+		stats_by_level = {
+			"Strength": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Constitution": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Dexterity": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Agility": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Discipline": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Aura": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Logic": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Intuition": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Wisdom": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			"Influence": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+		};
+		stat_total_by_level = new Array(101);
+		ptp_by_level = new Array(101);
+		mtp_by_level = new Array(101);
+		level_range = 1;
+		R = 0;
+		
+		// Fills the global arrays and sets the default values for race and profession.
+		function Onload() {
+			stat_total_by_level.fill(0, 0, 101)
+			ptp_by_level.fill(0, 0, 101)
+			mtp_by_level.fill(0, 0, 101)
+		
+			document.getElementById("character_race").value = "Human";
+			document.getElementById("character_profession").value = "Warrior";
+			
+			OnChangeRaceOrProfession("race");
+		}
+		
+		// Changes the Race or Profession of the character which updates bonus and growth adjustments.
+		// Statistics are automatically calculated and the level range is reset to 1 - 10.
+		function OnChangeRaceOrProfession(caller) {
+			var race = document.getElementById("character_race").value;
+			var profession = document.getElementById("character_profession").value;
+			var prof_growth_list = prof_stat_growth[profession];
+			var race_growth_list = race_stat_growth[race];
+			var race_bonus_list = race_stat_bonuses[race];
+			
+			if(caller = "race") {
+				for(i = 0; i < statistics_list.length; i++) {
+					document.getElementById("statistic_race_bonus_"+statistics_list[i]).innerHTML = race_bonus_list[statistics_list[i]];
+				}
+			}
+			
+			for(i = 0; i < statistics_list.length; i++) {
+				document.getElementById("statistic_growth_index_"+statistics_list[i]).innerHTML = race_growth_list[statistics_list[i]] + prof_growth_list[statistics_list[i]];
+			}
+			
+			CalculateAllStats()
+			SetLevelRange(0)
+		}
+		
+		// Calculates the growth of all statistics, PTP, and MTP from level 1 to 100.
+		function CalculateAllStats() {
+			var race = document.getElementById("character_race").value;
+			var profession = document.getElementById("character_profession").value;
+			var prof_growth_list = prof_stat_growth[profession];
+			var race_growth_list = race_stat_growth[race];
+			
+			// Move input box statistics to stats_by_level[0] before doing calculations.
+			// This is also force the input boxes to use the appropriate values if they are wrong.
+			for(i = 0; i < statistics_list.length; i++) {
+				R = race_growth_list[statistics_list[i]] + prof_growth_list[statistics_list[i]];
+				stat = document.getElementById("statistic_base_input_"+statistics_list[i]);
+				
+				if(stat.value == "" || isNaN(stat.value)) {
+					stat.value = 20;
+					stats_by_level[statistics_list[i]][0] = 20;
+				}	
+				
+				if(stat.value < 20) {
+					stat.value = 20;
+					stats_by_level[statistics_list[i]][0] = 20;				
+				} else if(stat.value > 100) {
+					stat.value = 100;
+					stats_by_level[statistics_list[i]][0] = 100;
+				} else {
+					stats_by_level[statistics_list[i]][0] = parseInt(stat.value, 10);
+				}
+				
+				for(j = 1; j < stats_by_level[statistics_list[i]].length; j++) {
+					S = stats_by_level[statistics_list[i]][j-1];
+					GI = Math.max(Math.floor(S/R),1);
+					prev_stat = S;
+					
+					if(S < 100 && (j % GI) == 0) {
+						S += 1
+						GI = Math.max(Math.floor(S/R),1);
+					}
+					
+					stats_by_level[statistics_list[i]][j] = S;
+				}
+			}
+			
+			// Calculates statistics totals, PTP, and MTP values for each level.
+			for(i = 0; i < 101; i++) {
+				STR = stats_by_level["Strength"][i];
+				CON = stats_by_level["Constitution"][i];
+				DEX = stats_by_level["Dexterity"][i];
+				AGI = stats_by_level["Agility"][i];
+				LOG = stats_by_level["Logic"][i];
+				INT = stats_by_level["Intuition"][i];
+				WIS = stats_by_level["Wisdom"][i];
+				INF = stats_by_level["Influence"][i];
+				AUR = stats_by_level["Aura"][i];
+				DIS = stats_by_level["Discipline"][i];
+				stat_total_by_level[i] = STR + CON + DEX + AGI + LOG + INT + WIS + INF + AUR + DIS;
+				ptp_by_level[i] = 25 + ((STR + CON + DEX + AGI + ((AUR + DIS) / 2)) / 20);
+				mtp_by_level[i] = 25 + ((LOG + INT + WIS + INF + ((AUR + DIS) / 2)) / 20);
+
+				if(i != 0) {
+					ptp_by_level[i] = parseInt(Math.floor(ptp_by_level[i]));
+					mtp_by_level[i] = parseInt(Math.floor(mtp_by_level[i]));
+				}
+			}
+			
+			document.getElementById("statistics_total").innerHTML = stat_total_by_level[0];
+			document.getElementById("statistics_ptp").innerHTML = ptp_by_level[0];
+			document.getElementById("statistics_mtp").innerHTML = mtp_by_level[0];
+		
+				
+			if(parseInt(stat_total_by_level[0]) == 660) {	
+				document.getElementById("statistics_total").classList.add("cell_bg_green");
+			} else {
+				document.getElementById("statistics_total").classList.add("cell_bg_red");					
+			}	
+			
+		}
+		
+		// Changes the displayed level range. The level range is from a given level to that level+9.
+		// All displayed statistics, PTP, and MTP values also updated to display values for the given level.
+		function SetLevelRange(adjustment) {
+			var display_val = document.querySelector('input[name="level_display"]:checked').value;
+			var new_range = level_range + adjustment;
+			var race = document.getElementById("character_race").value;
+			var race_bonus_list = race_stat_bonuses[race];
+			
+			if(new_range < 1) {
+				level_range = 1;
+			} else if(new_range > 91) {
+				level_range = 91;
+			} else {
+				level_range = new_range;
+			}			
+			
+			for(i = 1; i <= 10; i++) {
+				// Set the level headers
+				level_string = "level_header_" + (i)
+				display_level_range = level_range + i - 1
+				document.getElementById(level_string).innerHTML = display_level_range;
+				
+				// Set stat values and colors				
+				for(j = 0; j < statistics_list.length; j++) {
+					race_bonus = race_bonus_list[statistics_list[j]]
+					cell = document.getElementById("level_"+statistics_list[j]+"_"+i)
+					cell.classList.remove("cell_bg_white");
+					cell.classList.remove("cell_bg_green");
+					
+					if(display_val == "growth") {
+						current_val = stats_by_level[statistics_list[j]][display_level_range];
+						prev_val = stats_by_level[statistics_list[j]][display_level_range-1];
+					} else {
+						current_val = parseInt(Math.floor((stats_by_level[statistics_list[j]][display_level_range] - 50) / 2)) + race_bonus;
+						prev_val = parseInt(Math.floor((stats_by_level[statistics_list[j]][display_level_range-1] - 50) / 2)) + race_bonus;
+						
+						if(current_val > 0) {
+							current_val = "+"+current_val;
+						}
+						
+						if(prev_val > 0) {
+							prev_val = "+"+prev_val;
+						}
+					}
+					
+					cell.innerHTML = current_val;	
+						
+					if(current_val == prev_val) {	
+						cell.classList.add("cell_bg_white");
+					} else {
+						cell.classList.add("cell_bg_green");					
+					}
+				}
+				
+				// Updates statistics totals, PTP, and MTP values.
+				stat_total_cell = document.getElementById("level_stat_total_"+i);
+				ptp_cell = document.getElementById("level_ptp_"+i);
+				mtp_cell = document.getElementById("level_mtp_"+i);
+				
+				stat_total_cell.classList.remove("cell_bg_white");
+				stat_total_cell.classList.remove("cell_bg_red");
+				ptp_cell.classList.remove("cell_bg_white");
+				ptp_cell.classList.remove("cell_bg_green");
+				mtp_cell.classList.remove("cell_bg_white");
+				mtp_cell.classList.remove("cell_bg_green");
+				
+				stat_total_cell.innerHTML = stat_total_by_level[i];
+				ptp_cell.innerHTML = ptp_by_level[i];
+				mtp_cell.innerHTML = mtp_by_level[i];
+				
+				if(ptp_by_level[i] == ptp_by_level[i-1]) {	
+					ptp_cell.classList.add("cell_bg_white");
+				} else {
+					ptp_cell.classList.add("cell_bg_green");					
+				}
+				
+				if(mtp_by_level[i] == mtp_by_level[i-1]) {	
+					mtp_cell.classList.add("cell_bg_white");
+				} else {
+					mtp_cell.classList.add("cell_bg_green");					
+				}
+			}			
+		}
+	
+	
+	</SCRIPT>
+	<BODY onload="Onload()">
+		<table>
+			<thead>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<table>
+							<tr>
+								<td><b>Race</b></td>
+								<td>
+									<select id="character_race" onchange="OnChangeRaceOrProfession('race');">
+										<option>Aelotoi</option>
+										<option>Burghal Gnome</option>
+										<option>Dark Elf</option>
+										<option>Dwarf</option>
+										<option>Elf</option>
+										<option>Erithian</option>
+										<option>Forest Gnome</option>
+										<option>Giantman</option>
+										<option>Half-Elf</option>
+										<option>Half-Krolvin</option>
+										<option>Halfling</option>
+										<option selected="selected">Human</option>
+										<option>Sylvankind</option>
+									</select>
+								</td>
+								<td><b>Profession</b></td>
+								<td>
+									<select id="character_profession" onchange="OnChangeRaceOrProfession('prof');">
+										<option>Bard</option>
+										<option>Cleric</option>
+										<option>Empath</option>
+										<option>Monk</option>
+										<option>Paladin</option>
+										<option>Ranger</option>
+										<option>Rogue</option>
+										<option>Sorcerer</option>
+										<option selected="selected">Warrior</option>
+										<option>Wizard</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td width="75%">
+						<table>
+							<tr>
+								<td><b>Display Statistics by Level</b> <input type="radio" id="level_display_growth" name="level_display" value="growth" onclick="SetLevelRange(0);" checked></td>
+								<td><b>Display Statistic Bonuses by Level</b> <input type="radio" id="level_display_bonus" name="level_display" value="bonus" onclick="SetLevelRange(0);"></td>
+								<td colspan="2" width=50%></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table id="stats_table">
+							<thead>
+								<tr class="stats_header">
+									<th>Statistic</th>
+									<th>Race Bonus</th>
+									<th>Growth Index</th>
+									<th>Base</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td id="statistic_name_strength" class="stat_name">Strength</td>
+									<td id="statistic_race_bonus_Strength" align="center"></td>
+									<td id="statistic_growth_index_Strength" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Strength" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_constitution" class="stat_name">Constitution</td>
+									<td id="statistic_race_bonus_Constitution" align="center"></td>
+									<td id="statistic_growth_index_Constitution" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Constitution" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_dexterity" class="stat_name">Dexterity</td>
+									<td id="statistic_race_bonus_Dexterity" align="center"></td>
+									<td id="statistic_growth_index_Dexterity" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Dexterity" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_agility" class="stat_name">Agility</td>
+									<td id="statistic_race_bonus_Agility" align="center"></td>
+									<td id="statistic_growth_index_Agility" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Agility" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_discipline" class="stat_name">Discipline</td>
+									<td id="statistic_race_bonus_Discipline" align="center"></td>
+									<td id="statistic_growth_index_Discipline" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Discipline" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_aura" class="stat_name">Aura</td>
+									<td id="statistic_race_bonus_Aura" align="center"></td>
+									<td id="statistic_growth_index_Aura" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Aura" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_logic" class="stat_name">Logic</td>
+									<td id="statistic_race_bonus_Logic" align="center"></td>
+									<td id="statistic_growth_index_Logic" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Logic" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_intuition" class="stat_name">Intuition</td>
+									<td id="statistic_race_bonus_Intuition" align="center"></td>
+									<td id="statistic_growth_index_Intuition" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Intuition" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_wisdom" class="stat_name">Wisdom</td>
+									<td id="statistic_race_bonus_Wisdom" align="center"></td>
+									<td id="statistic_growth_index_Wisdom" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Wisdom" class="stat_box" maxlength="3" value="20" />
+									</td>
+								</tr>
+								<tr>
+									<td id="statistic_name_influence" class="stat_name">Influence</td>
+									<td id="statistic_race_bonus_Influence" align="center"></td>
+									<td id="statistic_growth_index_Influence" align="center"></td>
+									<td align="center">
+										<input id="statistic_base_input_Influence" class="stat_box" maxlength="3" value="20"/>
+									</td>
+								</tr>
+								<tr class="total_footer_top">
+									<td colspan="3" align="right"><b>Statistics Total (660)</b></td>
+									<td id="statistics_total" align="center"><b>-</b></td>								
+								</tr>
+									<td colspan="3" align="right"><b>PTP</b></td>
+									<td id="statistics_ptp" align="center"><b>-</b></td>		
+								</tr>
+								<tr>
+									<td colspan="3" align="right"><b>MTP</b></td>
+									<td id="statistics_mtp" align="center"><b>-</b></td>		
+								</tr>
+								<tr class="total_footer_top">
+									<td colspan="3"><b>Type INFO START in-game for level 0 statistics</b></td>
+									<td align="right">
+										<input type="button" id="statistic_calculate" value="Calculate Stats" onclick="CalculateAllStats();SetLevelRange(0);"/>
+									</td>
+								</td>
+							</tbody>
+						</table>
+					</td>
+					<td>
+						<table class="level_table">
+							<thead>
+								<tr>
+									<th id="level_header_1">1</th>
+									<th id="level_header_2">2</th>
+									<th id="level_header_3">3</th>
+									<th id="level_header_4">4</th>
+									<th id="level_header_5">5</th>
+									<th id="level_header_6">6</th>
+									<th id="level_header_7">7</th>
+									<th id="level_header_8">8</th>
+									<th id="level_header_9">9</th>
+									<th id="level_header_10">10</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td id="level_Strength_1">-</td>
+									<td id="level_Strength_2">-</td>
+									<td id="level_Strength_3">-</td>
+									<td id="level_Strength_4">-</td>
+									<td id="level_Strength_5">-</td>
+									<td id="level_Strength_6">-</td>
+									<td id="level_Strength_7">-</td>
+									<td id="level_Strength_8">-</td>
+									<td id="level_Strength_9">-</td>
+									<td id="level_Strength_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Constitution_1">-</td>
+									<td id="level_Constitution_2">-</td>
+									<td id="level_Constitution_3">-</td>
+									<td id="level_Constitution_4">-</td>
+									<td id="level_Constitution_5">-</td>
+									<td id="level_Constitution_6">-</td>
+									<td id="level_Constitution_7">-</td>
+									<td id="level_Constitution_8">-</td>
+									<td id="level_Constitution_9">-</td>
+									<td id="level_Constitution_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Dexterity_1">-</td>
+									<td id="level_Dexterity_2">-</td>
+									<td id="level_Dexterity_3">-</td>
+									<td id="level_Dexterity_4">-</td>
+									<td id="level_Dexterity_5">-</td>
+									<td id="level_Dexterity_6">-</td>
+									<td id="level_Dexterity_7">-</td>
+									<td id="level_Dexterity_8">-</td>
+									<td id="level_Dexterity_9">-</td>
+									<td id="level_Dexterity_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Agility_1">-</td>
+									<td id="level_Agility_2">-</td>
+									<td id="level_Agility_3">-</td>
+									<td id="level_Agility_4">-</td>
+									<td id="level_Agility_5">-</td>
+									<td id="level_Agility_6">-</td>
+									<td id="level_Agility_7">-</td>
+									<td id="level_Agility_8">-</td>
+									<td id="level_Agility_9">-</td>
+									<td id="level_Agility_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Discipline_1">-</td>
+									<td id="level_Discipline_2">-</td>
+									<td id="level_Discipline_3">-</td>
+									<td id="level_Discipline_4">-</td>
+									<td id="level_Discipline_5">-</td>
+									<td id="level_Discipline_6">-</td>
+									<td id="level_Discipline_7">-</td>
+									<td id="level_Discipline_8">-</td>
+									<td id="level_Discipline_9">-</td>
+									<td id="level_Discipline_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Aura_1">-</td>
+									<td id="level_Aura_2">-</td>
+									<td id="level_Aura_3">-</td>
+									<td id="level_Aura_4">-</td>
+									<td id="level_Aura_5">-</td>
+									<td id="level_Aura_6">-</td>
+									<td id="level_Aura_7">-</td>
+									<td id="level_Aura_8">-</td>
+									<td id="level_Aura_9">-</td>
+									<td id="level_Aura_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Logic_1">-</td>
+									<td id="level_Logic_2">-</td>
+									<td id="level_Logic_3">-</td>
+									<td id="level_Logic_4">-</td>
+									<td id="level_Logic_5">-</td>
+									<td id="level_Logic_6">-</td>
+									<td id="level_Logic_7">-</td>
+									<td id="level_Logic_8">-</td>
+									<td id="level_Logic_9">-</td>
+									<td id="level_Logic_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Intuition_1">-</td>
+									<td id="level_Intuition_2">-</td>
+									<td id="level_Intuition_3">-</td>
+									<td id="level_Intuition_4">-</td>
+									<td id="level_Intuition_5">-</td>
+									<td id="level_Intuition_6">-</td>
+									<td id="level_Intuition_7">-</td>
+									<td id="level_Intuition_8">-</td>
+									<td id="level_Intuition_9">-</td>
+									<td id="level_Intuition_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Wisdom_1">-</td>
+									<td id="level_Wisdom_2">-</td>
+									<td id="level_Wisdom_3">-</td>
+									<td id="level_Wisdom_4">-</td>
+									<td id="level_Wisdom_5">-</td>
+									<td id="level_Wisdom_6">-</td>
+									<td id="level_Wisdom_7">-</td>
+									<td id="level_Wisdom_8">-</td>
+									<td id="level_Wisdom_9">-</td>
+									<td id="level_Wisdom_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_Influence_1">-</td>
+									<td id="level_Influence_2">-</td>
+									<td id="level_Influence_3">-</td>
+									<td id="level_Influence_4">-</td>
+									<td id="level_Influence_5">-</td>
+									<td id="level_Influence_6">-</td>
+									<td id="level_Influence_7">-</td>
+									<td id="level_Influence_8">-</td>
+									<td id="level_Influence_9">-</td>
+									<td id="level_Influence_10">-</td>
+								</tr>
+								<tr class="total_footer_top">
+									<td id="level_stat_total_1">-</td>
+									<td id="level_stat_total_2">-</td>
+									<td id="level_stat_total_3">-</td>
+									<td id="level_stat_total_4">-</td>
+									<td id="level_stat_total_5">-</td>
+									<td id="level_stat_total_6">-</td>
+									<td id="level_stat_total_7">-</td>
+									<td id="level_stat_total_8">-</td>
+									<td id="level_stat_total_9">-</td>
+									<td id="level_stat_total_10">-</td>
+								</tr>
+								<tr>
+									<td id="level_ptp_1">-</td>
+									<td id="level_ptp_2">-</td>
+									<td id="level_ptp_3">-</td>
+									<td id="level_ptp_4">-</td>
+									<td id="level_ptp_5">-</td>
+									<td id="level_ptp_6">-</td>
+									<td id="level_ptp_7">-</td>
+									<td id="level_ptp_8">-</td>
+									<td id="level_ptp_9">-</td>
+									<td id="level_ptp_10">-</td>
+								</tr>
+								<tr class="total_footer_bottom">
+									<td id="level_mtp_1">-</td>
+									<td id="level_mtp_2">-</td>
+									<td id="level_mtp_3">-</td>
+									<td id="level_mtp_4">-</td>
+									<td id="level_mtp_5">-</td>
+									<td id="level_mtp_6">-</td>
+									<td id="level_mtp_7">-</td>
+									<td id="level_mtp_8">-</td>
+									<td id="level_mtp_9">-</td>
+									<td id="level_mtp_10">-</td>
+								</tr>
+								<tr>
+									<td colspan="10" align="center">
+										<button onclick="SetLevelRange(-100);">START</button>
+										<button onclick="SetLevelRange(-10);">-10</button>
+										<button onclick="SetLevelRange(-1);">-1</button>
+										<span><b>SET LEVEL</b></span>
+										<button onclick="SetLevelRange(+1);">+1</button>
+										<button onclick="SetLevelRange(+10);">+10</button>
+										<button onclick="SetLevelRange(100);">END</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="link_text">
+			<a href="./index.html">Back to Main Page</a>
+		</div>
+	</BODY>
+</HTML>		
