@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+	<TITLE>Hymore's Fash'o'nae's Gift (1750) Calculator v1.0</TITLE>
+	<STYLE>
+		td {
+			padding: 3px;
+		}
+		td.section_title {
+			font-weight: bold;
+			font-size: 20px;
+		}
+		
+		.tableFixHead {
+			overflow: auto; 
+			height: 810px;
+		}
+		
+		.tableFixHead thead th {
+			position: sticky;
+			top: 0; 
+			z-index: 1;
+			color: #FFFFFF;
+			background-color: #000000;
+			width: 30px;
+		}
+		
+		div.link_text {
+			position: fixed;
+			bottom: 15px;
+			left: 15px;
+		}
+	</STYLE>
+	<SCRIPT>
+	/*		
+		ABOUT
+		The Fash'o'nae Gift (1750) Calculator was created by Hymore.
+		This is a tool that allows the user to determine the effectiveness of the Fash'o'nae's Gift (1750) spell
+		with their given stats and training. The tool was made using Fleur's chart as a model for the best way to 
+		display the results.
+		
+		Special thanks go to Fleur for creating the chart that allowed this tool to be made.
+		
+		Wiki link to spell: https://gswiki.play.net/Fash%27lo%27nae%27s_Gift_(1750)
+		Fleur's Math: https://gswiki.play.net/Fash%27lo%27nae%27s_Gift_(1750)/saved_posts#Fleur.27s_Math
+		
+		VERSION HISTORY:
+		v1.0  
+		- Initial release.
+	*/	
+	
+	
+	// Calculate the total bonus from stats and skill.
+	function CalculateBonus() {
+		// Validate all fields and reset them to 0 for invalid numbers.
+		var skill_elem = document.getElementById("as_miu_skill");
+		var AUR_elem = document.getElementById("stat_aura");
+		var LOG_elem = document.getElementById("stat_logic");
+		var INT_elem = document.getElementById("stat_intuition");
+		var WIS_elem = document.getElementById("stat_wisdom");
+		var loop_list = [skill_elem, AUR_elem, LOG_elem, INT_elem, WIS_elem];
+		
+		for(i = 0; i < loop_list.length; i++) {
+			if(loop_list[i].value == "" || isNaN(loop_list[i].value)) {
+				loop_list[i].value = 0;
+			}	
+		}
+	
+		// Calculate the total bonus.
+		var skill = parseInt(skill_elem.value, 10);
+		var AUR = parseInt(AUR_elem.value, 10);
+		var LOG = parseInt(LOG_elem.value, 10);
+		var INT = parseInt(INT_elem.value, 10);
+		var WIS = parseInt(WIS_elem.value, 10);
+		var average = Math.floor((AUR + WIS + LOG) / 3) - (20*5 + 20*4 + 10*3);
+		
+		return INT + LOG + skill + average;
+	}
+	
+	
+	// Determines how many spells of a given level can be cast from 1750.
+	// If SM (success margin) is greater than 100, an unlimited number of spells
+	// can be cast. If the level is higher than MSL (maximum spell level) the no
+	// spells can be cast at all.
+	function GetSpellCount(level, SM, MSL) {
+		if(level > MSL) {
+			return "-";
+		}
+		
+		min_margin = Math.max(((level - 5) * 5), 0);		
+		true_margin = SM - min_margin;
+		
+		if(true_margin >= 100) {
+			return "UN";
+		}
+		
+		spell_count = Math.floor(true_margin / 25);
+		
+		if(spell_count < 0) {
+			return 1;
+		}
+		
+		return 1 + spell_count;
+	}
+	
+	// Creates the giant table that shows the results of casting 1750 with the given stats,
+	// using every outcome of a d100 roll. The table is large enough that it is less work to
+	// generate the HTML and place it inside of a div element instead of hard coding it like
+	// the rest of the tool.
+	function GenerateResultsTable() {
+		var results_div = document.getElementById("results_div");
+		var results = "";
+		var bonus = CalculateBonus();
+		
+		results += '<table border="1">';
+		results += '<thead>';
+		results += '<tr>';
+		results += '<th>d100 roll</th>';
+		results += '<th>SM</th>';
+		results += '<th>MSL</th>';
+		
+		for(i=1; i<=25; i++) {
+			results += '<th>' +i+ '</th>';
+		}
+		
+		results += '</thead>';
+		results += '<tbody>';
+		
+		for(i = 1; i <= 100; i++) {
+			SM = i + bonus - 100;
+			MSL = 5 + Math.floor(SM / 5);
+			
+			results += '<tr>';
+			results += '<td>' + i +'</td>';
+			results += '<td>' + SM +'</td>';
+			results += '<td>' + MSL +'</td>';
+			
+			for(j=1; j<=25; j++) {
+				results += '<td>' + GetSpellCount(j, SM, MSL) +'</td>';
+			}
+			
+			results += '</tr>';
+		}
+		
+		results += '</tbody>';
+		results += '</table>';		
+		results_div.innerHTML = results;
+	}
+	</SCRIPT>
+	<BODY>
+		<table>
+			<tr><td style="vertical-align: top;">
+				<table border="1">
+					<tr><td class="section_title" colspan="2" width="300px">
+						Magic Skill Bonus
+					</td></tr>
+					<tr>
+						<td>Arcane Symbols / Magic Item Use Bonus</td>
+						<td><input type="text" id="as_miu_skill" size="5" maxlength="3" value="0" /></td>
+					</tr>
+					<tr><td class="section_title" colspan="2">
+						Statistics
+					</td></tr>	
+					<tr>
+						<td>Aura Bonus</td>
+						<td><input type="text" id="stat_aura" size="5" maxlength="3" value="0" /></td>
+					</tr>
+					<tr>
+						<td>Logic Bonus</td>
+						<td><input type="text" id="stat_logic" size="5" maxlength="3" value="0" /></td>
+					</tr>
+					<tr>
+						<td>Intuition Bonus</td>
+						<td><input type="text" id="stat_intuition" size="5" maxlength="3" value="0" /></td>
+					</tr>
+					<tr>
+						<td>Wisdom Bonus</td>
+						<td><input type="text" id="stat_wisdom" size="5" maxlength="3" value="0" /></td>
+					</tr>
+				</table>
+				<br>
+				<input type="button" id="calculate_button" value="Calculate" onclick="GenerateResultsTable();" />
+			</td>
+			<td id="table_spacer" width="400px"></td>
+			<td class="results_td">
+				<div id="results_div" class="tableFixHead"></div>				
+			</td></tr>
+		</table>
+		<br>
+		<div class="link_text">
+			<a href="./index.html">Back to Main Page</a>
+		</div>
+	</BODY>
+</HTML>
