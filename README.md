@@ -4,7 +4,7 @@ and can be run by themselves offline if an individual file is downloaded.
 
 Version changes can be found in the source code of each tool's file.
 
-# Designers
+## Designers
 ### Warrior Sheath Designer
 - Assists users in creating a warrior sheath.
 
@@ -15,7 +15,7 @@ Version changes can be found in the source code of each tool's file.
 - Assists users in designing footwear that can be created from the Cobbling artisan system.
 - This tool is larger in scale due to the huge amount of options available for footwear.
 
-# Calculators
+## Calculators
 ### Statistics Growth Calculator
 - Allows users to calculate the growth of their statistics from level 0 to level 100.
 - PTP and MTP are also calculated and displayed.
